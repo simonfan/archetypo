@@ -1,0 +1,19 @@
+{
+  "name": "archetypo",
+  "main": "built/archetypo.js",
+  "version": "0.0.0",
+  "description": "Some module...",
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "subject": "~0.3.3",
+    "eventemitter2": "~0.4.13",
+    "lowercase-backbone": "*"
+  },
+  "devDependencies": {
+    "requirejs": "*",
+    "requirejs-text": "*",
+    "underscore": "*",
+    "jquery": "*",
+    "qunit": "*"
+  }
+}

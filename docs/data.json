@@ -1,0 +1,199 @@
+{
+    "project": {
+        "name": "archetypo",
+        "version": "0.0.0"
+    },
+    "files": {
+        "src/__archetypo/eventemitter/index.js": {
+            "name": "src/__archetypo/eventemitter/index.js",
+            "modules": {
+                "eventemitter": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/model/index.js": {
+            "name": "src/__archetypo/model/index.js",
+            "modules": {
+                "model": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/model/setters.js": {
+            "name": "src/__archetypo/model/setters.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/model/view.js": {
+            "name": "src/__archetypo/model/view.js",
+            "modules": {
+                "model.view": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/view/index.js": {
+            "name": "src/__archetypo/view/index.js",
+            "modules": {
+                "baseview": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/index.js": {
+            "name": "src/index.js",
+            "modules": {
+                "Archetypo": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "archetypo": {
+            "name": "archetypo",
+            "submodules": {
+                "eventemitter": 1,
+                "model": 1,
+                "model.view": 1,
+                "baseview": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "eventemitter": {
+            "name": "eventemitter",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "archetypo",
+            "namespace": "",
+            "file": "src/__archetypo/eventemitter/index.js",
+            "line": 1,
+            "description": "Just an adapter of EventEmitter2, so that it fits as\nan extendable subject."
+        },
+        "model": {
+            "name": "model",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "archetypo",
+            "namespace": "",
+            "file": "src/__archetypo/model/index.js",
+            "line": 1
+        },
+        "model.view": {
+            "name": "model.view",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "archetypo",
+            "namespace": "",
+            "file": "src/__archetypo/model/view.js",
+            "line": 1
+        },
+        "baseview": {
+            "name": "baseview",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "archetypo",
+            "namespace": "",
+            "file": "src/__archetypo/view/index.js",
+            "line": 1
+        },
+        "Archetypo": {
+            "name": "Archetypo",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src/index.js",
+            "line": 5,
+            "description": "AMD and CJS module."
+        }
+    },
+    "classes": {},
+    "classitems": [
+        {
+            "file": "src/__archetypo/model/setters.js",
+            "line": 16,
+            "description": "Set values emitting change events if required.",
+            "methos": "set",
+            "params": [
+                {
+                    "name": "attribute",
+                    "description": "",
+                    "type": "String|Object"
+                },
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "",
+            "module": "archetypo",
+            "submodule": "model"
+        },
+        {
+            "file": "src/__archetypo/model/view.js",
+            "line": 27,
+            "itemtype": "method",
+            "name": "view",
+            "params": [
+                {
+                    "name": "$el",
+                    "description": "",
+                    "type": "Jq-Object"
+                },
+                {
+                    "name": "map",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "",
+            "module": "archetypo",
+            "submodule": "model.view"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "unknown tag: methos",
+            "line": " src/__archetypo/model/setters.js:16"
+        },
+        {
+            "message": "Missing item type\nSet values emitting change events if required.",
+            "line": " src/__archetypo/model/setters.js:16"
+        }
+    ]
+}
