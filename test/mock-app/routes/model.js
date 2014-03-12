@@ -17,6 +17,9 @@ define(function (require, exports, module) {
 
 	// route definition
 	app.route('/model/:id', 'model', function () {
+
+		console.log(view);
+
 		view.docks.model.attach(database.get(1));
 	});
 });

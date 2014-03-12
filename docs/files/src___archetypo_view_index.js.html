@@ -131,7 +131,7 @@ define(function (require, exports, module) {
 
 		// [3] Save view on app.
 		var id = this.$el.data(&#x27;arch-id&#x27;) || this.$el.prop(&#x27;id&#x27;) || this.cid;
-		app.instance(id, this);
+		app.view(id, this);
 
 		// [4] Invoke dockable-view.
 		dockableView.prototype.initialize.apply(this, arguments);

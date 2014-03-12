@@ -136,7 +136,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 54,
+            "line": 53,
             "description": "Either defines or retrieves a constructor function.",
             "itemtype": "method",
             "name": "constructor",
@@ -163,7 +163,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 81,
+            "line": 80,
             "description": "Defines or retrieves an instance.",
             "itemtype": "method",
             "name": "instance",

@@ -136,7 +136,6 @@ define(function (require, exports, module) {
 			view: {},
 			model: {},
 			collection: {},
-			router: {},
 		};
 	});
 
@@ -179,6 +178,7 @@ define(function (require, exports, module) {
 		 * @param [obj] {Object}
 		 */
 		instance: function instance(type, name, obj) {
+
 			var instances = this.instances[type];
 
 			if (arguments.length === 3) {

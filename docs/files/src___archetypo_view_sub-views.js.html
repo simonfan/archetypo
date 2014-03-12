@@ -126,8 +126,6 @@ define(function (require, exports, module) {
 		// Instantiate the sub-views.
 		_.each($subs, _.bind(function subView(el) {
 
-
-
 				// wrap el in jqObject
 			var $el = $(el),
 				// retrieve data
@@ -138,10 +136,6 @@ define(function (require, exports, module) {
 			// set el and app on the data object.
 			data.el = $el;
 			data.app = app;
-
-			// transfer instances and constructors
-			data.instances = this.instances;
-			data.constructors = this.constructors;
 
 			// instantiate the view.
 			view(data);

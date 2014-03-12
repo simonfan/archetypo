@@ -16,6 +16,18 @@ define(function (require, exports, module) {
 
 		html: html,
 
+
+		docks: {
+			model: {
+
+				map: {
+					id: '[data-attribute="id"]',
+					name: '[data-attribute="name"]',
+					color: '[data-attribute="color"]',
+				},
+			}
+		},
+
 		events: {
 			'click .lalala': 'alert',
 		},
