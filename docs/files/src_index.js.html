@@ -41,21 +41,15 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
+                <li><a href="../classes/view.html">view</a></li>
+            
             </ul>
 
             <ul id="api-modules" class="apis modules">
             
                 <li><a href="../modules/archetypo.html">archetypo</a></li>
             
-                <li><a href="../modules/Archetypo.html">Archetypo</a></li>
-            
-                <li><a href="../modules/baseview.html">baseview</a></li>
-            
-                <li><a href="../modules/eventemitter.html">eventemitter</a></li>
-            
-                <li><a href="../modules/model.html">model</a></li>
-            
-                <li><a href="../modules/model.view.html">model.view</a></li>
+                <li><a href="../modules/view.html">view</a></li>
             
             </ul>
         </div>
@@ -96,33 +90,135 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-//     Archetypo
+//     archetypo
 //     (c) simonfan
-//     Archetypo is licensed under the MIT terms.
+//     archetypo is licensed under the MIT terms.
 
 /**
- * AMD and CJS module.
+ * AMD module.
  *
- * @module Archetypo
+ * @module archetypo
  */
-
-/* jshint ignore:start */
-if (typeof define !== &#x27;function&#x27;) { var define = require(&#x27;amdefine&#x27;)(module) }
-/* jshint ignore:end */
 
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var _ = require(&#x27;lodash&#x27;),
-		subject = require(&#x27;subject&#x27;);
+	var subject = require(&#x27;subject&#x27;),
+		backbone = require(&#x27;lowercase-backbone&#x27;),
+		q = require(&#x27;q&#x27;);
+
+	// sub modules.
+	var archView = require(&#x27;./__archetypo/view/index&#x27;);
+
+	var archetypo = module.exports = backbone.router.extend(function archetypoBuilder() {
+
+		/**
+		 * Hash where constructors are stored.
+		 *
+		 * @property constructors
+		 * @type Object
+		 */
+		this.constructors = {
+			view: {
+				&#x27;default&#x27;: archView
+			},
+			model: {},
+			collection: {}
+		};
+
+		/**
+		 * Hash where instances are stored.
+		 *
+		 * @property instances
+		 * @type Object
+		 */
+		this.instances = {
+			view: {},
+			model: {},
+			collection: {},
+			router: {},
+		};
+	});
+
+	// proto
+	archetypo.proto({
+
+		/**
+		 * Either defines or retrieves a constructor function.
+		 *
+		 * @method constructor
+		 * @param type {String}
+		 * @param name {String}
+		 * @param [extensions] {Object}
+		 */
+		constructor: function defineConstructor(type, name, extensions) {
+
+			var constructors = this.constructors[type],
+				constructor = constructors[name] || constructors[&#x27;default&#x27;];
+
+			if (arguments.length === 3) {
+				// define a constructor
+
+				// Add app to extensions
+				extensions.app = this;
+
+				return constructors[name] = constructor.extend(extensions);
+
+			} else if (arguments.length === 2) {
+				// retrieve a constructor.
+				return constructor;
+			}
+		},
+
+		/**
+		 * Defines or retrieves an instance.
+		 *
+		 * @method instance
+		 * @param type {String}
+		 * @param name {String}
+		 * @param [obj] {Object}
+		 */
+		instance: function instance(type, name, obj) {
+			var instances = this.instances[type];
+
+			if (arguments.length === 3) {
+				instances[name] = obj;
+			}
+
+			return instances[name];
+		},
+
+		/**
+		 * Instantiates a default view given an $el.
+		 *
+		 * @method build
+		 * @param $el {jq Object}
+		 */
+		build: function build($el) {
+			var view = this.constructor(&#x27;view&#x27;, &#x27;default&#x27;);
+
+			view({
+				$el: $el,
+				app: this
+			});
+
+			return this;
+		},
+
+		start: function start(options) {
+			backbone.history.start(options);
+
+			return this;
+		}
+	});
 
 
-	var Archetypo = module.exports = function Archetypo() {
-
-	};
-
-
-	Archetypo.model = require(&#x27;./__archetypo/model/index&#x27;);
+	// partials
+	archetypo.proto({
+		view: _.partial(archetypo.prototype.instance, &#x27;view&#x27;),
+		model: _.partial(archetypo.prototype.instance, &#x27;model&#x27;),
+		collection: _.partial(archetypo.prototype.instance, &#x27;collection&#x27;)
+	});
 });
 
     </pre>

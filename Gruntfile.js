@@ -1,5 +1,5 @@
 /**
-Gruntfile designed to work for modules that work on browser and node.
+Gruntfile designed for browser-only modules.
 */
 
 module.exports = function (grunt) {
@@ -57,7 +57,6 @@ module.exports = function (grunt) {
 			}
 		},
 
-
 		jshint: {
 			options: {
 				jshintrc: '.jshintrc',
@@ -84,7 +83,7 @@ module.exports = function (grunt) {
 				options: {
 					livereload: true
 				},
-				tasks: ['jshint:gruntfile', 'jshint:src', 'simplemocha']
+				tasks: ['jshint:gruntfile', 'jshint:src']
 			},
 
 			bower: {
@@ -105,7 +104,7 @@ module.exports = function (grunt) {
 					// module name
 					name: 'archetypo',
 					// output here
-					out: 'built/archetypo.js',
+					out: './built/archetypo.js',
 					// config file
 					mainConfigFile: 'amdconfig.js',
 
@@ -114,7 +113,7 @@ module.exports = function (grunt) {
 
 					// exclude these modules AND their dependencies
 					// (excluding your bower dependencies)
-					exclude: ["lodash", "subject"],
+					exclude: ["dockable-view"],
 
 					// excludeShallow
 					excludeShallow: [],
@@ -124,6 +123,19 @@ module.exports = function (grunt) {
 					pragmas: {
 						exclude: true,
 					},
+				}
+			},
+
+			project: {
+				options: {
+					// source files
+					appDir: 'src/',
+					// output here:
+					dir: 'built/project/',
+					mainConfigFile: 'amdconfig.js',
+
+					// do not copy these files
+					fileExclusionRegExp: /^\./,
 				}
 			}
 		}
@@ -146,7 +158,6 @@ module.exports = function (grunt) {
 
 	grunt.loadNpmTasks('grunt-simple-mocha');
 
-
 	/**
 	Auxiliary task that starts a server in a child process.
 	*/
@@ -159,6 +170,7 @@ module.exports = function (grunt) {
 		});
 	});
 
+
 	// mocha tests
 	grunt.registerTask('mocha', 'simplemocha');
 
@@ -169,5 +181,5 @@ module.exports = function (grunt) {
 	[2] Starts watching files.
 	*/
 
-	grunt.registerTask('default', ['bower', 'yuidoc', 'jshint:gruntfile', 'jshint:src', 'requirejs', 'simplemocha', 'live']);
+	grunt.registerTask('default', ['bower', 'yuidoc', 'jshint:gruntfile', 'jshint:src', 'requirejs', 'live']);
 };

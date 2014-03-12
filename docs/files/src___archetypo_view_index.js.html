@@ -41,21 +41,15 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
+                <li><a href="../classes/view.html">view</a></li>
+            
             </ul>
 
             <ul id="api-modules" class="apis modules">
             
                 <li><a href="../modules/archetypo.html">archetypo</a></li>
             
-                <li><a href="../modules/Archetypo.html">Archetypo</a></li>
-            
-                <li><a href="../modules/baseview.html">baseview</a></li>
-            
-                <li><a href="../modules/eventemitter.html">eventemitter</a></li>
-            
-                <li><a href="../modules/model.html">model</a></li>
-            
-                <li><a href="../modules/model.view.html">model.view</a></li>
+                <li><a href="../modules/view.html">view</a></li>
             
             </ul>
         </div>
@@ -98,27 +92,50 @@
     <pre class="code prettyprint linenums">
 /**
  * @module archetypo
- * @submodule baseview
+ * @submodule view
  */
-
-/* jshint ignore:start */
-if (typeof define !== &#x27;function&#x27;) { var define = require(&#x27;amdefine&#x27;)(module) }
-/* jshint ignore:end */
 
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
 	var _ = require(&#x27;lodash&#x27;),
-		subject = require(&#x27;subject&#x27;);
+		dockableView = require(&#x27;dockable-view&#x27;);
 
-	var baseview = module.exports = subject(function baseview($el, map, options) {
+	var subViews = require(&#x27;./sub-views&#x27;);
 
-		this.$el = $el;
-		this.map = map;
-		this.options = options;
+	/**
+	 * The view builder. It is basically a Backbone.View
+	 *
+	 * @class view
+	 * @constructor
+	 * @param options {Object}
+	 */
+	var archView = module.exports = dockableView.extend(function archView(options) {
 
+		// [1] Templating and replacement
+		// If there is an &#x27;html&#x27; property
+		// build up an element with it place it within $el.
+
+		// [1.1] retrieve AND normalize the element object
+		this.$el = _.isObject(options.$el) ? options.$el : _.isObject(options.el) ? options.el : $(&#x27;&lt;div&gt;&lt;/div&gt;&#x27;);
+
+		var html = options.html || this.html;
+		if (html) {
+			// [1.2] place
+			this.$el.html(html);
+		}
+
+		// [2] Find and instantiate sub-views.
+		var app = options.app || this.app;
+		subViews.call(this, app, this.$el);
+
+		// [3] Save view on app.
+		var id = this.$el.data(&#x27;arch-id&#x27;) || this.$el.prop(&#x27;id&#x27;) || this.cid;
+		app.instance(id, this);
+
+		// [4] Invoke dockable-view.
+		dockableView.prototype.initialize.apply(this, arguments);
 	});
-
 });
 
     </pre>

@@ -1,0 +1,5 @@
+//     archetypo
+//     (c) simonfan
+//     archetypo is licensed under the MIT terms.
+
+define(["require","exports","module","subject","lowercase-backbone","q","./__archetypo/view/index"],function(e,t,n){var r=e("subject"),i=e("lowercase-backbone"),s=e("q"),o=e("./__archetypo/view/index"),u=n.exports=i.router.extend(function(){this.constructors={view:{"default":o},model:{},collection:{}},this.instances={view:{},model:{},collection:{},router:{}}});u.proto({constructor:function(t,n,r){var i=this.constructors[t],s=i[n]||i["default"];if(arguments.length===3)return r.app=this,i[n]=s.extend(r);if(arguments.length===2)return s},instance:function(t,n,r){var i=this.instances[t];return arguments.length===3&&(i[n]=r),i[n]},build:function(t){var n=this.constructor("view","default");return n({$el:t,app:this}),this},start:function(t){return i.history.start(t),this}}),u.proto({view:_.partial(u.prototype.instance,"view"),model:_.partial(u.prototype.instance,"model"),collection:_.partial(u.prototype.instance,"collection")})});

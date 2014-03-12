@@ -1,5 +1,5 @@
 require.config({
-	urlArgs: 'bust=0.46449076058343053',
+	urlArgs: 'bust=0.8728536725975573',
 	baseUrl: '/src',
 	paths: {
 		requirejs: '../bower_components/requirejs/require',
@@ -7,13 +7,19 @@ require.config({
 		mocha: '../node_modules/mocha/mocha',
 		should: '../node_modules/should/should',
 		archetypo: 'index',
-		jquery: '../bower_components/jquery/jquery',
+		backbone: '../bower_components/backbone/backbone',
+		'collection-dock': '../bower_components/collection-dock/built/collection-dock',
+		'dockable-view': '../bower_components/dockable-view/built/dockable-view',
+		'jquery.filler': '../bower_components/jquery.filler/built/jquery.filler',
+		jquery: '../bower_components/jquery/dist/jquery',
 		lodash: '../bower_components/lodash/dist/lodash.compat',
+		'lowercase-backbone': '../bower_components/lowercase-backbone/built/lowercase-backbone',
+		'model-dock': '../bower_components/model-dock/built/model-dock',
+		q: '../bower_components/q/q',
 		qunit: '../bower_components/qunit/qunit/qunit',
 		'requirejs-text': '../bower_components/requirejs-text/text',
 		subject: '../bower_components/subject/built/subject',
-		underscore: '../bower_components/underscore/underscore',
-		eventemitter2: '../bower_components/eventemitter2/lib/eventemitter2'
+		underscore: '../bower_components/underscore/underscore'
 	},
 	shim: {
 		backbone: {

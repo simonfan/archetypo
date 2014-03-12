@@ -2,12 +2,11 @@
   "name": "archetypo",
   "main": "built/archetypo.js",
   "version": "0.0.0",
-  "description": "Some module...",
+  "description": "Backbone-based framework.",
   "dependencies": {
-    "lodash": "~2.4.1",
-    "subject": "~0.3.3",
-    "eventemitter2": "~0.4.13",
-    "lowercase-backbone": "*"
+    "dockable-view": "~0.0.1",
+    "subject": "~0.4.1",
+    "q": "~1.0.0"
   },
   "devDependencies": {
     "requirejs": "*",
@@ -15,5 +14,9 @@
     "underscore": "*",
     "jquery": "*",
     "qunit": "*"
+  },
+  "resolutions": {
+    "subject": "~0.4.1",
+    "jquery": "~2.1.0"
   }
 }

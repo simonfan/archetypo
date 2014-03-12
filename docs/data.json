@@ -4,45 +4,20 @@
         "version": "0.0.0"
     },
     "files": {
-        "src/__archetypo/eventemitter/index.js": {
-            "name": "src/__archetypo/eventemitter/index.js",
-            "modules": {
-                "eventemitter": 1
-            },
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/model/index.js": {
-            "name": "src/__archetypo/model/index.js",
-            "modules": {
-                "model": 1
-            },
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/model/setters.js": {
-            "name": "src/__archetypo/model/setters.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/model/view.js": {
-            "name": "src/__archetypo/model/view.js",
-            "modules": {
-                "model.view": 1
-            },
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
         "src/__archetypo/view/index.js": {
             "name": "src/__archetypo/view/index.js",
             "modules": {
-                "baseview": 1
+                "view": 1
             },
+            "classes": {
+                "view": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/view/sub-views.js": {
+            "name": "src/__archetypo/view/sub-views.js",
+            "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
@@ -50,7 +25,7 @@
         "src/index.js": {
             "name": "src/index.js",
             "modules": {
-                "Archetypo": 1
+                "archetypo": 1
             },
             "classes": {},
             "fors": {},
@@ -61,139 +36,174 @@
         "archetypo": {
             "name": "archetypo",
             "submodules": {
-                "eventemitter": 1,
-                "model": 1,
-                "model.view": 1,
-                "baseview": 1
+                "view": 1
             },
-            "classes": {},
+            "classes": {
+                "view": 1
+            },
             "fors": {},
-            "namespaces": {}
-        },
-        "eventemitter": {
-            "name": "eventemitter",
-            "submodules": {},
-            "classes": {},
-            "fors": {},
-            "is_submodule": 1,
             "namespaces": {},
-            "module": "archetypo",
-            "namespace": "",
-            "file": "src/__archetypo/eventemitter/index.js",
-            "line": 1,
-            "description": "Just an adapter of EventEmitter2, so that it fits as\nan extendable subject."
+            "tag": "module",
+            "file": "src/__archetypo/view/index.js",
+            "line": 14,
+            "description": "AMD module."
         },
-        "model": {
-            "name": "model",
+        "view": {
+            "name": "view",
             "submodules": {},
-            "classes": {},
-            "fors": {},
-            "is_submodule": 1,
-            "namespaces": {},
-            "module": "archetypo",
-            "namespace": "",
-            "file": "src/__archetypo/model/index.js",
-            "line": 1
-        },
-        "model.view": {
-            "name": "model.view",
-            "submodules": {},
-            "classes": {},
-            "fors": {},
-            "is_submodule": 1,
-            "namespaces": {},
-            "module": "archetypo",
-            "namespace": "",
-            "file": "src/__archetypo/model/view.js",
-            "line": 1
-        },
-        "baseview": {
-            "name": "baseview",
-            "submodules": {},
-            "classes": {},
+            "classes": {
+                "view": 1
+            },
             "fors": {},
             "is_submodule": 1,
             "namespaces": {},
             "module": "archetypo",
             "namespace": "",
             "file": "src/__archetypo/view/index.js",
-            "line": 1
-        },
-        "Archetypo": {
-            "name": "Archetypo",
-            "submodules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {},
-            "tag": "module",
-            "file": "src/index.js",
-            "line": 5,
-            "description": "AMD and CJS module."
+            "line": 14,
+            "description": "The view builder. It is basically a Backbone.View"
         }
     },
-    "classes": {},
-    "classitems": [
-        {
-            "file": "src/__archetypo/model/setters.js",
-            "line": 16,
-            "description": "Set values emitting change events if required.",
-            "methos": "set",
+    "classes": {
+        "view": {
+            "name": "view",
+            "shortname": "view",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "archetypo",
+            "submodule": "view",
+            "namespace": "",
+            "file": "src/__archetypo/view/index.js",
+            "line": 14,
+            "description": "The view builder. It is basically a Backbone.View",
+            "is_constructor": 1,
             "params": [
-                {
-                    "name": "attribute",
-                    "description": "",
-                    "type": "String|Object"
-                },
-                {
-                    "name": "value",
-                    "description": "",
-                    "type": "*"
-                },
                 {
                     "name": "options",
                     "description": "",
                     "type": "Object"
                 }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "src/__archetypo/view/sub-views.js",
+            "line": 13,
+            "description": "Finds sub views within a $parent\nand instantiates them.",
+            "itemtype": "method",
+            "name": "subViews",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "app",
+                    "description": "",
+                    "type": "App Object"
+                },
+                {
+                    "name": "$parent",
+                    "description": "",
+                    "type": "Jq Object"
+                }
             ],
             "class": "",
             "module": "archetypo",
-            "submodule": "model"
+            "submodule": "view"
         },
         {
-            "file": "src/__archetypo/model/view.js",
-            "line": 27,
+            "file": "src/index.js",
+            "line": 23,
+            "description": "Hash where constructors are stored.",
+            "itemtype": "property",
+            "name": "constructors",
+            "type": "Object",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 37,
+            "description": "Hash where instances are stored.",
+            "itemtype": "property",
+            "name": "instances",
+            "type": "Object",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 54,
+            "description": "Either defines or retrieves a constructor function.",
             "itemtype": "method",
-            "name": "view",
+            "name": "constructor",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "extensions",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 81,
+            "description": "Defines or retrieves an instance.",
+            "itemtype": "method",
+            "name": "instance",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 99,
+            "description": "Instantiates a default view given an $el.",
+            "itemtype": "method",
+            "name": "build",
             "params": [
                 {
                     "name": "$el",
                     "description": "",
-                    "type": "Jq-Object"
-                },
-                {
-                    "name": "map",
-                    "description": "",
-                    "type": "Object"
-                },
-                {
-                    "name": "options",
-                    "description": "",
-                    "type": "Object"
+                    "type": "Jq Object"
                 }
             ],
             "class": "",
-            "module": "archetypo",
-            "submodule": "model.view"
+            "module": "archetypo"
         }
     ],
-    "warnings": [
-        {
-            "message": "unknown tag: methos",
-            "line": " src/__archetypo/model/setters.js:16"
-        },
-        {
-            "message": "Missing item type\nSet values emitting change events if required.",
-            "line": " src/__archetypo/model/setters.js:16"
-        }
-    ]
+    "warnings": []
 }

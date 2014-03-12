@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>eventemitter - archetypo</title>
+    <title>src/__archetypo/view/sub-views.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -41,21 +41,15 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
+                <li><a href="../classes/view.html">view</a></li>
+            
             </ul>
 
             <ul id="api-modules" class="apis modules">
             
                 <li><a href="../modules/archetypo.html">archetypo</a></li>
             
-                <li><a href="../modules/Archetypo.html">Archetypo</a></li>
-            
-                <li><a href="../modules/baseview.html">baseview</a></li>
-            
-                <li><a href="../modules/eventemitter.html">eventemitter</a></li>
-            
-                <li><a href="../modules/model.html">model</a></li>
-            
-                <li><a href="../modules/model.view.html">model.view</a></li>
+                <li><a href="../modules/view.html">view</a></li>
             
             </ul>
         </div>
@@ -92,39 +86,72 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>eventemitter Module</h1>
-<div class="box clearfix meta">
-    
+                        <h1 class="file-heading">File: src/__archetypo/view/sub-views.js</h1>
 
-    
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * @module archetypo
+ * @submodule view
+ */
 
-    
-        <div class="foundat">
-            Defined in: <a href="../files/src___archetypo_eventemitter_index.js.html#l1"><code>src&#x2F;__archetypo&#x2F;eventemitter&#x2F;index.js:1</code></a>
-        </div>
-    
+define(function (require, exports, module) {
+	&#x27;use strict&#x27;;
 
-    
-</div>
-
-
-
-<div class="box intro">
-    <p>Just an adapter of EventEmitter2, so that it fits as
-an extendable subject.</p>
-
-</div>
+	var _ = require(&#x27;lodash&#x27;),
+		$ = require(&#x27;jquery&#x27;);
 
 
+	/**
+	 * Finds sub views within a $parent
+	 * and instantiates them.
+	 *
+	 * @method subViews
+	 * @private
+	 * @param app {app Object}
+	 * @param $parent {jq Object}
+	 */
+	module.exports = function subViews(app, $parent) {
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-        
-    </div>
+		// [0] Sub-views
+		// Look for child nodes that have an &#x27;arch-view&#x27;
+		// attribute defined and instantiate the corresponding view.
 
-    <div class="yui3-u-1-2">
-        
-    </div>
+		// [1]
+		// find all elements within this element
+		// that have an &#x27;arch-view&#x27; attribute defined.
+		var $subs = $parent.find(&#x27;[data-arch-view]&#x27;);
+
+		// [2]
+		// Instantiate the sub-views.
+		_.each($subs, _.bind(function subView(el) {
+
+
+
+				// wrap el in jqObject
+			var $el = $(el),
+				// retrieve data
+				data = $el.data(),
+				// the arch-view constructor
+				view = app.constructor(&#x27;view&#x27;, data.archView);
+
+			// set el and app on the data object.
+			data.el = $el;
+			data.app = app;
+
+			// transfer instances and constructors
+			data.instances = this.instances;
+			data.constructors = this.constructors;
+
+			// instantiate the view.
+			view(data);
+
+		}, this));
+
+	};
+});
+
+    </pre>
 </div>
 
                     </div>
