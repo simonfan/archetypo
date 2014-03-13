@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/view/index.js - archetypo</title>
+    <title>src/__archetypo/router/format.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -88,7 +88,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/view/index.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/router/format.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -100,44 +100,55 @@
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var _ = require(&#x27;lodash&#x27;),
-		dockableView = require(&#x27;dockable-view&#x27;);
+	var _ = require(&#x27;lodash&#x27;);
 
-	var subViews = require(&#x27;./sub-views&#x27;);
+
+	var optionalParam = /\((.*?)\)/g,
+		namedParam    = /(\(\?)?:\w+/g,
+		splatParam    = /\*\w+/g,
+		escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+
 
 	/**
-	 * The view builder. It is basically a Backbone.View
+	 * Removes all weird tokens from the raw string and returns the key
+	 * to be used when looking for the correspondant value.
 	 *
-	 * @class view
-	 * @constructor
-	 * @param options {Object}
+	 * @method getKey
+	 * @private
+	 * @param str {String}
 	 */
-	var archView = module.exports = dockableView.extend(function archView(options) {
+	function getKey(str) {
+		return str.replace(/(\(|\(.*:|:|\)|\*)/, &#x27;&#x27;);
+	}
 
-		// [1] Templating and replacement
-		// If there is an &#x27;html&#x27; property
-		// build up an element with it place it within $el.
+	/**
+	 * Formats the data into the given route string.
+	 *
+	 * @method format
+	 * @private
+	 * @param route {String}
+	 * @param data {Object}
+	 */
+	module.exports = function format(route, data) {
 
-		// [1.1] retrieve AND normalize the element object
-		this.$el = _.isObject(options.$el) ? options.$el : options.el;
+		// place named data
+		route = route.replace(namedParam, function (match) {
 
-		var html = options.html || this.html;
-		if (html) {
-			// [1.2] place
-			this.$el.html(html);
-		}
+			var key = getKey(match);
 
-		// [2] Find and instantiate sub-views.
-		var app = options.app || this.app;
-		subViews(app, this.$el);
+			return data[key] ? data[key] : match;
+		});
 
-		// [3] Save view on app.
-		var id = this.$el.data(&#x27;arch-id&#x27;) || this.$el.prop(&#x27;id&#x27;) || this.cid;
-		app.view(id, this);
+		// place splat data
+		route = route.replace(splatParam, function (match) {
+			var key = getKey(match);
 
-		// [4] Invoke dockable-view.
-		dockableView.prototype.initialize.apply(this, arguments);
-	});
+			return data[key] ? data[key] : &#x27;&#x27;;
+		});
+
+		// remove optionals that were not used.
+		return route.replace(optionalParam, &#x27;&#x27;);
+	};
 });
 
     </pre>

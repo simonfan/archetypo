@@ -41,6 +41,8 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
+                <li><a href="../classes/archetypo.html">archetypo</a></li>
+            
                 <li><a href="../classes/view.html">view</a></li>
             
             </ul>
@@ -105,12 +107,19 @@ define(function (require, exports, module) {
 
 	var subject = require(&#x27;subject&#x27;),
 		backbone = require(&#x27;lowercase-backbone&#x27;),
-		q = require(&#x27;q&#x27;);
+		q = require(&#x27;q&#x27;),
+		_ = require(&#x27;lodash&#x27;);
 
 	// sub modules.
 	var archView = require(&#x27;./__archetypo/view/index&#x27;),
 		archRouter = require(&#x27;./__archetypo/router/index&#x27;);
 
+	/**
+	 * The main class.
+	 *
+	 * @class archetypo
+	 * @constructor
+	 */
 	var archetypo = module.exports = archRouter.extend(function archetypoBuilder() {
 
 		// initialize the arch router.
@@ -165,9 +174,24 @@ define(function (require, exports, module) {
 				// Add app to extensions
 				extensions.app = this;
 
-				return constructors[name] = constructor.extend(extensions);
+				// save
+				constructors[name] = constructor.extend(extensions);
+
+				// return
+				return constructors[name];
 
 			} else if (arguments.length === 2) {
+
+				if (_.isObject(name)) {
+					// define multiple constructors
+					_.each(name, _.bind(this, function (extensions, name) {
+						this.constructor(type, name, extensions);
+					}));
+
+				} else {
+
+				}
+
 				// retrieve a constructor.
 				return constructor;
 			}

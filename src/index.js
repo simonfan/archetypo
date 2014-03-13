@@ -20,6 +20,12 @@ define(function (require, exports, module) {
 	var archView = require('./__archetypo/view/index'),
 		archRouter = require('./__archetypo/router/index');
 
+	/**
+	 * The main class.
+	 *
+	 * @class archetypo
+	 * @constructor
+	 */
 	var archetypo = module.exports = archRouter.extend(function archetypoBuilder() {
 
 		// initialize the arch router.
@@ -81,6 +87,17 @@ define(function (require, exports, module) {
 				return constructors[name];
 
 			} else if (arguments.length === 2) {
+
+				if (_.isObject(name)) {
+					// define multiple constructors
+					_.each(name, _.bind(this, function (extensions, name) {
+						this.constructor(type, name, extensions);
+					}));
+
+				} else {
+
+				}
+
 				// retrieve a constructor.
 				return constructor;
 			}
