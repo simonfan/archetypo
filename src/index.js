@@ -1,7 +1,7 @@
 //     archetypo
 //     (c) simonfan
 //     archetypo is licensed under the MIT terms.
-Mobile test
+
 /**
  * AMD module.
  *
