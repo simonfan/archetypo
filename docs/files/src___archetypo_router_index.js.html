@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/index.js - archetypo</title>
+    <title>src/__archetypo/router/index.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -86,142 +86,80 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/index.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/router/index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-//     archetypo
-//     (c) simonfan
-//     archetypo is licensed under the MIT terms.
-
 /**
- * AMD module.
- *
  * @module archetypo
+ * @submodule view
  */
 
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var subject = require(&#x27;subject&#x27;),
-		backbone = require(&#x27;lowercase-backbone&#x27;),
-		q = require(&#x27;q&#x27;);
+	var _ = require(&#x27;lodash&#x27;),
+		router = require(&#x27;lowercase-backbone&#x27;).router;
 
-	// sub modules.
-	var archView = require(&#x27;./__archetypo/view/index&#x27;),
-		archRouter = require(&#x27;./__archetypo/router/index&#x27;);
+	var archRouter = module.exports = router.extend({
 
-	var archetypo = module.exports = archRouter.extend(function archetypoBuilder() {
-
-		// initialize the arch router.
-		archRouter.prototype.initialize.apply(this, arguments);
+		initialize: function initializeArchRouter(options) {
+			options = options || {};
+			this.stringifiers = _.extend({}, this.stringifiers, options.stringifiers);
+		},
 
 		/**
-		 * Hash where constructors are stored.
+		 * Hash on which route stringifiers are stored by name.
 		 *
-		 * @property constructors
+		 * @property stringifiers
 		 * @type Object
 		 */
-		this.constructors = {
-			view: {
-				&#x27;default&#x27;: archView
-			},
-			model: {},
-			collection: {}
-		};
-
-		/**
-		 * Hash where instances are stored.
-		 *
-		 * @property instances
-		 * @type Object
-		 */
-		this.instances = {
-			view: {},
-			model: {},
-			collection: {},
-		};
-	});
-
-	// proto
-	archetypo.proto({
-
-		/**
-		 * Either defines or retrieves a constructor function.
-		 *
-		 * @method constructor
-		 * @param type {String}
-		 * @param name {String}
-		 * @param [extensions] {Object}
-		 */
-		constructor: function defineConstructor(type, name, extensions) {
-
-			var constructors = this.constructors[type],
-				constructor = constructors[name] || constructors[&#x27;default&#x27;];
-
-			if (arguments.length === 3) {
-				// define a constructor
-
-				// Add app to extensions
-				extensions.app = this;
-
-				return constructors[name] = constructor.extend(extensions);
-
-			} else if (arguments.length === 2) {
-				// retrieve a constructor.
-				return constructor;
+		stringifiers: {
+			&#x27;default&#x27;: function defaultStringifier(data) {
+				return &#x27;/&#x27; + JSON.stringify(data);
 			}
 		},
 
 		/**
-		 * Defines or retrieves an instance.
+		 * Defines a stringifier method.
 		 *
-		 * @method instance
-		 * @param type {String}
-		 * @param name {String}
-		 * @param [obj] {Object}
+		 * @method stringifier
 		 */
-		instance: function instance(type, name, obj) {
+		stringifier: function defineStringifier(type, stringifier) {
+			this.stringifiers[type] = stringifier;
 
-			var instances = this.instances[type] = this.instances[type] || {};
-
-			if (arguments.length === 3) {
-				instances[name] = obj;
-			}
-
-			return instances[name];
+			return this;
 		},
 
 		/**
-		 * Instantiates a default view given an $el.
+		 * Returns a route string by using a pre-defined strngifier.
 		 *
-		 * @method build
-		 * @param $el {jq Object}
+		 * @method stringify
+		 * @param type String Identifier string for the stringifier.
+		 * @param data
 		 */
-		build: function build($el) {
-			var view = this.constructor(&#x27;view&#x27;, &#x27;default&#x27;);
+		stringify: function stringifyRoute(type, data) {
 
-			view({
-				$el: $el,
-				app: this
-			});
+			var stringifier = this.stringifiers[type] || this.stringifiers[&#x27;default&#x27;];
 
-			return this;
+			return stringifier(data);
 		},
 
-		start: function start(options) {
-			backbone.history.start(options);
+		/**
+		 * Intercepts the original navigate method,
+		 * so that the router automatically takes advantage
+		 * of stringifier methods.
+		 *
+		 * @method navigate
+		 * @param stringifier {String}
+		 * @param data {Object}
+		 * @param [options] {Object}
+		 */
+		navigate: function navigate(stringifier, data, options) {
+			var route = this.stringify(stringifier, data);
 
-			return this;
-		}
-	});
-
-
-	// partials
-	archetypo.proto({
-		view: _.partial(archetypo.prototype.instance, &#x27;view&#x27;),
-		model: _.partial(archetypo.prototype.instance, &#x27;model&#x27;),
-		collection: _.partial(archetypo.prototype.instance, &#x27;collection&#x27;)
+			return router.prototype.navigate.call(this, route, options);
+		},
 	});
 });
 

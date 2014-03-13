@@ -9,7 +9,7 @@ define(function (require, exports, module) {
 	app.constructor('view', 'model', {
 
 		initialize: function () {
-			_.bindAll(this, 'alert');
+			_.bindAll(this, 'showFruit');
 
 			app.constructor('view', 'default').prototype.initialize.apply(this, arguments);
 		},
@@ -18,8 +18,10 @@ define(function (require, exports, module) {
 
 
 		docks: {
-			model: {
-				name: 'data',
+			data: {
+			//	name: 'data',
+
+				property: 'data',
 
 				map: {
 					id: '[data-attribute="id"]',
@@ -31,19 +33,20 @@ define(function (require, exports, module) {
 					name: function (name) {
 						return 'The fruit\'s name is ' + name;
 					}
+				},
+
+				parsers: {
+
 				}
 			}
 		},
 
 		events: {
-			'click .lalala': 'alert',
+			'click .lalala': 'showFruit',
 		},
 
-		alert: function (event) {
-
-
-			alert(this.$el.data('message'));
-
+		showFruit: function (event) {
+			app.navigate('model', this.$el.data(), { trigger: true });
 		}
 	});
 });

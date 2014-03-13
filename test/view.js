@@ -1,4 +1,4 @@
-define(['archetypo', 'should', 'jquery', 'mock-app/start.js', 'text!/test/mock-app/templates/main.html'], function(archetypo, should, $, app, mainHtml) {
+define(['archetypo', 'should', 'jquery', 'mock-app/loader.js', 'text!/test/mock-app/templates/main.html'], function(archetypo, should, $, app, mainHtml) {
 	'use strict';
 
 	describe('archetypo view', function () {
@@ -7,7 +7,7 @@ define(['archetypo', 'should', 'jquery', 'mock-app/start.js', 'text!/test/mock-a
 		});
 
 		afterEach(function () {
-			app.navigate('/test');
+			app.navigate('/test', { trigger: true });
 		});
 
 		it('multiple view definition', function (done) {
@@ -16,7 +16,9 @@ define(['archetypo', 'should', 'jquery', 'mock-app/start.js', 'text!/test/mock-a
 			app.build(this.$main)
 				.start({ pushState: true });
 
-			app.navigate('model/1', { trigger: true });
+			setTimeout(function (argument) {
+				app.navigate('model', { id: 1 }, { trigger: true });
+			}, 400);
 
 			setTimeout(done, 1000);
 		});

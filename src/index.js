@@ -13,12 +13,17 @@ define(function (require, exports, module) {
 
 	var subject = require('subject'),
 		backbone = require('lowercase-backbone'),
-		q = require('q');
+		q = require('q'),
+		_ = require('lodash');
 
 	// sub modules.
-	var archView = require('./__archetypo/view/index');
+	var archView = require('./__archetypo/view/index'),
+		archRouter = require('./__archetypo/router/index');
 
-	var archetypo = module.exports = backbone.router.extend(function archetypoBuilder() {
+	var archetypo = module.exports = archRouter.extend(function archetypoBuilder() {
+
+		// initialize the arch router.
+		archRouter.prototype.initialize.apply(this, arguments);
 
 		/**
 		 * Hash where constructors are stored.
@@ -69,7 +74,11 @@ define(function (require, exports, module) {
 				// Add app to extensions
 				extensions.app = this;
 
-				return constructors[name] = constructor.extend(extensions);
+				// save
+				constructors[name] = constructor.extend(extensions);
+
+				// return
+				return constructors[name];
 
 			} else if (arguments.length === 2) {
 				// retrieve a constructor.

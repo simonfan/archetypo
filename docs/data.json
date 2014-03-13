@@ -4,11 +4,18 @@
         "version": "0.0.0"
     },
     "files": {
-        "src/__archetypo/view/index.js": {
-            "name": "src/__archetypo/view/index.js",
+        "src/__archetypo/router/index.js": {
+            "name": "src/__archetypo/router/index.js",
             "modules": {
                 "view": 1
             },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/view/index.js": {
+            "name": "src/__archetypo/view/index.js",
+            "modules": {},
             "classes": {
                 "view": 1
             },
@@ -91,6 +98,75 @@
     },
     "classitems": [
         {
+            "file": "src/__archetypo/router/index.js",
+            "line": 19,
+            "description": "Hash on which route stringifiers are stored by name.",
+            "itemtype": "property",
+            "name": "stringifiers",
+            "type": "Object",
+            "class": "view",
+            "module": "archetypo",
+            "submodule": "view"
+        },
+        {
+            "file": "src/__archetypo/router/index.js",
+            "line": 31,
+            "description": "Defines a stringifier method.",
+            "itemtype": "method",
+            "name": "stringifier",
+            "class": "view",
+            "module": "archetypo",
+            "submodule": "view"
+        },
+        {
+            "file": "src/__archetypo/router/index.js",
+            "line": 42,
+            "description": "Returns a route string by using a pre-defined strngifier.",
+            "itemtype": "method",
+            "name": "stringify",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "String Identifier string for the stringifier."
+                },
+                {
+                    "name": "data",
+                    "description": ""
+                }
+            ],
+            "class": "view",
+            "module": "archetypo",
+            "submodule": "view"
+        },
+        {
+            "file": "src/__archetypo/router/index.js",
+            "line": 56,
+            "description": "Intercepts the original navigate method,\nso that the router automatically takes advantage\nof stringifier methods.",
+            "itemtype": "method",
+            "name": "navigate",
+            "params": [
+                {
+                    "name": "stringifier",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "class": "view",
+            "module": "archetypo",
+            "submodule": "view"
+        },
+        {
             "file": "src/__archetypo/view/sub-views.js",
             "line": 13,
             "description": "Finds sub views within a $parent\nand instantiates them.",
@@ -116,7 +192,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 23,
+            "line": 27,
             "description": "Hash where constructors are stored.",
             "itemtype": "property",
             "name": "constructors",
@@ -126,7 +202,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 37,
+            "line": 41,
             "description": "Hash where instances are stored.",
             "itemtype": "property",
             "name": "instances",
@@ -136,7 +212,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 53,
+            "line": 57,
             "description": "Either defines or retrieves a constructor function.",
             "itemtype": "method",
             "name": "constructor",
@@ -163,7 +239,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 80,
+            "line": 84,
             "description": "Defines or retrieves an instance.",
             "itemtype": "method",
             "name": "instance",
@@ -190,7 +266,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 99,
+            "line": 103,
             "description": "Instantiates a default view given an $el.",
             "itemtype": "method",
             "name": "build",

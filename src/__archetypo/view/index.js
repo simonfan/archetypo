@@ -25,7 +25,7 @@ define(function (require, exports, module) {
 		// build up an element with it place it within $el.
 
 		// [1.1] retrieve AND normalize the element object
-		this.$el = _.isObject(options.$el) ? options.$el : _.isObject(options.el) ? options.el : $('<div></div>');
+		this.$el = _.isObject(options.$el) ? options.$el : options.el;
 
 		var html = options.html || this.html;
 		if (html) {
