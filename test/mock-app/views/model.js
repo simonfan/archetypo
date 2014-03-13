@@ -19,12 +19,19 @@ define(function (require, exports, module) {
 
 		docks: {
 			model: {
+				name: 'data',
 
 				map: {
 					id: '[data-attribute="id"]',
 					name: '[data-attribute="name"]',
 					color: '[data-attribute="color"]',
 				},
+
+				stringifiers: {
+					name: function (name) {
+						return 'The fruit\'s name is ' + name;
+					}
+				}
 			}
 		},
 

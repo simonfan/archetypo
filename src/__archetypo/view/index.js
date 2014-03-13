@@ -35,7 +35,7 @@ define(function (require, exports, module) {
 
 		// [2] Find and instantiate sub-views.
 		var app = options.app || this.app;
-		subViews.call(this, app, this.$el);
+		subViews(app, this.$el);
 
 		// [3] Save view on app.
 		var id = this.$el.data('arch-id') || this.$el.prop('id') || this.cid;

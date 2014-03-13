@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "description": "Backbone-based framework.",
   "dependencies": {
-    "dockable-view": "~0.0.1",
+    "dockable-view": "0.1.2",
     "subject": "~0.4.1",
     "q": "~1.0.0"
   },
@@ -17,6 +17,7 @@
   },
   "resolutions": {
     "subject": "~0.4.1",
-    "jquery": "~2.1.0"
+    "jquery": "~2.1.0",
+    "dockable-view": "0.1.2"
   }
 }

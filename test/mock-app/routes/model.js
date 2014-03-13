@@ -9,17 +9,19 @@ define(function (require, exports, module) {
 	require('/test/mock-app/views/nav.js');
 
 	// the app.
-	var app = require('/test/mock-app/app.js'),
-		// the model view
-		view = app.instance('view', 'model-display');
+	var app = require('/test/mock-app/app.js');
 
 	var database = require('/test/mock-app/database/collection.js');
 
 	// route definition
-	app.route('/model/:id', 'model', function () {
+	app.route('model/:id', 'model', function (id) {
 
+		// the model view
+		var view = app.instance('view', 'model-display');
 		console.log(view);
 
-		view.docks.model.attach(database.get(1));
+		console.log(database.get(id));
+
+		view.docks.model.attach(database.get(id));
 	});
 });

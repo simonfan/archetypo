@@ -179,7 +179,7 @@ define(function (require, exports, module) {
 		 */
 		instance: function instance(type, name, obj) {
 
-			var instances = this.instances[type];
+			var instances = this.instances[type] = this.instances[type] || {};
 
 			if (arguments.length === 3) {
 				instances[name] = obj;

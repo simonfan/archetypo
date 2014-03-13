@@ -16,7 +16,7 @@ define(['archetypo', 'should', 'jquery', 'mock-app/start.js', 'text!/test/mock-a
 			app.build(this.$main)
 				.start({ pushState: true });
 
-			app.navigate('model/2', { trigger: true });
+			app.navigate('model/1', { trigger: true });
 
 			setTimeout(done, 1000);
 		});
