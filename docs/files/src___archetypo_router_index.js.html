@@ -41,6 +41,8 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
+                <li><a href="../classes/archetypo.html">archetypo</a></li>
+            
                 <li><a href="../classes/view.html">view</a></li>
             
             </ul>
@@ -101,64 +103,62 @@ define(function (require, exports, module) {
 	var _ = require(&#x27;lodash&#x27;),
 		router = require(&#x27;lowercase-backbone&#x27;).router;
 
+	var formatRoute = require(&#x27;./format&#x27;);
+
+
+	var optionalParam = /\((.*?)\)/g,
+		namedParam    = /(\(\?)?:\w+/g,
+		splatParam    = /\*\w+/g,
+		escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+
 	var archRouter = module.exports = router.extend({
 
-		initialize: function initializeArchRouter(options) {
-			options = options || {};
-			this.stringifiers = _.extend({}, this.stringifiers, options.stringifiers);
+		initialize: function initializeArchRouter() {
+			this.routeFormats = {};
 		},
 
 		/**
-		 * Hash on which route stringifiers are stored by name.
+		 * Intercepts calls for the route method, so that
+		 * we can save the route strings to a formats hash for navigation use.
 		 *
-		 * @property stringifiers
-		 * @type Object
+		 * @method route
 		 */
-		stringifiers: {
-			&#x27;default&#x27;: function defaultStringifier(data) {
-				return &#x27;/&#x27; + JSON.stringify(data);
+		route: function defineRoute(route, name, callback) {
+
+			// save the route to the routeFormats if a name is defined
+			if (_.isString(name)) {
+				this.routeFormats[name] = route;
 			}
-		},
 
-		/**
-		 * Defines a stringifier method.
-		 *
-		 * @method stringifier
-		 */
-		stringifier: function defineStringifier(type, stringifier) {
-			this.stringifiers[type] = stringifier;
-
-			return this;
-		},
-
-		/**
-		 * Returns a route string by using a pre-defined strngifier.
-		 *
-		 * @method stringify
-		 * @param type String Identifier string for the stringifier.
-		 * @param data
-		 */
-		stringify: function stringifyRoute(type, data) {
-
-			var stringifier = this.stringifiers[type] || this.stringifiers[&#x27;default&#x27;];
-
-			return stringifier(data);
+			// continue normal execution
+			return router.prototype.route.apply(this, arguments);
 		},
 
 		/**
 		 * Intercepts the original navigate method,
 		 * so that the router automatically takes advantage
-		 * of stringifier methods.
+		 * of format methods.
 		 *
 		 * @method navigate
-		 * @param stringifier {String}
-		 * @param data {Object}
+		 * @param route|format {String|Object}
+		 * @param data|options {Object}
 		 * @param [options] {Object}
 		 */
-		navigate: function navigate(stringifier, data, options) {
-			var route = this.stringify(stringifier, data);
+		navigate: function navigate(first, second, third) {
+			// [1] try to get a format
+			var format = this.routeFormats[first];
 
-			return router.prototype.navigate.call(this, route, options);
+			if (!format) {
+				// simple navigation
+				return router.prototype.navigate.apply(this, arguments);
+			} else {
+				// build up the route
+				var route = formatRoute(format, second);
+
+				// navigate
+				return router.prototype.navigate.call(this, route, third);
+			}
+
 		},
 	});
 });

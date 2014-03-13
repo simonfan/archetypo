@@ -1,23 +1,23 @@
 {
   "name": "archetypo",
   "main": "built/archetypo.js",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Backbone-based framework.",
   "dependencies": {
-    "dockable-view": "0.1.3",
-    "subject": "~0.4.1",
-    "q": "~1.0.0"
+	"dockable-view": "0.1.3",
+	"subject": "~0.4.1",
+	"q": "~1.0.0"
   },
   "devDependencies": {
-    "requirejs": "*",
-    "requirejs-text": "*",
-    "underscore": "*",
-    "jquery": "*",
-    "qunit": "*"
+	"requirejs": "*",
+	"requirejs-text": "*",
+	"underscore": "*",
+	"jquery": "*",
+	"qunit": "*"
   },
   "resolutions": {
-    "subject": "~0.4.1",
-    "jquery": "~2.1.0",
-    "dockable-view": "0.1.3"
+	"subject": "~0.4.1",
+	"jquery": "~2.1.0",
+	"dockable-view": "0.1.3"
   }
 }

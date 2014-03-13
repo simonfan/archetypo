@@ -4,11 +4,18 @@
         "version": "0.0.0"
     },
     "files": {
-        "src/__archetypo/router/index.js": {
-            "name": "src/__archetypo/router/index.js",
+        "src/__archetypo/router/format.js": {
+            "name": "src/__archetypo/router/format.js",
             "modules": {
                 "view": 1
             },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/router/index.js": {
+            "name": "src/__archetypo/router/index.js",
+            "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
@@ -34,7 +41,9 @@
             "modules": {
                 "archetypo": 1
             },
-            "classes": {},
+            "classes": {
+                "archetypo": 1
+            },
             "fors": {},
             "namespaces": {}
         }
@@ -46,13 +55,14 @@
                 "view": 1
             },
             "classes": {
-                "view": 1
+                "view": 1,
+                "archetypo": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "src/__archetypo/view/index.js",
-            "line": 14,
+            "file": "src/index.js",
+            "line": 23,
             "description": "AMD module."
         },
         "view": {
@@ -94,44 +104,61 @@
                     "type": "Object"
                 }
             ]
+        },
+        "archetypo": {
+            "name": "archetypo",
+            "shortname": "archetypo",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "archetypo",
+            "namespace": "",
+            "file": "src/index.js",
+            "line": 23,
+            "description": "The main class.",
+            "is_constructor": 1
         }
     },
     "classitems": [
         {
-            "file": "src/__archetypo/router/index.js",
-            "line": 19,
-            "description": "Hash on which route stringifiers are stored by name.",
-            "itemtype": "property",
-            "name": "stringifiers",
-            "type": "Object",
-            "class": "view",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/router/index.js",
-            "line": 31,
-            "description": "Defines a stringifier method.",
+            "file": "src/__archetypo/router/format.js",
+            "line": 18,
+            "description": "Removes all weird tokens from the raw string and returns the key\nto be used when looking for the correspondant value.",
             "itemtype": "method",
-            "name": "stringifier",
-            "class": "view",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/router/index.js",
-            "line": 42,
-            "description": "Returns a route string by using a pre-defined strngifier.",
-            "itemtype": "method",
-            "name": "stringify",
+            "name": "getKey",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
-                    "name": "type",
-                    "description": "String Identifier string for the stringifier."
+                    "name": "str",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "view",
+            "module": "archetypo",
+            "submodule": "view"
+        },
+        {
+            "file": "src/__archetypo/router/format.js",
+            "line": 30,
+            "description": "Formats the data into the given route string.",
+            "itemtype": "method",
+            "name": "format",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "route",
+                    "description": "",
+                    "type": "String"
                 },
                 {
                     "name": "data",
-                    "description": ""
+                    "description": "",
+                    "type": "Object"
                 }
             ],
             "class": "view",
@@ -140,18 +167,28 @@
         },
         {
             "file": "src/__archetypo/router/index.js",
-            "line": 56,
-            "description": "Intercepts the original navigate method,\nso that the router automatically takes advantage\nof stringifier methods.",
+            "line": 26,
+            "description": "Intercepts calls for the route method, so that\nwe can save the route strings to a formats hash for navigation use.",
+            "itemtype": "method",
+            "name": "route",
+            "class": "view",
+            "module": "archetypo",
+            "submodule": "view"
+        },
+        {
+            "file": "src/__archetypo/router/index.js",
+            "line": 43,
+            "description": "Intercepts the original navigate method,\nso that the router automatically takes advantage\nof format methods.",
             "itemtype": "method",
             "name": "navigate",
             "params": [
                 {
-                    "name": "stringifier",
+                    "name": "route|format",
                     "description": "",
-                    "type": "String"
+                    "type": "String|Object"
                 },
                 {
-                    "name": "data",
+                    "name": "data|options",
                     "description": "",
                     "type": "Object"
                 },
@@ -186,33 +223,33 @@
                     "type": "Jq Object"
                 }
             ],
-            "class": "",
+            "class": "archetypo",
             "module": "archetypo",
             "submodule": "view"
         },
         {
             "file": "src/index.js",
-            "line": 27,
+            "line": 34,
             "description": "Hash where constructors are stored.",
             "itemtype": "property",
             "name": "constructors",
             "type": "Object",
-            "class": "",
+            "class": "archetypo",
             "module": "archetypo"
         },
         {
             "file": "src/index.js",
-            "line": 41,
+            "line": 48,
             "description": "Hash where instances are stored.",
             "itemtype": "property",
             "name": "instances",
             "type": "Object",
-            "class": "",
+            "class": "archetypo",
             "module": "archetypo"
         },
         {
             "file": "src/index.js",
-            "line": 57,
+            "line": 64,
             "description": "Either defines or retrieves a constructor function.",
             "itemtype": "method",
             "name": "constructor",
@@ -234,12 +271,12 @@
                     "optional": true
                 }
             ],
-            "class": "",
+            "class": "archetypo",
             "module": "archetypo"
         },
         {
             "file": "src/index.js",
-            "line": 84,
+            "line": 106,
             "description": "Defines or retrieves an instance.",
             "itemtype": "method",
             "name": "instance",
@@ -261,12 +298,12 @@
                     "optional": true
                 }
             ],
-            "class": "",
+            "class": "archetypo",
             "module": "archetypo"
         },
         {
             "file": "src/index.js",
-            "line": 103,
+            "line": 125,
             "description": "Instantiates a default view given an $el.",
             "itemtype": "method",
             "name": "build",
@@ -277,7 +314,7 @@
                     "type": "Jq Object"
                 }
             ],
-            "class": "",
+            "class": "archetypo",
             "module": "archetypo"
         }
     ],
