@@ -4,6 +4,17 @@
         "version": "0.0.0"
     },
     "files": {
+        "src/__archetypo/registry/index.js": {
+            "name": "src/__archetypo/registry/index.js",
+            "modules": {
+                "registry": 1
+            },
+            "classes": {
+                "registry": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/__archetypo/router/format.js": {
             "name": "src/__archetypo/router/format.js",
             "modules": {
@@ -20,19 +31,33 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/__archetypo/view/initialize/register.js": {
+            "name": "src/__archetypo/view/initialize/register.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/view/initialize/render.js": {
+            "name": "src/__archetypo/view/initialize/render.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/view/initialize/subviews.js": {
+            "name": "src/__archetypo/view/initialize/subviews.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "src/__archetypo/view/index.js": {
             "name": "src/__archetypo/view/index.js",
             "modules": {},
             "classes": {
                 "view": 1
             },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/view/sub-views.js": {
-            "name": "src/__archetypo/view/sub-views.js",
-            "modules": {},
-            "classes": {},
             "fors": {},
             "namespaces": {}
         },
@@ -52,9 +77,11 @@
         "archetypo": {
             "name": "archetypo",
             "submodules": {
+                "registry": 1,
                 "view": 1
             },
             "classes": {
+                "registry": 1,
                 "view": 1,
                 "archetypo": 1
             },
@@ -64,6 +91,21 @@
             "file": "src/index.js",
             "line": 23,
             "description": "AMD module."
+        },
+        "registry": {
+            "name": "registry",
+            "submodules": {},
+            "classes": {
+                "registry": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "archetypo",
+            "namespace": "",
+            "file": "src/__archetypo/registry/index.js",
+            "line": 15,
+            "description": "The registry is just a Bakbone.Model.Tree Object\nwith some special methods to get the 'item' attributes\nfrom the branch models."
         },
         "view": {
             "name": "view",
@@ -77,11 +119,27 @@
             "module": "archetypo",
             "namespace": "",
             "file": "src/__archetypo/view/index.js",
-            "line": 14,
+            "line": 19,
             "description": "The view builder. It is basically a Backbone.View"
         }
     },
     "classes": {
+        "registry": {
+            "name": "registry",
+            "shortname": "registry",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "archetypo",
+            "submodule": "registry",
+            "namespace": "",
+            "file": "src/__archetypo/registry/index.js",
+            "line": 15,
+            "description": "The registry is just a Bakbone.Model.Tree Object\nwith some special methods to get the 'item' attributes\nfrom the branch models.",
+            "is_constructor": 1
+        },
         "view": {
             "name": "view",
             "shortname": "view",
@@ -94,7 +152,7 @@
             "submodule": "view",
             "namespace": "",
             "file": "src/__archetypo/view/index.js",
-            "line": 14,
+            "line": 19,
             "description": "The view builder. It is basically a Backbone.View",
             "is_constructor": 1,
             "params": [
@@ -122,6 +180,23 @@
         }
     },
     "classitems": [
+        {
+            "file": "src/__archetypo/registry/index.js",
+            "line": 29,
+            "description": "Selects the descending branch models and map\nthe results to return directly the 'item' attribute.",
+            "itemtype": "method",
+            "name": "descendantItems",
+            "params": [
+                {
+                    "name": "criteria",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "registry",
+            "module": "archetypo",
+            "submodule": "registry"
+        },
         {
             "file": "src/__archetypo/router/format.js",
             "line": 18,
@@ -204,26 +279,18 @@
             "submodule": "view"
         },
         {
-            "file": "src/__archetypo/view/sub-views.js",
-            "line": 13,
-            "description": "Finds sub views within a $parent\nand instantiates them.",
-            "itemtype": "method",
-            "name": "subViews",
-            "access": "private",
-            "tagname": "",
+            "file": "src/__archetypo/view/index.js",
+            "line": 47,
+            "description": "Selects the view objcets that descend from this view.",
+            "methos": "selectViews",
             "params": [
                 {
-                    "name": "app",
+                    "name": "selector",
                     "description": "",
-                    "type": "App Object"
-                },
-                {
-                    "name": "$parent",
-                    "description": "",
-                    "type": "Jq Object"
+                    "type": "Object|[String]"
                 }
             ],
-            "class": "archetypo",
+            "class": "view",
             "module": "archetypo",
             "submodule": "view"
         },
@@ -318,5 +385,14 @@
             "module": "archetypo"
         }
     ],
-    "warnings": []
+    "warnings": [
+        {
+            "message": "unknown tag: methos",
+            "line": " src/__archetypo/view/index.js:47"
+        },
+        {
+            "message": "Missing item type\nSelects the view objcets that descend from this view.",
+            "line": " src/__archetypo/view/index.js:47"
+        }
+    ]
 }

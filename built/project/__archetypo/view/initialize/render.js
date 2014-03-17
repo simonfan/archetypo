@@ -1,0 +1,1 @@
+define(["require","exports","module","lodash"],function(e,t,n){var r=e("lodash");n.exports=function(t){this.$el=r.isObject(t.$el)?t.$el:t.el;var n=t.html||this.html;n&&this.$el.html(n)}});

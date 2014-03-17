@@ -43,6 +43,8 @@
             
                 <li><a href="../classes/archetypo.html">archetypo</a></li>
             
+                <li><a href="../classes/registry.html">registry</a></li>
+            
                 <li><a href="../classes/view.html">view</a></li>
             
             </ul>
@@ -50,6 +52,8 @@
             <ul id="api-modules" class="apis modules">
             
                 <li><a href="../modules/archetypo.html">archetypo</a></li>
+            
+                <li><a href="../modules/registry.html">registry</a></li>
             
                 <li><a href="../modules/view.html">view</a></li>
             
@@ -103,7 +107,12 @@ define(function (require, exports, module) {
 	var _ = require(&#x27;lodash&#x27;),
 		dockableView = require(&#x27;dockable-view&#x27;);
 
-	var subViews = require(&#x27;./sub-views&#x27;);
+	var registry = require(&#x27;../registry/index&#x27;);
+
+	// view initialization steps
+	var render = require(&#x27;./initialize/render&#x27;),
+		register = require(&#x27;./initialize/register&#x27;),
+		subviews = require(&#x27;./initialize/subviews&#x27;);
 
 	/**
 	 * The view builder. It is basically a Backbone.View
@@ -113,31 +122,36 @@ define(function (require, exports, module) {
 	 * @param options {Object}
 	 */
 	var archView = module.exports = dockableView.extend(function archView(options) {
+		// [2] Invoke dockable-view.
+		dockableView.prototype.initialize.apply(this, arguments);
+
+		// GET APP
+		this.app = options.app;
 
 		// [1] Templating and replacement
 		// If there is an &#x27;html&#x27; property
 		// build up an element with it place it within $el.
+		render.apply(this, arguments);
 
-		// [1.1] retrieve AND normalize the element object
-		this.$el = _.isObject(options.$el) ? options.$el : options.el;
 
-		var html = options.html || this.html;
-		if (html) {
-			// [1.2] place
-			this.$el.html(html);
-		}
+		// [3] Register view
+		register.apply(this, arguments);
 
-		// [2] Find and instantiate sub-views.
-		var app = options.app || this.app;
-		subViews(app, this.$el);
-
-		// [3] Save view on app.
-		var id = this.$el.data(&#x27;arch-id&#x27;) || this.$el.prop(&#x27;id&#x27;) || this.cid;
-		app.view(id, this);
-
-		// [4] Invoke dockable-view.
-		dockableView.prototype.initialize.apply(this, arguments);
+		// [4] Start subviews
+		subviews.apply(this, arguments);
 	});
+
+	archView.proto({
+		/**
+		 * Selects the view objcets that descend from this view.
+		 *
+		 * @methos selectViews
+		 * @param selector {Object|[String]}
+		 */
+		views: function selectViews(selector) {
+			return this.registry.descendantItems(selector);
+		},
+	})
 });
 
     </pre>

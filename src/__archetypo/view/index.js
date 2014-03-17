@@ -9,7 +9,12 @@ define(function (require, exports, module) {
 	var _ = require('lodash'),
 		dockableView = require('dockable-view');
 
-	var subViews = require('./sub-views');
+	var registry = require('../registry/index');
+
+	// view initialization steps
+	var render = require('./initialize/render'),
+		register = require('./initialize/register'),
+		subviews = require('./initialize/subviews');
 
 	/**
 	 * The view builder. It is basically a Backbone.View
@@ -19,29 +24,34 @@ define(function (require, exports, module) {
 	 * @param options {Object}
 	 */
 	var archView = module.exports = dockableView.extend(function archView(options) {
+		// [2] Invoke dockable-view.
+		dockableView.prototype.initialize.apply(this, arguments);
+
+		// GET APP
+		this.app = options.app;
 
 		// [1] Templating and replacement
 		// If there is an 'html' property
 		// build up an element with it place it within $el.
+		render.apply(this, arguments);
 
-		// [1.1] retrieve AND normalize the element object
-		this.$el = _.isObject(options.$el) ? options.$el : options.el;
 
-		var html = options.html || this.html;
-		if (html) {
-			// [1.2] place
-			this.$el.html(html);
-		}
+		// [3] Register view
+		register.apply(this, arguments);
 
-		// [2] Find and instantiate sub-views.
-		var app = options.app || this.app;
-		subViews(app, this.$el);
-
-		// [3] Save view on app.
-		var id = this.$el.data('arch-id') || this.$el.prop('id') || this.cid;
-		app.view(id, this);
-
-		// [4] Invoke dockable-view.
-		dockableView.prototype.initialize.apply(this, arguments);
+		// [4] Start subviews
+		subviews.apply(this, arguments);
 	});
+
+	archView.proto({
+		/**
+		 * Selects the view objcets that descend from this view.
+		 *
+		 * @methos selectViews
+		 * @param selector {Object|[String]}
+		 */
+		views: function selectViews(selector) {
+			return this.registry.descendantItems(selector);
+		},
+	})
 });

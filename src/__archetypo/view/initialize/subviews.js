@@ -6,20 +6,9 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var _ = require('lodash'),
-		$ = require('jquery');
+	var _ = require('lodash');
 
-
-	/**
-	 * Finds sub views within a $parent
-	 * and instantiates them.
-	 *
-	 * @method subViews
-	 * @private
-	 * @param app {app Object}
-	 * @param $parent {jq Object}
-	 */
-	module.exports = function subViews(app, $parent) {
+	module.exports = function render(options) {
 
 		// [0] Sub-views
 		// Look for child nodes that have an 'arch-view'
@@ -28,27 +17,31 @@ define(function (require, exports, module) {
 		// [1]
 		// find all elements within this element
 		// that have an 'arch-view' attribute defined.
-		var $subs = $parent.find('[data-arch-view]');
+		var $subs = this.$el.find('[data-arch-view]');
 
 		// [2]
 		// Instantiate the sub-views.
-		_.each($subs, _.bind(function subView(el) {
+		_.each($subs, _.bind(function instantiateSubview(el) {
 
 				// wrap el in jqObject
 			var $el = $(el),
 				// retrieve data
 				data = $el.data(),
 				// the arch-view constructor
-				view = app.constructor('view', data.archView);
+				view = this.app.constructor('view', data.archView);
 
 			// set el and app on the data object.
-			data.el = $el;
-			data.app = app;
+			var options = _.extend(data, {
+				el: $el,
+				app: this.app,
+				registry: this.registry,
+			});
 
 			// instantiate the view.
-			view(data);
+			view(options);
 
 		}, this));
 
 	};
+
 });

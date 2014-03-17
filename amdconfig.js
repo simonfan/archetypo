@@ -19,7 +19,15 @@ require.config({
 		qunit: '../bower_components/qunit/qunit/qunit',
 		'requirejs-text': '../bower_components/requirejs-text/text',
 		subject: '../bower_components/subject/built/subject',
-		underscore: '../bower_components/underscore/underscore'
+		underscore: '../bower_components/underscore/underscore',
+		'backbone.collection.lazy': '../bower_components/backbone.collection.lazy/built/backbone.collection.lazy',
+		'backbone.collection.queryable': '../bower_components/backbone.collection.queryable/built/backbone.collection.queryable',
+		'backbone.model.tree': '../bower_components/backbone.model.tree/built/backbone.model.tree',
+		deep: '../bower_components/deep/built/deep',
+		itr: '../bower_components/itr/built/itr',
+		containers: '../bower_components/containers/built/containers',
+		'object-query': '../bower_components/object-query/built/object-query',
+		lazy: '../bower_components/lazy.js/lazy'
 	},
 	shim: {
 		backbone: {
@@ -37,6 +45,9 @@ require.config({
 		},
 		should: {
 			exports: 'should'
+		},
+		lazy: {
+			exports: 'Lazy'
 		}
 	}
 });

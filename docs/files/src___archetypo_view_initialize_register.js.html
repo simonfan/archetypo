@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>archetypo - archetypo</title>
+    <title>src/__archetypo/view/initialize/register.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -92,90 +92,42 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>archetypo Module</h1>
-<div class="box clearfix meta">
-    
+                        <h1 class="file-heading">File: src/__archetypo/view/initialize/register.js</h1>
 
-    
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * @module archetypo
+ * @submodule view
+ */
 
-    
-        <div class="foundat">
-            Defined in: <a href="../files/src_index.js.html#l23"><code>src&#x2F;index.js:23</code></a>
-        </div>
-    
+define(function (require, exports, module) {
+	&#x27;use strict&#x27;;
 
-    
-</div>
+	var _ = require(&#x27;lodash&#x27;);
 
+	var registry = require(&#x27;../../registry/index&#x27;);
 
+	module.exports = function render(options) {
 
-<div class="box intro">
-    <p>AMD module.</p>
-
-</div>
+		// [1] retrieve data that will identify this view
+		var data = this.$el.data();
+		data.id = this.cid;
+		data.item = this;
 
 
+		// [2] ancestorView
+		this.ancestorView = options.ancestorView || false;
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-        
-            <p>This module provides the following classes:</p>
+		// [2] get registry object
+		this.registry = this.ancestorView ?
+			this.ancestorView.registry.addBranch(data) :
+			registry(data);
+	};
 
-            <ul class="module-classes">
-            
-                <li class="module-class">
-                    <a href="../classes/archetypo.html">
-                        archetypo
-                    </a>
-                </li>
-            
-                <li class="module-class">
-                    <a href="../classes/registry.html">
-                        registry
-                    </a>
-                </li>
-            
-                <li class="module-class">
-                    <a href="../classes/view.html">
-                        view
-                    </a>
-                </li>
-            
-            </ul>
-        
-    </div>
+});
 
-    <div class="yui3-u-1-2">
-        
-            <p>This module is a rollup of the following modules:</p>
-
-            <ul class="module-submodules">
-            
-                <li class="module-submodule">
-                    <a href="../modules/registry.html">
-                        registry
-                    </a>
-
-                    <div class="module-submodule-description">
-                        The registry is just a Bakbone.Model.Tree Object
-with some special methods to get the 'item' attributes
-from the branch models.
-                    </div>
-                </li>
-            
-                <li class="module-submodule">
-                    <a href="../modules/view.html">
-                        view
-                    </a>
-
-                    <div class="module-submodule-description">
-                        The view builder. It is basically a Backbone.View
-                    </div>
-                </li>
-            
-            </ul>
-        
-    </div>
+    </pre>
 </div>
 
                     </div>
