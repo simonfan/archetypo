@@ -1,8 +1,9 @@
 define(function (require, exports, module) {
 
-	var archetypo = require('archetypo');
+	var archetypo = require('archetypo'),
+		$ = require('jquery');
 
-	var app = archetypo();
+	var app = window.app = archetypo();
 
 	module.exports = app;
 });

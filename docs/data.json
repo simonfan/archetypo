@@ -89,7 +89,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "src/index.js",
-            "line": 23,
+            "line": 28,
             "description": "AMD module."
         },
         "registry": {
@@ -174,7 +174,7 @@
             "module": "archetypo",
             "namespace": "",
             "file": "src/index.js",
-            "line": 23,
+            "line": 28,
             "description": "The main class.",
             "is_constructor": 1
         }
@@ -296,7 +296,23 @@
         },
         {
             "file": "src/index.js",
-            "line": 34,
+            "line": 42,
+            "description": "The initialization logic is different from that of a\nsimple archView.",
+            "itemtype": "method",
+            "name": "initialize",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object [for both router and view]"
+                }
+            ],
+            "class": "archetypo",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 55,
             "description": "Hash where constructors are stored.",
             "itemtype": "property",
             "name": "constructors",
@@ -306,7 +322,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 48,
+            "line": 69,
             "description": "Hash where instances are stored.",
             "itemtype": "property",
             "name": "instances",
@@ -316,7 +332,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 64,
+            "line": 82,
             "description": "Either defines or retrieves a constructor function.",
             "itemtype": "method",
             "name": "constructor",
@@ -343,7 +359,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 106,
+            "line": 121,
             "description": "Defines or retrieves an instance.",
             "itemtype": "method",
             "name": "instance",
@@ -363,22 +379,6 @@
                     "description": "",
                     "type": "Object",
                     "optional": true
-                }
-            ],
-            "class": "archetypo",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 125,
-            "description": "Instantiates a default view given an $el.",
-            "itemtype": "method",
-            "name": "build",
-            "params": [
-                {
-                    "name": "$el",
-                    "description": "",
-                    "type": "Jq Object"
                 }
             ],
             "class": "archetypo",

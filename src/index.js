@@ -13,6 +13,7 @@ define(function (require, exports, module) {
 
 	var subject = require('subject'),
 		backbone = require('lowercase-backbone'),
+		dockableView = require('dockable-view'),
 		q = require('q'),
 		_ = require('lodash');
 
@@ -20,46 +21,63 @@ define(function (require, exports, module) {
 	var archView = require('./__archetypo/view/index'),
 		archRouter = require('./__archetypo/router/index');
 
+	// view-initialization
+	var register = require('./__archetypo/view/initialize/register'),
+		subviews = require('./__archetypo/view/initialize/subviews');
+
 	/**
 	 * The main class.
 	 *
 	 * @class archetypo
 	 * @constructor
 	 */
-	var archetypo = module.exports = archRouter.extend(function archetypoBuilder() {
-
-		// initialize the arch router.
-		archRouter.prototype.initialize.apply(this, arguments);
-
-		/**
-		 * Hash where constructors are stored.
-		 *
-		 * @property constructors
-		 * @type Object
-		 */
-		this.constructors = {
-			view: {
-				'default': archView
-			},
-			model: {},
-			collection: {}
-		};
-
-		/**
-		 * Hash where instances are stored.
-		 *
-		 * @property instances
-		 * @type Object
-		 */
-		this.instances = {
-			view: {},
-			model: {},
-			collection: {},
-		};
-	});
+	var archetypo = module.exports =
+		archView
+			.extend(backbone.router.prototype)
+			.extend(archRouter.prototype);
 
 	// proto
 	archetypo.proto({
+
+		/**
+		 * The initialization logic is different from that of a
+		 * simple archView.
+		 *
+		 * @method initialize
+		 * @param options {Object [for both router and view]}
+		 */
+		initialize: function initializeArchetypo(options) {
+			// initialize the arch router.
+			archRouter.prototype.initialize.apply(this, arguments);
+
+			this.isApp = true;
+
+			/**
+			 * Hash where constructors are stored.
+			 *
+			 * @property constructors
+			 * @type Object
+			 */
+			this.constructors = {
+				view: {
+					'default': archView
+				},
+				model: {},
+				collection: {}
+			};
+
+			/**
+			 * Hash where instances are stored.
+			 *
+			 * @property instances
+			 * @type Object
+			 */
+			this.instances = {
+				view: {},
+				model: {},
+				collection: {},
+			};
+		},
 
 		/**
 		 * Either defines or retrieves a constructor function.
@@ -76,9 +94,6 @@ define(function (require, exports, module) {
 
 			if (arguments.length === 3) {
 				// define a constructor
-
-				// Add app to extensions
-				extensions.app = this;
 
 				// save
 				constructors[name] = constructor.extend(extensions);
@@ -122,24 +137,30 @@ define(function (require, exports, module) {
 			return instances[name];
 		},
 
-		/**
-		 * Instantiates a default view given an $el.
-		 *
-		 * @method build
-		 * @param $el {jq Object}
-		 */
-		build: function build($el) {
-			var view = this.constructor('view', 'default');
+		build: function build(options) {
 
-			view({
-				$el: $el,
-				app: this
-			});
 
-			return this;
+			// initialize basic backbone view
+			dockableView.prototype.initialize.apply(this, arguments);
+
+
+			// check if $el is present
+			if (!this.$el) {
+				throw new Error('No DOM element in archetypo.');
+			}
+
+
+			// initialize registry
+			register.apply(this, arguments);
+
+			// start subviews
+			subviews.apply(this);
 		},
 
 		start: function start(options) {
+
+			this.build(options);
+
 			backbone.history.start(options);
 
 			return this;

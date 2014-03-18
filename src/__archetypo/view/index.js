@@ -24,16 +24,16 @@ define(function (require, exports, module) {
 	 * @param options {Object}
 	 */
 	var archView = module.exports = dockableView.extend(function archView(options) {
-		// [2] Invoke dockable-view.
-		dockableView.prototype.initialize.apply(this, arguments);
-
-		// GET APP
-		this.app = options.app;
 
 		// [1] Templating and replacement
 		// If there is an 'html' property
 		// build up an element with it place it within $el.
 		render.apply(this, arguments);
+
+
+		// [2] Invoke dockable-view.
+		//     MUST come afte render.
+		dockableView.prototype.initialize.apply(this, arguments);
 
 
 		// [3] Register view
@@ -51,7 +51,18 @@ define(function (require, exports, module) {
 		 * @param selector {Object|[String]}
 		 */
 		views: function selectViews(selector) {
-			return this.registry.descendantItems(selector);
+			if (_.isString(selector)) {
+				// single, by id
+				return this.registry.descendantItems({ id: selector }).take(1).toArray()[0];
+			} else {
+				// multiple
+				return this.registry.descendantItems(selector);
+			}
 		},
-	})
+
+
+		app: function app() {
+			return this.isApp ? this : this.ancestorView.app();
+		},
+	});
 });

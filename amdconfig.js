@@ -27,7 +27,10 @@ require.config({
 		itr: '../bower_components/itr/built/itr',
 		containers: '../bower_components/containers/built/containers',
 		'object-query': '../bower_components/object-query/built/object-query',
-		lazy: '../bower_components/lazy.js/lazy'
+		lazy: '../bower_components/lazy.js/lazy',
+		'backbone.collection.multisort': '../bower_components/backbone.collection.multisort/built/backbone.collection.multisort',
+		comparator: '../bower_components/comparator/built/comparator',
+		database: '../bower_components/database/built/database'
 	},
 	shim: {
 		backbone: {

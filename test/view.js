@@ -13,8 +13,7 @@ define(['archetypo', 'should', 'jquery', 'mock-app/loader.js', 'text!/test/mock-
 		it('multiple view definition', function (done) {
 
 			// [2] Start stuff!
-			app.build(this.$main)
-				.start({ pushState: true });
+			app.start({ el: this.$main, pushState: true });
 
 			setTimeout(function (argument) {
 				app.navigate('model', { id: 1 }, { trigger: true });

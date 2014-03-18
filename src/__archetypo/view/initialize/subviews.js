@@ -6,9 +6,12 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var _ = require('lodash');
+	var _ = require('lodash'),
+		$ = require('jquery');
 
-	module.exports = function render(options) {
+	module.exports = function render() {
+
+		var app = this.app();
 
 		// [0] Sub-views
 		// Look for child nodes that have an 'arch-view'
@@ -28,13 +31,12 @@ define(function (require, exports, module) {
 				// retrieve data
 				data = $el.data(),
 				// the arch-view constructor
-				view = this.app.constructor('view', data.archView);
+				view = app.constructor('view', data.archView);
 
 			// set el and app on the data object.
 			var options = _.extend(data, {
 				el: $el,
-				app: this.app,
-				registry: this.registry,
+				ancestorView: this,
 			});
 
 			// instantiate the view.

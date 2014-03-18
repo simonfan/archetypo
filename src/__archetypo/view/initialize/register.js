@@ -10,21 +10,28 @@ define(function (require, exports, module) {
 
 	var registry = require('../../registry/index');
 
-	module.exports = function render(options) {
+	module.exports = function register(options) {
+
+		options = options || {};
 
 		// [1] retrieve data that will identify this view
-		var data = this.$el.data();
-		data.id = this.cid;
+		var data = this.$el.data() || {};
+		// id
+		data.id = data.id || data.archId || this.cid;
+		// classes
+		data['class'] = data['class'] ? data['class'].split(/\s+/) : [];
+		// item
 		data.item = this;
-
 
 		// [2] ancestorView
 		this.ancestorView = options.ancestorView || false;
 
 		// [2] get registry object
-		this.registry = this.ancestorView ?
-			this.ancestorView.registry.addBranch(data) :
-			registry(data);
+		if (this.ancestorView) {
+			this.registry = this.ancestorView.registry.addBranch(data);
+		} else {
+			this.registry = registry(data);
+		}
 	};
 
 });

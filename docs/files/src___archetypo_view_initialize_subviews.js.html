@@ -104,9 +104,12 @@
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var _ = require(&#x27;lodash&#x27;);
+	var _ = require(&#x27;lodash&#x27;),
+		$ = require(&#x27;jquery&#x27;);
 
-	module.exports = function render(options) {
+	module.exports = function render() {
+
+		var app = this.app();
 
 		// [0] Sub-views
 		// Look for child nodes that have an &#x27;arch-view&#x27;
@@ -126,13 +129,12 @@ define(function (require, exports, module) {
 				// retrieve data
 				data = $el.data(),
 				// the arch-view constructor
-				view = this.app.constructor(&#x27;view&#x27;, data.archView);
+				view = app.constructor(&#x27;view&#x27;, data.archView);
 
 			// set el and app on the data object.
 			var options = _.extend(data, {
 				el: $el,
-				app: this.app,
-				registry: this.registry,
+				ancestorView: this,
 			});
 
 			// instantiate the view.
