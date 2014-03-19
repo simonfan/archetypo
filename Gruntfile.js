@@ -126,18 +126,36 @@ module.exports = function (grunt) {
 				}
 			},
 
-			project: {
+			full: {
 				options: {
-					// source files
-					appDir: 'src/',
-					// output here:
-					dir: 'built/project/',
+					// base url where to look for module files
+					// and relative to which the module paths will be defined
+					// (must coincide with that defined in mainConfigFile)
+					baseUrl: './src',
+					// module name
+					name: 'archetypo',
+					// output here
+					out: './built/archetypo.full.js',
+					// config file
 					mainConfigFile: 'amdconfig.js',
 
-					// do not copy these files
-					fileExclusionRegExp: /^\./,
+					// include these modules
+					include: [],
+
+					// exclude these modules AND their dependencies
+					// (excluding your bower dependencies)
+					exclude: ["dockable-view", 'backbone', 'jquery', 'q', 'lodash', 'underscore', 'subject', 'backbone.model.tree', 'database'],
+
+					// excludeShallow
+					excludeShallow: [],
+
+					optimize: 'none',
+
+					pragmas: {
+						exclude: true,
+					},
 				}
-			}
+			},
 		}
 	});
 

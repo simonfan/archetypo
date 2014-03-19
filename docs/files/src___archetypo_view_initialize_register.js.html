@@ -117,7 +117,7 @@ define(function (require, exports, module) {
 		// id
 		data.id = data.id || data.archId || this.cid;
 		// classes
-		data[&#x27;class&#x27;] = data[&#x27;class&#x27;] ? data[&#x27;class&#x27;].split(/\s+/) : [];
+		data[&#x27;class&#x27;] = _.isString(data[&#x27;class&#x27;]) ? data[&#x27;class&#x27;].split(/\s+/) : [];
 		// item
 		data.item = this;
 

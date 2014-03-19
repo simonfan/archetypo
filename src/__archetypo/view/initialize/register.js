@@ -19,7 +19,7 @@ define(function (require, exports, module) {
 		// id
 		data.id = data.id || data.archId || this.cid;
 		// classes
-		data['class'] = data['class'] ? data['class'].split(/\s+/) : [];
+		data['class'] = _.isString(data['class']) ? data['class'].split(/\s+/) : [];
 		// item
 		data.item = this;
 

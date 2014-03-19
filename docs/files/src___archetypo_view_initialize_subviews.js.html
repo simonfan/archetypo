@@ -127,19 +127,29 @@ define(function (require, exports, module) {
 				// wrap el in jqObject
 			var $el = $(el),
 				// retrieve data
-				data = $el.data(),
-				// the arch-view constructor
-				view = app.constructor(&#x27;view&#x27;, data.archView);
+				data = $el.data();
 
-			// set el and app on the data object.
-			var options = _.extend(data, {
-				el: $el,
-				ancestorView: this,
-			});
+			if (!data.archInstantiated) {
 
-			// instantiate the view.
-			view(options);
+				// PREVENT DOUBLE VIEW INSTANTIATION.
+				// only instantiate view
+				// if not previously defined as already arch-instantiated
 
+					// the arch-view constructor
+				var view = app.constructor(&#x27;view&#x27;, data.archView);
+
+				// set el and app on the data object.
+				var options = _.extend(data, {
+					el: $el,
+					ancestorView: this,
+				});
+
+				// set arch-instantiated to true
+				$el.data({ archInstantiated: true });
+
+				// instantiate the view.
+				view(options);
+			}
 		}, this));
 
 	};
