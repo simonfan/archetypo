@@ -359,7 +359,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 121,
+            "line": 110,
             "description": "Defines or retrieves an instance.",
             "itemtype": "method",
             "name": "instance",

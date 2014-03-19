@@ -458,32 +458,21 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 		 */
 		constructor: function defineConstructor(type, name, extensions) {
 
-			var constructors = this.constructors[type],
-				constructor = constructors[name] || constructors['default'];
+			var constructors = this.constructors[type];
 
 			if (arguments.length === 3) {
 				// define a constructor
 
 				// save
-				constructors[name] = constructor.extend(extensions);
+				constructors[name] = constructors['default'].extend(extensions);
 
 				// return
 				return constructors[name];
 
 			} else if (arguments.length === 2) {
 
-				if (_.isObject(name)) {
-					// define multiple constructors
-					_.each(name, _.bind(this, function (extensions, name) {
-						this.constructor(type, name, extensions);
-					}));
-
-				} else {
-
-				}
-
 				// retrieve a constructor.
-				return constructor;
+				return constructors[name];
 			}
 		},
 
