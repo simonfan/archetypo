@@ -37,8 +37,10 @@ define(function (require, exports, module) {
 				// only instantiate view
 				// if not previously defined as already arch-instantiated
 
+					// the view name
+				var viewName = data.archView || data.view,
 					// the arch-view constructor
-				var view = app.constructor('view', data.archView);
+					view = app.constructor('view', viewName);
 
 				// set el and app on the data object.
 				var options = _.extend(data, {

@@ -201,7 +201,14 @@ define(function (require, exports, module) {
 			} else if (arguments.length === 2) {
 
 				// retrieve a constructor.
-				return constructors[name];
+
+				var constructor = constructors[name];
+
+				if (!constructor) {
+					throw new Error(&#x27;No constructor &quot;&#x27; + name + &#x27;&quot; defined in app.&#x27;);
+				}
+
+				return constructor;
 			}
 		},
 

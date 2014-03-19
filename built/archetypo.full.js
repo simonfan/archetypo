@@ -147,8 +147,10 @@ define('__archetypo/view/initialize/subviews',['require','exports','module','lod
 				// only instantiate view
 				// if not previously defined as already arch-instantiated
 
+					// the view name
+				var viewName = data.archView || data.view,
 					// the arch-view constructor
-				var view = app.constructor('view', data.archView);
+					view = app.constructor('view', viewName);
 
 				// set el and app on the data object.
 				var options = _.extend(data, {
@@ -472,7 +474,14 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 			} else if (arguments.length === 2) {
 
 				// retrieve a constructor.
-				return constructors[name];
+
+				var constructor = constructors[name];
+
+				if (!constructor) {
+					throw new Error('No constructor "' + name + '" defined in app.');
+				}
+
+				return constructor;
 			}
 		},
 
