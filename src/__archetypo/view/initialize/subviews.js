@@ -20,7 +20,7 @@ define(function (require, exports, module) {
 		// [1]
 		// find all elements within this element
 		// that have an 'arch-view' attribute defined.
-		var $subs = this.$el.find('[data-arch-view]');
+		var $subs = this.$el.find('[data-arch-view], [data-view]');
 
 		// [2]
 		// Instantiate the sub-views.

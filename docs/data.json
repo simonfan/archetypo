@@ -89,7 +89,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "src/index.js",
-            "line": 28,
+            "line": 29,
             "description": "AMD module."
         },
         "registry": {
@@ -174,7 +174,7 @@
             "module": "archetypo",
             "namespace": "",
             "file": "src/index.js",
-            "line": 28,
+            "line": 29,
             "description": "The main class.",
             "is_constructor": 1
         }
@@ -296,7 +296,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 42,
+            "line": 43,
             "description": "The initialization logic is different from that of a\nsimple archView.",
             "itemtype": "method",
             "name": "initialize",
@@ -312,7 +312,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 55,
+            "line": 56,
             "description": "Hash where constructors are stored.",
             "itemtype": "property",
             "name": "constructors",
@@ -322,7 +322,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 69,
+            "line": 70,
             "description": "Hash where instances are stored.",
             "itemtype": "property",
             "name": "instances",
@@ -332,7 +332,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 82,
+            "line": 83,
             "description": "Either defines or retrieves a constructor function.",
             "itemtype": "method",
             "name": "constructor",
@@ -359,7 +359,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 117,
+            "line": 118,
             "description": "Defines or retrieves an instance.",
             "itemtype": "method",
             "name": "instance",

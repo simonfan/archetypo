@@ -15,7 +15,8 @@ define(function (require, exports, module) {
 		backbone = require('lowercase-backbone'),
 		dockableView = require('dockable-view'),
 		q = require('q'),
-		_ = require('lodash');
+		_ = require('lodash'),
+		$ = require('jquery');
 
 	// sub modules.
 	var archView = require('./__archetypo/view/index'),
@@ -154,6 +155,8 @@ define(function (require, exports, module) {
 		},
 
 		start: function start(options) {
+
+			options.el = options.el || $('[data-archetypo],[archetypo]');
 
 			this.build(options);
 

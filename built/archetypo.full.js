@@ -130,7 +130,7 @@ define('__archetypo/view/initialize/subviews',['require','exports','module','lod
 		// [1]
 		// find all elements within this element
 		// that have an 'arch-view' attribute defined.
-		var $subs = this.$el.find('[data-arch-view]');
+		var $subs = this.$el.find('[data-arch-view], [data-view]');
 
 		// [2]
 		// Instantiate the sub-views.
@@ -379,14 +379,15 @@ define('__archetypo/router/index',['require','exports','module','lodash','lowerc
  * @module archetypo
  */
 
-define('archetypo',['require','exports','module','subject','lowercase-backbone','dockable-view','q','lodash','./__archetypo/view/index','./__archetypo/router/index','./__archetypo/view/initialize/register','./__archetypo/view/initialize/subviews'],function (require, exports, module) {
+define('archetypo',['require','exports','module','subject','lowercase-backbone','dockable-view','q','lodash','jquery','./__archetypo/view/index','./__archetypo/router/index','./__archetypo/view/initialize/register','./__archetypo/view/initialize/subviews'],function (require, exports, module) {
 	
 
 	var subject = require('subject'),
 		backbone = require('lowercase-backbone'),
 		dockableView = require('dockable-view'),
 		q = require('q'),
-		_ = require('lodash');
+		_ = require('lodash'),
+		$ = require('jquery');
 
 	// sub modules.
 	var archView = require('./__archetypo/view/index'),
@@ -525,6 +526,8 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 		},
 
 		start: function start(options) {
+
+			options.el = options.el || $('[data-archetypo],[archetypo]');
 
 			this.build(options);
 
