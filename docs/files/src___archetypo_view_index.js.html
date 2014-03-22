@@ -125,25 +125,41 @@ define(function (require, exports, module) {
 
 		arguments[0] = options || {};
 
+		var args = Array.prototype.slice.call(arguments);
+
+
 		// [1] Templating and replacement
 		// If there is an &#x27;html&#x27; property
 		// build up an element with it place it within $el.
-		render.apply(this, arguments);
+		// render is ASYNC
+		this.render(options)
+			.then(_.bind(function () {
+
+				// [2] Invoke dockable-view.
+				//     MUST come afte render.
+				dockableView.prototype.initialize.apply(this, args);
+
+				// [3] Start subviews
+				subviews.apply(this, args);
+
+			}, this));
 
 
-		// [2] Invoke dockable-view.
-		//     MUST come afte render.
-		dockableView.prototype.initialize.apply(this, arguments);
-
-
-		// [3] Register view
-		register.apply(this, arguments);
-
-		// [4] Start subviews
-		subviews.apply(this, arguments);
+		// [4] Register view (synchornously)
+		register.apply(this, args);
 	});
 
 	archView.proto({
+
+		/**
+		 * Renders the view and returns promise.
+		 *
+		 * @method render
+		 *
+		 */
+		render: render,
+
+
 		/**
 		 * Selects the view objcets that descend from this view.
 		 *

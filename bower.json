@@ -1,7 +1,7 @@
 {
   "name": "archetypo",
   "main": "built/archetypo.js",
-  "version": "0.2.2",
+  "version": "0.3.2",
   "description": "Backbone-based framework.",
   "dependencies": {
 	"dockable-view": "0.1.3",

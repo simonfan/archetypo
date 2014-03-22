@@ -279,8 +279,46 @@
             "submodule": "view"
         },
         {
+            "file": "src/__archetypo/view/initialize/render.js",
+            "line": 12,
+            "description": "Does all the dirty stuff.",
+            "itemtype": "method",
+            "name": "_render",
+            "access": "private",
+            "tagname": "",
+            "class": "view",
+            "module": "archetypo",
+            "submodule": "view"
+        },
+        {
+            "file": "src/__archetypo/view/initialize/render.js",
+            "line": 64,
+            "description": "Verifies for cached render call.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "options",
+                    "description": ""
+                }
+            ],
+            "class": "view",
+            "module": "archetypo",
+            "submodule": "view"
+        },
+        {
             "file": "src/__archetypo/view/index.js",
-            "line": 49,
+            "line": 56,
+            "description": "Renders the view and returns promise.",
+            "itemtype": "method",
+            "name": "render",
+            "class": "view",
+            "module": "archetypo",
+            "submodule": "view"
+        },
+        {
+            "file": "src/__archetypo/view/index.js",
+            "line": 65,
             "description": "Selects the view objcets that descend from this view.",
             "methos": "selectViews",
             "params": [
@@ -388,7 +426,7 @@
     "warnings": [
         {
             "message": "unknown tag: methos",
-            "line": " src/__archetypo/view/index.js:49"
+            "line": " src/__archetypo/view/index.js:65"
         },
         {
             "message": "unknown tag: builder",
@@ -396,7 +434,7 @@
         },
         {
             "message": "Missing item type\nSelects the view objcets that descend from this view.",
-            "line": " src/__archetypo/view/index.js:49"
+            "line": " src/__archetypo/view/index.js:65"
         }
     ]
 }
