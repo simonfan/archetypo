@@ -133,7 +133,7 @@ define('__archetypo/view/initialize/subviews',['require','exports','module','lod
 		var $subs = this.$el.find('[data-arch-view], [data-view]');
 
 		// [2]
-		// Instantiate the sub-views.
+		// Instantiate the sub-views
 		_.each($subs, _.bind(function instantiateSubview(el) {
 
 				// wrap el in jqObject
@@ -141,29 +141,33 @@ define('__archetypo/view/initialize/subviews',['require','exports','module','lod
 				// retrieve data
 				data = $el.data();
 
-			if (!data.archInstantiated) {
 
-				// PREVENT DOUBLE VIEW INSTANTIATION.
-				// only instantiate view
-				// if not previously defined as already arch-instantiated
+			// retrieve the view names
+			var vNames = data.archView || data.view;
+			// split and remove empty values
+			vNames = _.isString(vNames) ? vNames.split(/\s+/) : [];
+			vNames = _.compact(vNames);
 
-					// the view name
-				var viewName = data.archView || data.view,
-					// the arch-view constructor
-					view = app.constructor('view', viewName);
+			// loop through each of the view names
+			_.each(vNames, _.bind(function (vName, index) {
 
-				// set el and app on the data object.
-				var options = _.extend(data, {
-					el: $el,
-					ancestorView: this,
-				});
+				if (!data['instantiated_' + vName]) {
+					var view = app.builder('view', vName);
 
-				// set arch-instantiated to true
-				$el.data({ archInstantiated: true });
+					// set el and app on the data object.
+					var options = _.extend(data, {
+						el: $el,
+						ancestorView: this,
+					});
 
-				// instantiate the view.
-				view(options);
-			}
+					// instantiate the view.
+					view(options);
+
+					// set arch-instantiated to true
+					$el.data('instantiated_' + vName, true);
+				}
+
+			}, this));
 		}, this));
 
 	};
@@ -401,7 +405,7 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 	 * The main class.
 	 *
 	 * @class archetypo
-	 * @constructor
+	 * @builder
 	 */
 	var archetypo = module.exports =
 		archView
@@ -425,12 +429,12 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 			this.isApp = true;
 
 			/**
-			 * Hash where constructors are stored.
+			 * Hash where builders are stored.
 			 *
-			 * @property constructors
+			 * @property builders
 			 * @type Object
 			 */
-			this.constructors = {
+			this.builders = {
 				view: {
 					'default': archView
 				},
@@ -452,37 +456,37 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 		},
 
 		/**
-		 * Either defines or retrieves a constructor function.
+		 * Either defines or retrieves a builder function.
 		 *
-		 * @method constructor
+		 * @method builder
 		 * @param type {String}
 		 * @param name {String}
 		 * @param [extensions] {Object}
 		 */
-		constructor: function defineConstructor(type, name, extensions) {
+		builder: function defineBuilder(type, name, extensions) {
 
-			var constructors = this.constructors[type];
+			var builders = this.builders[type];
 
 			if (arguments.length === 3) {
-				// define a constructor
+				// define a builder
 
 				// save
-				constructors[name] = constructors['default'].extend(extensions);
+				builders[name] = builders['default'].extend(extensions);
 
 				// return
-				return constructors[name];
+				return builders[name];
 
 			} else if (arguments.length === 2) {
 
-				// retrieve a constructor.
+				// retrieve a builder.
 
-				var constructor = constructors[name];
+				var builder = builders[name];
 
-				if (!constructor) {
-					throw new Error('No constructor "' + name + '" defined in app.');
+				if (!builder) {
+					throw new Error('No builder "' + name + '" defined in app.');
 				}
 
-				return constructor;
+				return builder;
 			}
 		},
 
@@ -526,6 +530,7 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 		},
 
 		start: function start(options) {
+			options = options || {};
 
 			options.el = options.el || $('[data-archetypo],[archetypo]');
 

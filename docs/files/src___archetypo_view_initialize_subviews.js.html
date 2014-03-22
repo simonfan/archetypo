@@ -121,7 +121,7 @@ define(function (require, exports, module) {
 		var $subs = this.$el.find(&#x27;[data-arch-view], [data-view]&#x27;);
 
 		// [2]
-		// Instantiate the sub-views.
+		// Instantiate the sub-views
 		_.each($subs, _.bind(function instantiateSubview(el) {
 
 				// wrap el in jqObject
@@ -129,29 +129,33 @@ define(function (require, exports, module) {
 				// retrieve data
 				data = $el.data();
 
-			if (!data.archInstantiated) {
 
-				// PREVENT DOUBLE VIEW INSTANTIATION.
-				// only instantiate view
-				// if not previously defined as already arch-instantiated
+			// retrieve the view names
+			var vNames = data.archView || data.view;
+			// split and remove empty values
+			vNames = _.isString(vNames) ? vNames.split(/\s+/) : [];
+			vNames = _.compact(vNames);
 
-					// the view name
-				var viewName = data.archView || data.view,
-					// the arch-view constructor
-					view = app.constructor(&#x27;view&#x27;, viewName);
+			// loop through each of the view names
+			_.each(vNames, _.bind(function (vName, index) {
 
-				// set el and app on the data object.
-				var options = _.extend(data, {
-					el: $el,
-					ancestorView: this,
-				});
+				if (!data[&#x27;instantiated_&#x27; + vName]) {
+					var view = app.builder(&#x27;view&#x27;, vName);
 
-				// set arch-instantiated to true
-				$el.data({ archInstantiated: true });
+					// set el and app on the data object.
+					var options = _.extend(data, {
+						el: $el,
+						ancestorView: this,
+					});
 
-				// instantiate the view.
-				view(options);
-			}
+					// instantiate the view.
+					view(options);
+
+					// set arch-instantiated to true
+					$el.data(&#x27;instantiated_&#x27; + vName, true);
+				}
+
+			}, this));
 		}, this));
 
 	};

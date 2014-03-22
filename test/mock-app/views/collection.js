@@ -4,7 +4,7 @@ define(function (require, exports, module) {
 
 	var html = require('text!/test/mock-app/templates/collection.html')
 
-	app.constructor('view', 'collection', {
+	app.builder('view', 'collection', {
 		html: html,
 	});
 });

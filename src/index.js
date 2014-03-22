@@ -30,7 +30,7 @@ define(function (require, exports, module) {
 	 * The main class.
 	 *
 	 * @class archetypo
-	 * @constructor
+	 * @builder
 	 */
 	var archetypo = module.exports =
 		archView
@@ -54,12 +54,12 @@ define(function (require, exports, module) {
 			this.isApp = true;
 
 			/**
-			 * Hash where constructors are stored.
+			 * Hash where builders are stored.
 			 *
-			 * @property constructors
+			 * @property builders
 			 * @type Object
 			 */
-			this.constructors = {
+			this.builders = {
 				view: {
 					'default': archView
 				},
@@ -81,37 +81,37 @@ define(function (require, exports, module) {
 		},
 
 		/**
-		 * Either defines or retrieves a constructor function.
+		 * Either defines or retrieves a builder function.
 		 *
-		 * @method constructor
+		 * @method builder
 		 * @param type {String}
 		 * @param name {String}
 		 * @param [extensions] {Object}
 		 */
-		constructor: function defineConstructor(type, name, extensions) {
+		builder: function defineBuilder(type, name, extensions) {
 
-			var constructors = this.constructors[type];
+			var builders = this.builders[type];
 
 			if (arguments.length === 3) {
-				// define a constructor
+				// define a builder
 
 				// save
-				constructors[name] = constructors['default'].extend(extensions);
+				builders[name] = builders['default'].extend(extensions);
 
 				// return
-				return constructors[name];
+				return builders[name];
 
 			} else if (arguments.length === 2) {
 
-				// retrieve a constructor.
+				// retrieve a builder.
 
-				var constructor = constructors[name];
+				var builder = builders[name];
 
-				if (!constructor) {
-					throw new Error('No constructor "' + name + '" defined in app.');
+				if (!builder) {
+					throw new Error('No builder "' + name + '" defined in app.');
 				}
 
-				return constructor;
+				return builder;
 			}
 		},
 
@@ -155,6 +155,7 @@ define(function (require, exports, module) {
 		},
 
 		start: function start(options) {
+			options = options || {};
 
 			options.el = options.el || $('[data-archetypo],[archetypo]');
 

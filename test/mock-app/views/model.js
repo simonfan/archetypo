@@ -6,12 +6,12 @@ define(function (require, exports, module) {
 
 	var html = require('text!/test/mock-app/templates/model.html');
 
-	app.constructor('view', 'model', {
+	app.builder('view', 'model', {
 
 		initialize: function () {
 			_.bindAll(this, 'showFruit');
 
-			app.constructor('view', 'default').prototype.initialize.apply(this, arguments);
+			app.builder('view', 'default').prototype.initialize.apply(this, arguments);
 		},
 
 		html: html,

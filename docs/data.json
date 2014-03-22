@@ -176,7 +176,7 @@
             "file": "src/index.js",
             "line": 29,
             "description": "The main class.",
-            "is_constructor": 1
+            "builder": ""
         }
     },
     "classitems": [
@@ -313,9 +313,9 @@
         {
             "file": "src/index.js",
             "line": 56,
-            "description": "Hash where constructors are stored.",
+            "description": "Hash where builders are stored.",
             "itemtype": "property",
-            "name": "constructors",
+            "name": "builders",
             "type": "Object",
             "class": "archetypo",
             "module": "archetypo"
@@ -333,9 +333,9 @@
         {
             "file": "src/index.js",
             "line": 83,
-            "description": "Either defines or retrieves a constructor function.",
+            "description": "Either defines or retrieves a builder function.",
             "itemtype": "method",
-            "name": "constructor",
+            "name": "builder",
             "params": [
                 {
                     "name": "type",
@@ -389,6 +389,10 @@
         {
             "message": "unknown tag: methos",
             "line": " src/__archetypo/view/index.js:47"
+        },
+        {
+            "message": "unknown tag: builder",
+            "line": " src/index.js:29"
         },
         {
             "message": "Missing item type\nSelects the view objcets that descend from this view.",

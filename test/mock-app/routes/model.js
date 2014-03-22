@@ -2,7 +2,7 @@ define(function (require, exports, module) {
 
 
 
-	// view constructors that this route requires in order to operate.
+	// view builders that this route requires in order to operate.
 	require('/test/mock-app/views/collection.js');
 	require('/test/mock-app/views/display.js');
 	require('/test/mock-app/views/model.js');
