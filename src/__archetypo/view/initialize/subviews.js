@@ -9,9 +9,9 @@ define(function (require, exports, module) {
 	var _ = require('lodash'),
 		$ = require('jquery');
 
-	module.exports = function render() {
+	module.exports = function render(options) {
 
-		var app = this.app();
+		var app = options.app;
 
 		// [0] Sub-views
 		// Look for child nodes that have an 'arch-view'
@@ -48,6 +48,7 @@ define(function (require, exports, module) {
 					var options = _.extend(data, {
 						el: $el,
 						ancestorView: this,
+						app: app,
 					});
 
 					// instantiate the view.

@@ -136,6 +136,10 @@ define(function (require, exports, module) {
 
 		build: function build(options) {
 
+			arguments[0] = options || {};
+
+			// set APP
+			arguments[0].app = this;
 
 			// initialize basic backbone view
 			dockableView.prototype.initialize.apply(this, arguments);
@@ -151,7 +155,7 @@ define(function (require, exports, module) {
 			register.apply(this, arguments);
 
 			// start subviews
-			subviews.apply(this);
+			subviews.apply(this, arguments);
 		},
 
 		start: function start(options) {

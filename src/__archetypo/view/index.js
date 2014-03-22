@@ -25,6 +25,8 @@ define(function (require, exports, module) {
 	 */
 	var archView = module.exports = dockableView.extend(function archView(options) {
 
+		arguments[0] = options || {};
+
 		// [1] Templating and replacement
 		// If there is an 'html' property
 		// build up an element with it place it within $el.
@@ -58,11 +60,6 @@ define(function (require, exports, module) {
 				// multiple
 				return this.registry.descendantItems(selector);
 			}
-		},
-
-
-		app: function app() {
-			return this.isApp ? this : this.ancestorView.app();
 		},
 	});
 });

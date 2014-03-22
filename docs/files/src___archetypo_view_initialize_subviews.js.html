@@ -107,9 +107,9 @@ define(function (require, exports, module) {
 	var _ = require(&#x27;lodash&#x27;),
 		$ = require(&#x27;jquery&#x27;);
 
-	module.exports = function render() {
+	module.exports = function render(options) {
 
-		var app = this.app();
+		var app = options.app;
 
 		// [0] Sub-views
 		// Look for child nodes that have an &#x27;arch-view&#x27;
@@ -146,6 +146,7 @@ define(function (require, exports, module) {
 					var options = _.extend(data, {
 						el: $el,
 						ancestorView: this,
+						app: app,
 					});
 
 					// instantiate the view.

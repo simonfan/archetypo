@@ -280,7 +280,7 @@
         },
         {
             "file": "src/__archetypo/view/index.js",
-            "line": 47,
+            "line": 49,
             "description": "Selects the view objcets that descend from this view.",
             "methos": "selectViews",
             "params": [
@@ -388,7 +388,7 @@
     "warnings": [
         {
             "message": "unknown tag: methos",
-            "line": " src/__archetypo/view/index.js:47"
+            "line": " src/__archetypo/view/index.js:49"
         },
         {
             "message": "unknown tag: builder",
@@ -396,7 +396,7 @@
         },
         {
             "message": "Missing item type\nSelects the view objcets that descend from this view.",
-            "line": " src/__archetypo/view/index.js:47"
+            "line": " src/__archetypo/view/index.js:49"
         }
     ]
 }

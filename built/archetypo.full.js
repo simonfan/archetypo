@@ -119,9 +119,9 @@ define('__archetypo/view/initialize/subviews',['require','exports','module','lod
 	var _ = require('lodash'),
 		$ = require('jquery');
 
-	module.exports = function render() {
+	module.exports = function render(options) {
 
-		var app = this.app();
+		var app = options.app;
 
 		// [0] Sub-views
 		// Look for child nodes that have an 'arch-view'
@@ -158,6 +158,7 @@ define('__archetypo/view/initialize/subviews',['require','exports','module','lod
 					var options = _.extend(data, {
 						el: $el,
 						ancestorView: this,
+						app: app,
 					});
 
 					// instantiate the view.
@@ -201,6 +202,8 @@ define('__archetypo/view/index',['require','exports','module','lodash','dockable
 	 */
 	var archView = module.exports = dockableView.extend(function archView(options) {
 
+		arguments[0] = options || {};
+
 		// [1] Templating and replacement
 		// If there is an 'html' property
 		// build up an element with it place it within $el.
@@ -234,11 +237,6 @@ define('__archetypo/view/index',['require','exports','module','lodash','dockable
 				// multiple
 				return this.registry.descendantItems(selector);
 			}
-		},
-
-
-		app: function app() {
-			return this.isApp ? this : this.ancestorView.app();
 		},
 	});
 });
@@ -511,6 +509,10 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 
 		build: function build(options) {
 
+			arguments[0] = options || {};
+
+			// set APP
+			arguments[0].app = this;
 
 			// initialize basic backbone view
 			dockableView.prototype.initialize.apply(this, arguments);
@@ -526,7 +528,7 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 			register.apply(this, arguments);
 
 			// start subviews
-			subviews.apply(this);
+			subviews.apply(this, arguments);
 		},
 
 		start: function start(options) {
