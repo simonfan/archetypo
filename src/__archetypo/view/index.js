@@ -68,7 +68,7 @@ define(function (require, exports, module) {
 		/**
 		 * Selects the view objcets that descend from this view.
 		 *
-		 * @methos selectViews
+		 * @method selectViews
 		 * @param selector {Object|[String]}
 		 */
 		views: function selectViews(selector) {
@@ -81,4 +81,6 @@ define(function (require, exports, module) {
 			}
 		},
 	});
+
+	archView.proto(require('./el-data'));
 });

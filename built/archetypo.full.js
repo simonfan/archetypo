@@ -73,7 +73,7 @@ define('__archetypo/view/initialize/render',['require','exports','module','lodas
 		// [1.1] retrieve AND normalize the element object
 		this.$el = _.isObject(options.$el) ? options.$el : options.el;
 
-		var data = this.$el.data();
+		var data = this.elData();
 
 		// [2] retrieve html
 		if (data.html) {
@@ -104,7 +104,7 @@ define('__archetypo/view/initialize/render',['require','exports','module','lodas
 
 		// return promise no matter what.
 		return defer.promise;
-	};
+	}
 
 
 
@@ -146,11 +146,9 @@ define('__archetypo/view/initialize/register',['require','exports','module','lod
 		options = options || {};
 
 		// [1] retrieve data that will identify this view
-		var data = this.$el.data() || {};
+		var data = this.elData() || {};
 		// id
 		data.id = data.id || data.archId || this.cid;
-		// classes
-		data['class'] = _.isString(data['class']) ? data['class'].split(/\s+/) : [];
 		// item
 		data.item = this;
 
@@ -189,7 +187,7 @@ define('__archetypo/view/initialize/subviews',['require','exports','module','lod
 		// [1]
 		// find all elements within this element
 		// that have an 'arch-view' attribute defined.
-		var $subs = this.$el.find('[data-arch-view], [data-view]');
+		var $subs = this.$el.find('[data-builder]');
 
 		// [2]
 		// Instantiate the sub-views
@@ -202,16 +200,16 @@ define('__archetypo/view/initialize/subviews',['require','exports','module','lod
 
 
 			// retrieve the view names
-			var vNames = data.archView || data.view;
+			var builderNames = data.builder;
 			// split and remove empty values
-			vNames = _.isString(vNames) ? vNames.split(/\s+/) : [];
-			vNames = _.compact(vNames);
+			builderNames = _.isString(builderNames) ? builderNames.split(/\s+/) : [];
+			builderNames = _.compact(builderNames);
 
 			// loop through each of the view names
-			_.each(vNames, _.bind(function (vName, index) {
+			_.each(builderNames, _.bind(function (builderName, index) {
 
-				if (!data['instantiated_' + vName]) {
-					var view = app.builder('view', vName);
+				if (!data['instantiated_' + builderName]) {
+					var view = app.builder(builderName);
 
 					// set el and app on the data object.
 					var options = _.extend(data, {
@@ -224,7 +222,7 @@ define('__archetypo/view/initialize/subviews',['require','exports','module','lod
 					view(options);
 
 					// set arch-instantiated to true
-					$el.data('instantiated_' + vName, true);
+					$el.data('instantiated_' + builderName, true);
 				}
 
 			}, this));
@@ -239,7 +237,59 @@ define('__archetypo/view/initialize/subviews',['require','exports','module','lod
  * @submodule view
  */
 
-define('__archetypo/view/index',['require','exports','module','lodash','dockable-view','../registry/index','./initialize/render','./initialize/register','./initialize/subviews'],function (require, exports, module) {
+define('__archetypo/view/el-data',['require','exports','module','lodash'],function (require, exports, module) {
+	
+
+	var _ = require('lodash');
+
+	var splitter = /\s+/;
+
+	function split(str) {
+		var data = str.split(splitter);
+
+		// compact
+		data = _.compact(data);
+
+		return data.length === 1 ? data[0] : data;
+	}
+
+	/**
+	 * Basically $el.data()
+	 * Splits the data strings into tokens.
+	 *
+	 * @method elData
+	 */
+	exports.elData = function elData() {
+
+		var $el = this.$el;
+
+		if (arguments.length === 0) {
+			// full getter
+			return _.mapValues($el.data(), function (value, key) {
+				return _.isString(value) ? split(value) : value;
+			});
+
+		} else if (arguments.length === 1 && _.isString(arguments[0])) {
+
+			var value = $el.data(arguments[0]);
+
+			// simple getter
+			return _.isString(value) ? split(value) : value;
+		} else {
+
+			$el.data.apply($el, arguments);
+
+			return this;
+		}
+	};
+});
+
+/**
+ * @module archetypo
+ * @submodule view
+ */
+
+define('__archetypo/view/index',['require','exports','module','lodash','dockable-view','../registry/index','./initialize/render','./initialize/register','./initialize/subviews','./el-data'],function (require, exports, module) {
 	
 
 	var _ = require('lodash'),
@@ -304,7 +354,7 @@ define('__archetypo/view/index',['require','exports','module','lodash','dockable
 		/**
 		 * Selects the view objcets that descend from this view.
 		 *
-		 * @methos selectViews
+		 * @method selectViews
 		 * @param selector {Object|[String]}
 		 */
 		views: function selectViews(selector) {
@@ -317,6 +367,8 @@ define('__archetypo/view/index',['require','exports','module','lodash','dockable
 			}
 		},
 	});
+
+	archView.proto(require('./el-data'));
 });
 
 /**
@@ -511,23 +563,7 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 			 * @type Object
 			 */
 			this.builders = {
-				view: {
-					'default': archView
-				},
-				model: {},
-				collection: {}
-			};
-
-			/**
-			 * Hash where instances are stored.
-			 *
-			 * @property instances
-			 * @type Object
-			 */
-			this.instances = {
-				view: {},
-				model: {},
-				collection: {},
+				'default': archView
 			};
 		},
 
@@ -539,24 +575,22 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 		 * @param name {String}
 		 * @param [extensions] {Object}
 		 */
-		builder: function defineBuilder(type, name, extensions) {
+		builder: function defineOrGetBuilder(name, extensions) {
 
-			var builders = this.builders[type];
-
-			if (arguments.length === 3) {
+			if (arguments.length === 2) {
 				// define a builder
 
 				// save
-				builders[name] = builders['default'].extend(extensions);
+				this.builders[name] = this.builders['default'].extend(extensions);
 
 				// return
-				return builders[name];
+				return this.builders[name];
 
-			} else if (arguments.length === 2) {
+			} else if (arguments.length === 1) {
 
 				// retrieve a builder.
 
-				var builder = builders[name];
+				var builder = this.builders[name];
 
 				if (!builder) {
 					throw new Error('No builder "' + name + '" defined in app.');
@@ -567,24 +601,11 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 		},
 
 		/**
-		 * Defines or retrieves an instance.
 		 *
-		 * @method instance
-		 * @param type {String}
-		 * @param name {String}
-		 * @param [obj] {Object}
+		 *
+		 * @method builder
+		 * @param options
 		 */
-		instance: function instance(type, name, obj) {
-
-			var instances = this.instances[type] = this.instances[type] || {};
-
-			if (arguments.length === 3) {
-				instances[name] = obj;
-			}
-
-			return instances[name];
-		},
-
 		build: function build(options) {
 
 			arguments[0] = options || {};
@@ -601,7 +622,6 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 				throw new Error('No DOM element in archetypo.');
 			}
 
-
 			// initialize registry
 			register.apply(this, arguments);
 
@@ -609,6 +629,12 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 			subviews.apply(this, arguments);
 		},
 
+		/**
+		 * Starts the app up.
+		 *
+		 * @method
+		 * @param options
+		 */
 		start: function start(options) {
 			options = options || {};
 
@@ -620,14 +646,6 @@ define('archetypo',['require','exports','module','subject','lowercase-backbone',
 
 			return this;
 		}
-	});
-
-
-	// partials
-	archetypo.proto({
-		view: _.partial(archetypo.prototype.instance, 'view'),
-		model: _.partial(archetypo.prototype.instance, 'model'),
-		collection: _.partial(archetypo.prototype.instance, 'collection')
 	});
 });
 

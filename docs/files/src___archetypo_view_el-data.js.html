@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/view/initialize/register.js - archetypo</title>
+    <title>src/__archetypo/view/el-data.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -92,7 +92,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/view/initialize/register.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/view/el-data.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -106,30 +106,46 @@ define(function (require, exports, module) {
 
 	var _ = require(&#x27;lodash&#x27;);
 
-	var registry = require(&#x27;../../registry/index&#x27;);
+	var splitter = /\s+/;
 
-	module.exports = function register(options) {
+	function split(str) {
+		var data = str.split(splitter);
 
-		options = options || {};
+		// compact
+		data = _.compact(data);
 
-		// [1] retrieve data that will identify this view
-		var data = this.elData() || {};
-		// id
-		data.id = data.id || data.archId || this.cid;
-		// item
-		data.item = this;
+		return data.length === 1 ? data[0] : data;
+	}
 
-		// [2] ancestorView
-		this.ancestorView = options.ancestorView || false;
+	/**
+	 * Basically $el.data()
+	 * Splits the data strings into tokens.
+	 *
+	 * @method elData
+	 */
+	exports.elData = function elData() {
 
-		// [2] get registry object
-		if (this.ancestorView) {
-			this.registry = this.ancestorView.registry.addBranch(data);
+		var $el = this.$el;
+
+		if (arguments.length === 0) {
+			// full getter
+			return _.mapValues($el.data(), function (value, key) {
+				return _.isString(value) ? split(value) : value;
+			});
+
+		} else if (arguments.length === 1 &amp;&amp; _.isString(arguments[0])) {
+
+			var value = $el.data(arguments[0]);
+
+			// simple getter
+			return _.isString(value) ? split(value) : value;
 		} else {
-			this.registry = registry(data);
+
+			$el.data.apply($el, arguments);
+
+			return this;
 		}
 	};
-
 });
 
     </pre>

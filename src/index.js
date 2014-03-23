@@ -60,23 +60,7 @@ define(function (require, exports, module) {
 			 * @type Object
 			 */
 			this.builders = {
-				view: {
-					'default': archView
-				},
-				model: {},
-				collection: {}
-			};
-
-			/**
-			 * Hash where instances are stored.
-			 *
-			 * @property instances
-			 * @type Object
-			 */
-			this.instances = {
-				view: {},
-				model: {},
-				collection: {},
+				'default': archView
 			};
 		},
 
@@ -88,24 +72,22 @@ define(function (require, exports, module) {
 		 * @param name {String}
 		 * @param [extensions] {Object}
 		 */
-		builder: function defineBuilder(type, name, extensions) {
+		builder: function defineOrGetBuilder(name, extensions) {
 
-			var builders = this.builders[type];
-
-			if (arguments.length === 3) {
+			if (arguments.length === 2) {
 				// define a builder
 
 				// save
-				builders[name] = builders['default'].extend(extensions);
+				this.builders[name] = this.builders['default'].extend(extensions);
 
 				// return
-				return builders[name];
+				return this.builders[name];
 
-			} else if (arguments.length === 2) {
+			} else if (arguments.length === 1) {
 
 				// retrieve a builder.
 
-				var builder = builders[name];
+				var builder = this.builders[name];
 
 				if (!builder) {
 					throw new Error('No builder "' + name + '" defined in app.');
@@ -116,24 +98,11 @@ define(function (require, exports, module) {
 		},
 
 		/**
-		 * Defines or retrieves an instance.
 		 *
-		 * @method instance
-		 * @param type {String}
-		 * @param name {String}
-		 * @param [obj] {Object}
+		 *
+		 * @method builder
+		 * @param options
 		 */
-		instance: function instance(type, name, obj) {
-
-			var instances = this.instances[type] = this.instances[type] || {};
-
-			if (arguments.length === 3) {
-				instances[name] = obj;
-			}
-
-			return instances[name];
-		},
-
 		build: function build(options) {
 
 			arguments[0] = options || {};
@@ -150,7 +119,6 @@ define(function (require, exports, module) {
 				throw new Error('No DOM element in archetypo.');
 			}
 
-
 			// initialize registry
 			register.apply(this, arguments);
 
@@ -158,6 +126,12 @@ define(function (require, exports, module) {
 			subviews.apply(this, arguments);
 		},
 
+		/**
+		 * Starts the app up.
+		 *
+		 * @method
+		 * @param options
+		 */
 		start: function start(options) {
 			options = options || {};
 
@@ -169,13 +143,5 @@ define(function (require, exports, module) {
 
 			return this;
 		}
-	});
-
-
-	// partials
-	archetypo.proto({
-		view: _.partial(archetypo.prototype.instance, 'view'),
-		model: _.partial(archetypo.prototype.instance, 'model'),
-		collection: _.partial(archetypo.prototype.instance, 'collection')
 	});
 });

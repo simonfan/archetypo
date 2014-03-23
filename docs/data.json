@@ -52,6 +52,13 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/__archetypo/view/el-data.js": {
+            "name": "src/__archetypo/view/el-data.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "src/__archetypo/view/index.js": {
             "name": "src/__archetypo/view/index.js",
             "modules": {},
@@ -307,6 +314,16 @@
             "submodule": "view"
         },
         {
+            "file": "src/__archetypo/view/el-data.js",
+            "line": 22,
+            "description": "Basically $el.data()\nSplits the data strings into tokens.",
+            "itemtype": "method",
+            "name": "elData",
+            "class": "view",
+            "module": "archetypo",
+            "submodule": "view"
+        },
+        {
             "file": "src/__archetypo/view/index.js",
             "line": 59,
             "description": "Renders the view and returns promise.",
@@ -320,7 +337,8 @@
             "file": "src/__archetypo/view/index.js",
             "line": 68,
             "description": "Selects the view objcets that descend from this view.",
-            "methos": "selectViews",
+            "itemtype": "method",
+            "name": "selectViews",
             "params": [
                 {
                     "name": "selector",
@@ -360,17 +378,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 70,
-            "description": "Hash where instances are stored.",
-            "itemtype": "property",
-            "name": "instances",
-            "type": "Object",
-            "class": "archetypo",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 83,
+            "line": 67,
             "description": "Either defines or retrieves a builder function.",
             "itemtype": "method",
             "name": "builder",
@@ -397,26 +405,28 @@
         },
         {
             "file": "src/index.js",
-            "line": 118,
-            "description": "Defines or retrieves an instance.",
+            "line": 100,
             "itemtype": "method",
-            "name": "instance",
+            "name": "builder",
             "params": [
                 {
-                    "name": "type",
-                    "description": "",
-                    "type": "String"
-                },
+                    "name": "options",
+                    "description": ""
+                }
+            ],
+            "class": "archetypo",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 129,
+            "description": "Starts the app up.",
+            "itemtype": "method",
+            "name": "",
+            "params": [
                 {
-                    "name": "name",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "obj",
-                    "description": "",
-                    "type": "Object",
-                    "optional": true
+                    "name": "options",
+                    "description": ""
                 }
             ],
             "class": "archetypo",
@@ -425,16 +435,8 @@
     ],
     "warnings": [
         {
-            "message": "unknown tag: methos",
-            "line": " src/__archetypo/view/index.js:68"
-        },
-        {
             "message": "unknown tag: builder",
             "line": " src/index.js:29"
-        },
-        {
-            "message": "Missing item type\nSelects the view objcets that descend from this view.",
-            "line": " src/__archetypo/view/index.js:68"
         }
     ]
 }

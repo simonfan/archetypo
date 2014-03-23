@@ -15,11 +15,9 @@ define(function (require, exports, module) {
 		options = options || {};
 
 		// [1] retrieve data that will identify this view
-		var data = this.$el.data() || {};
+		var data = this.elData() || {};
 		// id
 		data.id = data.id || data.archId || this.cid;
-		// classes
-		data['class'] = _.isString(data['class']) ? data['class'].split(/\s+/) : [];
 		// item
 		data.item = this;
 

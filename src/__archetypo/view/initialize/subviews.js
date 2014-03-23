@@ -20,7 +20,7 @@ define(function (require, exports, module) {
 		// [1]
 		// find all elements within this element
 		// that have an 'arch-view' attribute defined.
-		var $subs = this.$el.find('[data-arch-view], [data-view]');
+		var $subs = this.$el.find('[data-builder]');
 
 		// [2]
 		// Instantiate the sub-views
@@ -33,16 +33,16 @@ define(function (require, exports, module) {
 
 
 			// retrieve the view names
-			var vNames = data.archView || data.view;
+			var builderNames = data.builder;
 			// split and remove empty values
-			vNames = _.isString(vNames) ? vNames.split(/\s+/) : [];
-			vNames = _.compact(vNames);
+			builderNames = _.isString(builderNames) ? builderNames.split(/\s+/) : [];
+			builderNames = _.compact(builderNames);
 
 			// loop through each of the view names
-			_.each(vNames, _.bind(function (vName, index) {
+			_.each(builderNames, _.bind(function (builderName, index) {
 
-				if (!data['instantiated_' + vName]) {
-					var view = app.builder('view', vName);
+				if (!data['instantiated_' + builderName]) {
+					var view = app.builder(builderName);
 
 					// set el and app on the data object.
 					var options = _.extend(data, {
@@ -55,7 +55,7 @@ define(function (require, exports, module) {
 					view(options);
 
 					// set arch-instantiated to true
-					$el.data('instantiated_' + vName, true);
+					$el.data('instantiated_' + builderName, true);
 				}
 
 			}, this));

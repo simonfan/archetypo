@@ -6,7 +6,7 @@ define(function (require, exports, module) {
 
 	var html = require('text!/test/mock-app/templates/model.html');
 
-	app.builder('view', 'model', {
+	app.builder('model', {
 
 		initialize: function () {
 			_.bindAll(this, 'showFruit');

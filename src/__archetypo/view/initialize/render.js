@@ -28,7 +28,7 @@ define(function (require, exports, module) {
 		// [1.1] retrieve AND normalize the element object
 		this.$el = _.isObject(options.$el) ? options.$el : options.el;
 
-		var data = this.$el.data();
+		var data = this.elData();
 
 		// [2] retrieve html
 		if (data.html) {
@@ -59,7 +59,7 @@ define(function (require, exports, module) {
 
 		// return promise no matter what.
 		return defer.promise;
-	};
+	}
 
 
 
