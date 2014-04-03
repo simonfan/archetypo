@@ -4,17 +4,6 @@
         "version": "0.0.0"
     },
     "files": {
-        "src/__archetypo/registry/index.js": {
-            "name": "src/__archetypo/registry/index.js",
-            "modules": {
-                "registry": 1
-            },
-            "classes": {
-                "registry": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
         "src/__archetypo/router/format.js": {
             "name": "src/__archetypo/router/format.js",
             "modules": {
@@ -28,43 +17,6 @@
             "name": "src/__archetypo/router/index.js",
             "modules": {},
             "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/view/initialize/register.js": {
-            "name": "src/__archetypo/view/initialize/register.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/view/initialize/render.js": {
-            "name": "src/__archetypo/view/initialize/render.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/view/initialize/subviews.js": {
-            "name": "src/__archetypo/view/initialize/subviews.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/view/el-data.js": {
-            "name": "src/__archetypo/view/el-data.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/view/index.js": {
-            "name": "src/__archetypo/view/index.js",
-            "modules": {},
-            "classes": {
-                "view": 1
-            },
             "fors": {},
             "namespaces": {}
         },
@@ -84,92 +36,32 @@
         "archetypo": {
             "name": "archetypo",
             "submodules": {
-                "registry": 1,
                 "view": 1
             },
             "classes": {
-                "registry": 1,
-                "view": 1,
                 "archetypo": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
             "file": "src/index.js",
-            "line": 29,
+            "line": 23,
             "description": "AMD module."
-        },
-        "registry": {
-            "name": "registry",
-            "submodules": {},
-            "classes": {
-                "registry": 1
-            },
-            "fors": {},
-            "is_submodule": 1,
-            "namespaces": {},
-            "module": "archetypo",
-            "namespace": "",
-            "file": "src/__archetypo/registry/index.js",
-            "line": 15,
-            "description": "The registry is just a Bakbone.Model.Tree Object\nwith some special methods to get the 'item' attributes\nfrom the branch models."
         },
         "view": {
             "name": "view",
             "submodules": {},
-            "classes": {
-                "view": 1
-            },
+            "classes": {},
             "fors": {},
             "is_submodule": 1,
             "namespaces": {},
             "module": "archetypo",
             "namespace": "",
-            "file": "src/__archetypo/view/index.js",
-            "line": 19,
-            "description": "The view builder. It is basically a Backbone.View"
+            "file": "src/__archetypo/router/format.js",
+            "line": 1
         }
     },
     "classes": {
-        "registry": {
-            "name": "registry",
-            "shortname": "registry",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "archetypo",
-            "submodule": "registry",
-            "namespace": "",
-            "file": "src/__archetypo/registry/index.js",
-            "line": 15,
-            "description": "The registry is just a Bakbone.Model.Tree Object\nwith some special methods to get the 'item' attributes\nfrom the branch models.",
-            "is_constructor": 1
-        },
-        "view": {
-            "name": "view",
-            "shortname": "view",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "archetypo",
-            "submodule": "view",
-            "namespace": "",
-            "file": "src/__archetypo/view/index.js",
-            "line": 19,
-            "description": "The view builder. It is basically a Backbone.View",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "options",
-                    "description": "",
-                    "type": "Object"
-                }
-            ]
-        },
         "archetypo": {
             "name": "archetypo",
             "shortname": "archetypo",
@@ -181,29 +73,12 @@
             "module": "archetypo",
             "namespace": "",
             "file": "src/index.js",
-            "line": 29,
+            "line": 23,
             "description": "The main class.",
             "builder": ""
         }
     },
     "classitems": [
-        {
-            "file": "src/__archetypo/registry/index.js",
-            "line": 29,
-            "description": "Selects the descending branch models and map\nthe results to return directly the 'item' attribute.",
-            "itemtype": "method",
-            "name": "descendantItems",
-            "params": [
-                {
-                    "name": "criteria",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "registry",
-            "module": "archetypo",
-            "submodule": "registry"
-        },
         {
             "file": "src/__archetypo/router/format.js",
             "line": 18,
@@ -219,7 +94,7 @@
                     "type": "String"
                 }
             ],
-            "class": "view",
+            "class": "archetypo",
             "module": "archetypo",
             "submodule": "view"
         },
@@ -243,23 +118,23 @@
                     "type": "Object"
                 }
             ],
-            "class": "view",
+            "class": "archetypo",
             "module": "archetypo",
             "submodule": "view"
         },
         {
             "file": "src/__archetypo/router/index.js",
-            "line": 26,
+            "line": 30,
             "description": "Intercepts calls for the route method, so that\nwe can save the route strings to a formats hash for navigation use.",
             "itemtype": "method",
             "name": "route",
-            "class": "view",
+            "class": "archetypo",
             "module": "archetypo",
             "submodule": "view"
         },
         {
             "file": "src/__archetypo/router/index.js",
-            "line": 43,
+            "line": 47,
             "description": "Intercepts the original navigate method,\nso that the router automatically takes advantage\nof format methods.",
             "itemtype": "method",
             "name": "navigate",
@@ -281,79 +156,14 @@
                     "optional": true
                 }
             ],
-            "class": "view",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/view/initialize/render.js",
-            "line": 12,
-            "description": "Does all the dirty stuff.",
-            "itemtype": "method",
-            "name": "_render",
-            "access": "private",
-            "tagname": "",
-            "class": "view",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/view/initialize/render.js",
-            "line": 66,
-            "description": "Verifies for cached render call.",
-            "itemtype": "method",
-            "name": "render",
-            "params": [
-                {
-                    "name": "options",
-                    "description": ""
-                }
-            ],
-            "class": "view",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/view/el-data.js",
-            "line": 22,
-            "description": "Basically $el.data()\nSplits the data strings into tokens.",
-            "itemtype": "method",
-            "name": "elData",
-            "class": "view",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/view/index.js",
-            "line": 59,
-            "description": "Renders the view and returns promise.",
-            "itemtype": "method",
-            "name": "render",
-            "class": "view",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/view/index.js",
-            "line": 68,
-            "description": "Selects the view objcets that descend from this view.",
-            "itemtype": "method",
-            "name": "selectViews",
-            "params": [
-                {
-                    "name": "selector",
-                    "description": "",
-                    "type": "Object|[String]"
-                }
-            ],
-            "class": "view",
+            "class": "archetypo",
             "module": "archetypo",
             "submodule": "view"
         },
         {
             "file": "src/index.js",
-            "line": 43,
-            "description": "The initialization logic is different from that of a\nsimple archView.",
+            "line": 36,
+            "description": "The initialization logic is different from that of a\nsimple archetypoView.",
             "itemtype": "method",
             "name": "initialize",
             "params": [
@@ -368,7 +178,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 56,
+            "line": 52,
             "description": "Hash where builders are stored.",
             "itemtype": "property",
             "name": "builders",
@@ -378,7 +188,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 67,
+            "line": 63,
             "description": "Either defines or retrieves a builder function.",
             "itemtype": "method",
             "name": "builder",
@@ -405,21 +215,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 100,
-            "itemtype": "method",
-            "name": "builder",
-            "params": [
-                {
-                    "name": "options",
-                    "description": ""
-                }
-            ],
-            "class": "archetypo",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 129,
+            "line": 106,
             "description": "Starts the app up.",
             "itemtype": "method",
             "name": "",
@@ -436,7 +232,7 @@
     "warnings": [
         {
             "message": "unknown tag: builder",
-            "line": " src/index.js:29"
+            "line": " src/index.js:23"
         }
     ]
 }

@@ -43,17 +43,11 @@
             
                 <li><a href="../classes/archetypo.html">archetypo</a></li>
             
-                <li><a href="../classes/registry.html">registry</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
-            
             </ul>
 
             <ul id="api-modules" class="apis modules">
             
                 <li><a href="../modules/archetypo.html">archetypo</a></li>
-            
-                <li><a href="../modules/registry.html">registry</a></li>
             
                 <li><a href="../modules/view.html">view</a></li>
             
@@ -109,20 +103,14 @@
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var subject = require(&#x27;subject&#x27;),
-		backbone = require(&#x27;lowercase-backbone&#x27;),
-		dockableView = require(&#x27;dockable-view&#x27;),
-		q = require(&#x27;q&#x27;),
+	var backbone = require(&#x27;lowercase-backbone&#x27;),
 		_ = require(&#x27;lodash&#x27;),
-		$ = require(&#x27;jquery&#x27;);
+		$ = require(&#x27;jquery&#x27;),
+
+		archetypoView = require(&#x27;archetypo-view&#x27;);
 
 	// sub modules.
-	var archView = require(&#x27;./__archetypo/view/index&#x27;),
-		archRouter = require(&#x27;./__archetypo/router/index&#x27;);
-
-	// view-initialization
-	var register = require(&#x27;./__archetypo/view/initialize/register&#x27;),
-		subviews = require(&#x27;./__archetypo/view/initialize/subviews&#x27;);
+	var archRouter = require(&#x27;./__archetypo/router/index&#x27;);
 
 	/**
 	 * The main class.
@@ -130,26 +118,28 @@ define(function (require, exports, module) {
 	 * @class archetypo
 	 * @builder
 	 */
-	var archetypo = module.exports =
-		archView
-			.extend(backbone.router.prototype)
-			.extend(archRouter.prototype);
+	var archetypo = module.exports = archetypoView
+		.extend(backbone.router.prototype)
+		.extend(archRouter.prototype);
 
 	// proto
 	archetypo.proto({
 
 		/**
 		 * The initialization logic is different from that of a
-		 * simple archView.
+		 * simple archetypoView.
 		 *
 		 * @method initialize
 		 * @param options {Object [for both router and view]}
 		 */
 		initialize: function initializeArchetypo(options) {
 			// initialize the arch router.
-			archRouter.prototype.initialize.apply(this, arguments);
+			this.initializeArchRouter.apply(this, arguments);
 
-			this.isApp = true;
+			this.initializeArchetypo.apply(this, arguments);
+		},
+
+		initializeArchetypo: function initializeArchetypo(options) {
 
 			/**
 			 * Hash where builders are stored.
@@ -158,7 +148,7 @@ define(function (require, exports, module) {
 			 * @type Object
 			 */
 			this.builders = {
-				&#x27;default&#x27;: archView
+				&#x27;default&#x27;: archetypoView
 			};
 		},
 
@@ -170,13 +160,23 @@ define(function (require, exports, module) {
 		 * @param name {String}
 		 * @param [extensions] {Object}
 		 */
-		builder: function defineOrGetBuilder(name, extensions) {
+		builder: function defineOrGetBuilder(name, builder) {
 
 			if (arguments.length === 2) {
 				// define a builder
 
+				if (_.isFunction(builder)) {
+					// builder is a constructor by itself
+					this.builder[name] = builder;
+
+				} else if (_.isObject(builder)) {
+					// builder is a set of properties that the defautl
+					// view must extend
+					this.builder[name] = archetypoView.extend(builder);
+				}
+
 				// save
-				this.builders[name] = this.builders[&#x27;default&#x27;].extend(extensions);
+				this.builders[name] = this.builders[&#x27;default&#x27;].extend(builder);
 
 				// return
 				return this.builders[name];
@@ -185,7 +185,7 @@ define(function (require, exports, module) {
 
 				// retrieve a builder.
 
-				var builder = this.builders[name];
+				builder = this.builders[name];
 
 				if (!builder) {
 					throw new Error(&#x27;No builder &quot;&#x27; + name + &#x27;&quot; defined in app.&#x27;);
@@ -193,35 +193,6 @@ define(function (require, exports, module) {
 
 				return builder;
 			}
-		},
-
-		/**
-		 *
-		 *
-		 * @method builder
-		 * @param options
-		 */
-		build: function build(options) {
-
-			arguments[0] = options || {};
-
-			// set APP
-			arguments[0].app = this;
-
-			// initialize basic backbone view
-			dockableView.prototype.initialize.apply(this, arguments);
-
-
-			// check if $el is present
-			if (!this.$el) {
-				throw new Error(&#x27;No DOM element in archetypo.&#x27;);
-			}
-
-			// initialize registry
-			register.apply(this, arguments);
-
-			// start subviews
-			subviews.apply(this, arguments);
 		},
 
 		/**
@@ -233,9 +204,16 @@ define(function (require, exports, module) {
 		start: function start(options) {
 			options = options || {};
 
+			// set app option
+			options.app = this;
+
 			options.el = options.el || $(&#x27;[data-archetypo],[archetypo]&#x27;);
 
-			this.build(options);
+			// initialize basic backbone view
+			backbone.view.prototype.initialize.apply(this, arguments);
+
+			// initialize archetypoView
+			this.initializeArchetypoView(options);
 
 			backbone.history.start(options);
 

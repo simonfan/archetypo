@@ -11,20 +11,14 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var subject = require('subject'),
-		backbone = require('lowercase-backbone'),
-		dockableView = require('dockable-view'),
-		q = require('q'),
+	var backbone = require('lowercase-backbone'),
 		_ = require('lodash'),
-		$ = require('jquery');
+		$ = require('jquery'),
+
+		archetypoView = require('archetypo-view');
 
 	// sub modules.
-	var archView = require('./__archetypo/view/index'),
-		archRouter = require('./__archetypo/router/index');
-
-	// view-initialization
-	var register = require('./__archetypo/view/initialize/register'),
-		subviews = require('./__archetypo/view/initialize/subviews');
+	var archRouter = require('./__archetypo/router/index');
 
 	/**
 	 * The main class.
@@ -32,26 +26,28 @@ define(function (require, exports, module) {
 	 * @class archetypo
 	 * @builder
 	 */
-	var archetypo = module.exports =
-		archView
-			.extend(backbone.router.prototype)
-			.extend(archRouter.prototype);
+	var archetypo = module.exports = archetypoView
+		.extend(backbone.router.prototype)
+		.extend(archRouter.prototype);
 
 	// proto
 	archetypo.proto({
 
 		/**
 		 * The initialization logic is different from that of a
-		 * simple archView.
+		 * simple archetypoView.
 		 *
 		 * @method initialize
 		 * @param options {Object [for both router and view]}
 		 */
 		initialize: function initializeArchetypo(options) {
 			// initialize the arch router.
-			archRouter.prototype.initialize.apply(this, arguments);
+			this.initializeArchRouter.apply(this, arguments);
 
-			this.isApp = true;
+			this.initializeArchetypo.apply(this, arguments);
+		},
+
+		initializeArchetypo: function initializeArchetypo(options) {
 
 			/**
 			 * Hash where builders are stored.
@@ -60,7 +56,7 @@ define(function (require, exports, module) {
 			 * @type Object
 			 */
 			this.builders = {
-				'default': archView
+				'default': archetypoView
 			};
 		},
 
@@ -72,13 +68,23 @@ define(function (require, exports, module) {
 		 * @param name {String}
 		 * @param [extensions] {Object}
 		 */
-		builder: function defineOrGetBuilder(name, extensions) {
+		builder: function defineOrGetBuilder(name, builder) {
 
 			if (arguments.length === 2) {
 				// define a builder
 
+				if (_.isFunction(builder)) {
+					// builder is a constructor by itself
+					this.builder[name] = builder;
+
+				} else if (_.isObject(builder)) {
+					// builder is a set of properties that the defautl
+					// view must extend
+					this.builder[name] = archetypoView.extend(builder);
+				}
+
 				// save
-				this.builders[name] = this.builders['default'].extend(extensions);
+				this.builders[name] = this.builders['default'].extend(builder);
 
 				// return
 				return this.builders[name];
@@ -87,7 +93,7 @@ define(function (require, exports, module) {
 
 				// retrieve a builder.
 
-				var builder = this.builders[name];
+				builder = this.builders[name];
 
 				if (!builder) {
 					throw new Error('No builder "' + name + '" defined in app.');
@@ -95,35 +101,6 @@ define(function (require, exports, module) {
 
 				return builder;
 			}
-		},
-
-		/**
-		 *
-		 *
-		 * @method builder
-		 * @param options
-		 */
-		build: function build(options) {
-
-			arguments[0] = options || {};
-
-			// set APP
-			arguments[0].app = this;
-
-			// initialize basic backbone view
-			dockableView.prototype.initialize.apply(this, arguments);
-
-
-			// check if $el is present
-			if (!this.$el) {
-				throw new Error('No DOM element in archetypo.');
-			}
-
-			// initialize registry
-			register.apply(this, arguments);
-
-			// start subviews
-			subviews.apply(this, arguments);
 		},
 
 		/**
@@ -135,9 +112,16 @@ define(function (require, exports, module) {
 		start: function start(options) {
 			options = options || {};
 
+			// set app option
+			options.app = this;
+
 			options.el = options.el || $('[data-archetypo],[archetypo]');
 
-			this.build(options);
+			// initialize basic backbone view
+			backbone.view.prototype.initialize.apply(this, arguments);
+
+			// initialize archetypoView
+			this.initializeArchetypoView(options);
 
 			backbone.history.start(options);
 
