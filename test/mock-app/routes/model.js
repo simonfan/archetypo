@@ -16,7 +16,7 @@ define(function (require, exports, module) {
 	// route definition
 	app.route('model/:id', 'model', function (id) {
 		// the model view
-		var view = app.views('model-display');
+		var view = app.subviews('model-display');
 
 		view.data.attach(database.get(id));
 	});

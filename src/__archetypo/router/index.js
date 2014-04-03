@@ -18,8 +18,12 @@ define(function (require, exports, module) {
 		escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
 
 	var archRouter = module.exports = router.extend({
+		initialize: function initialize() {
+			this.initializeArchRouter.apply(this, arguments);
+		},
 
-		initialize: function initializeArchRouter() {
+
+		initializeArchRouter: function initializeArchRouter() {
 			this.routeFormats = {};
 		},
 

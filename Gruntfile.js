@@ -113,7 +113,7 @@ module.exports = function (grunt) {
 
 					// exclude these modules AND their dependencies
 					// (excluding your bower dependencies)
-					exclude: ["dockable-view", 'backbone', 'jquery', 'q', 'lodash', 'underscore', 'subject', 'backbone.model.tree', 'database'],
+					exclude: ["archetypo-view", "lowercase-backbone"],
 
 					// excludeShallow
 					excludeShallow: [],
@@ -144,7 +144,7 @@ module.exports = function (grunt) {
 
 					// exclude these modules AND their dependencies
 					// (excluding your bower dependencies)
-					exclude: ["dockable-view", 'backbone', 'jquery', 'q', 'lodash', 'underscore', 'subject', 'backbone.model.tree', 'database'],
+					exclude: ["archetypo-view", "lowercase-backbone"],
 
 					// excludeShallow
 					excludeShallow: [],
