@@ -41,13 +41,13 @@ define(function (require, exports, module) {
 		 * @param options {Object [for both router and view]}
 		 */
 		initialize: function initializeArchetypo(options) {
-			// initialize the arch router.
-			this.initializeArchRouter.apply(this, arguments);
-
 			this.initializeArchetypo.apply(this, arguments);
 		},
 
 		initializeArchetypo: function initializeArchetypo(options) {
+			// initialize the arch router.
+			// the arch router is considered part of archetypo
+			this.initializeArchRouter(options);
 
 			/**
 			 * Hash where builders are stored.
@@ -58,38 +58,6 @@ define(function (require, exports, module) {
 			this.builders = {
 				'default': archetypoView
 			};
-		},
-
-		/**
-		 * Either defines or retrieves a builder function.
-		 *
-		 * @method builder
-		 * @param type {String}
-		 * @param name {String}
-		 * @param [extensions] {Object}
-		 */
-		builder: function defineOrGetBuilder(name, builder) {
-
-			if (arguments.length === 2) {
-				// define a builder
-
-				this.builder[name] = builder;
-
-				// return
-				return this.builders[name];
-
-			} else if (arguments.length === 1) {
-
-				// retrieve a builder.
-
-				builder = this.builders[name];
-
-				if (!builder) {
-					throw new Error('No builder "' + name + '" defined in app.');
-				}
-
-				return builder;
-			}
 		},
 
 		/**
@@ -117,4 +85,6 @@ define(function (require, exports, module) {
 			return this;
 		}
 	});
+
+	archetypo.proto(require('./__archetypo/builder'));
 });

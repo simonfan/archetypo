@@ -14,7 +14,7 @@
 		// load amdconfig manually
 		require(['../amdconfig'], function(undef) {
 			// load demo
-			require(['demo/main'], function() {
+			require(['../demo/main'], function() {
 
 				console.log('main demo successfully loaded and ran.');
 
@@ -28,6 +28,25 @@
 <body>
 
 	<a href="../index.html">Menu</a>
+
+
+	<div archetypo>
+		<ul data-builder="../../demo/views/nav">
+			<li>Home</li>
+			<li>Topics</li>
+			<li>Something</li>
+		</ul>
+
+		<div data-builder="item">
+			<div>Item display</div>
+		</div>
+
+		<div data-builder="list">
+			List display
+		</div>
+
+
+	</div>
 
 </body>
 

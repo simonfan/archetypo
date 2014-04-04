@@ -1,8 +1,9 @@
-define(['archetypo'], function (Archetypo) {
+define(function (require, exports, module) {
 
-    var msg = 'Main demo of the archetypo module running!';
 
-	console.log(msg);
+	var app = require('./app');
 
-	alert(msg);
+
+	app.start({ pushState: true });
+
 });

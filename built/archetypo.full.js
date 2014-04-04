@@ -132,6 +132,60 @@ define('__archetypo/router/index',['require','exports','module','lodash','lowerc
 	});
 });
 
+define('__archetypo/builder',['require','exports','module','q'],function (require, exports, module) {
+
+	var q = require('q');
+
+	/**
+	 * Either defines or retrieves a builder function.
+	 *
+	 * @method builder
+	 * @param type {String}
+	 * @param name {String}
+	 * @param [extensions] {Object}
+	 */
+	exports.builder = function defineOrGetBuilder(name, builder) {
+
+		if (arguments.length === 1) {
+
+			return this.getBuilder(name);
+
+		} else if (arguments.length === 2) {
+
+			return this.defineBuilder(name, builder);
+
+		}
+	};
+
+	exports.defineBuilder = function defineBuilder(name, builder) {
+		// define a builder
+		this.builders[name] = builder;
+
+		// return
+		return this;
+	};
+
+	exports.getBuilder = function getBuilder(name) {
+
+		var defer = q.deferred();
+
+		// retrieve a builder.
+		var builder = this.builders[name];
+
+		if (builder) {
+			// resolve immediately
+			defer.resolve(builder);
+		} else {
+			// require, then resolve
+			require([name], defer.resolve);
+		}
+
+		return defer.promise;
+	};
+
+
+})
+;
 //     archetypo
 //     (c) simonfan
 //     archetypo is licensed under the MIT terms.
@@ -142,7 +196,7 @@ define('__archetypo/router/index',['require','exports','module','lodash','lowerc
  * @module archetypo
  */
 
-define('archetypo',['require','exports','module','lowercase-backbone','lodash','jquery','archetypo-view','./__archetypo/router/index'],function (require, exports, module) {
+define('archetypo',['require','exports','module','lowercase-backbone','lodash','jquery','archetypo-view','./__archetypo/router/index','./__archetypo/builder'],function (require, exports, module) {
 	
 
 	var backbone = require('lowercase-backbone'),
@@ -175,13 +229,13 @@ define('archetypo',['require','exports','module','lowercase-backbone','lodash','
 		 * @param options {Object [for both router and view]}
 		 */
 		initialize: function initializeArchetypo(options) {
-			// initialize the arch router.
-			this.initializeArchRouter.apply(this, arguments);
-
 			this.initializeArchetypo.apply(this, arguments);
 		},
 
 		initializeArchetypo: function initializeArchetypo(options) {
+			// initialize the arch router.
+			// the arch router is considered part of archetypo
+			this.initializeArchRouter(options);
 
 			/**
 			 * Hash where builders are stored.
@@ -192,38 +246,6 @@ define('archetypo',['require','exports','module','lowercase-backbone','lodash','
 			this.builders = {
 				'default': archetypoView
 			};
-		},
-
-		/**
-		 * Either defines or retrieves a builder function.
-		 *
-		 * @method builder
-		 * @param type {String}
-		 * @param name {String}
-		 * @param [extensions] {Object}
-		 */
-		builder: function defineOrGetBuilder(name, builder) {
-
-			if (arguments.length === 2) {
-				// define a builder
-
-				this.builder[name] = builder;
-
-				// return
-				return this.builders[name];
-
-			} else if (arguments.length === 1) {
-
-				// retrieve a builder.
-
-				builder = this.builders[name];
-
-				if (!builder) {
-					throw new Error('No builder "' + name + '" defined in app.');
-				}
-
-				return builder;
-			}
 		},
 
 		/**
@@ -251,5 +273,7 @@ define('archetypo',['require','exports','module','lowercase-backbone','lodash','
 			return this;
 		}
 	});
+
+	archetypo.proto(require('./__archetypo/builder'));
 });
 

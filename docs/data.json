@@ -20,6 +20,13 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/__archetypo/builder.js": {
+            "name": "src/__archetypo/builder.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "src/index.js": {
             "name": "src/index.js",
             "modules": {
@@ -161,6 +168,33 @@
             "submodule": "view"
         },
         {
+            "file": "src/__archetypo/builder.js",
+            "line": 5,
+            "description": "Either defines or retrieves a builder function.",
+            "itemtype": "method",
+            "name": "builder",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "extensions",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "class": "archetypo",
+            "module": "archetypo"
+        },
+        {
             "file": "src/index.js",
             "line": 36,
             "description": "The initialization logic is different from that of a\nsimple archetypoView.",
@@ -189,33 +223,6 @@
         {
             "file": "src/index.js",
             "line": 63,
-            "description": "Either defines or retrieves a builder function.",
-            "itemtype": "method",
-            "name": "builder",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "name",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "extensions",
-                    "description": "",
-                    "type": "Object",
-                    "optional": true
-                }
-            ],
-            "class": "archetypo",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 95,
             "description": "Starts the app up.",
             "itemtype": "method",
             "name": "",
