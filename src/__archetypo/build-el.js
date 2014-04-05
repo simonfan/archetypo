@@ -44,13 +44,17 @@ define(function (require, exports, module) {
 		if (!done) {
 			// otherwise ...
 
+
+			// set the archetypo done.
+			$el.data('archetypo-done', done);
+
 			// set a views data property on the $el
 			$el.data('views', {});
 
 			// load stuff
 			var loading = [
 				load.builders($el),
-				load.modules($el, options.modules)
+				load.modules($el, options.loadable)
 			];
 
 			return q.spread(loading, function (builders, modules) {
@@ -84,9 +88,6 @@ define(function (require, exports, module) {
 			.then(function () {
 				return $el;
 			});
-
-			// set the archetypo done.
-			$el.data('archetypo-done', done);
 		}
 
 		// return a promise for whenever the archetypo call is done.

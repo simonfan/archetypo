@@ -11,9 +11,6 @@ define('__archetypo/build-sub',['require','exports','module','lodash','jquery','
 		q = require('q');
 
 	module.exports = function buildSub($el, options) {
-
-		console.log('sub')
-
 		// [0] Sub-views
 		// Look for child nodes that have an 'arch-view'
 		// attribute defined and instantiate the corresponding view.
@@ -35,6 +32,7 @@ define('__archetypo/build-sub',['require','exports','module','lodash','jquery','
 });
 
 define('__archetypo/load',['require','exports','module','lodash','q'],function (require, exports, module) {
+	
 
 	var _ = require('lodash'),
 		q = require('q');
@@ -57,7 +55,7 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 		});
 
 		return defer.promise;
-	};
+	}
 
 
 
@@ -66,9 +64,9 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 	 *
 	 * @method load
 	 * @param $el {jq Object}
-	 * @param modules {Array}
+	 * @param loadableProperties {Array}
 	 */
-	exports.modules = function modules($el, modules) {
+	exports.modules = function modules($el, loadableProperties) {
 
 		var data = $el.data();
 
@@ -76,7 +74,7 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 		var validNames = [],
 			locations = [];
 
-		_.each(modules, function (prop) {
+		_.each(loadableProperties, function (prop) {
 			var location = data[prop];
 
 			if (_.isString(location)) {
@@ -101,7 +99,7 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 	var whitespaces = /\s+/;
 	function tokenize(str) {
 		return _.isString(str) ? str.split(whitespaces) : [];
-	};
+	}
 
 	/**
 	 * Loads the builders defined in $el.
@@ -163,13 +161,17 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 		if (!done) {
 			// otherwise ...
 
+
+			// set the archetypo done.
+			$el.data('archetypo-done', done);
+
 			// set a views data property on the $el
 			$el.data('views', {});
 
 			// load stuff
 			var loading = [
 				load.builders($el),
-				load.modules($el, options.modules)
+				load.modules($el, options.loadable)
 			];
 
 			return q.spread(loading, function (builders, modules) {
@@ -203,9 +205,6 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 			.then(function () {
 				return $el;
 			});
-
-			// set the archetypo done.
-			$el.data('archetypo-done', done);
 		}
 
 		// return a promise for whenever the archetypo call is done.
@@ -244,8 +243,8 @@ define('archetypo',['require','exports','module','lodash','jquery','./__archetyp
 		var $subs = this.find(selector);
 
 		// return wrapped object
-		return _($subs, function (sub) {
-			return $(sub).view(name)
+		return _($subs).map(function (sub) {
+			return $(sub).view(name);
 		});
 	};
 

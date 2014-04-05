@@ -77,7 +77,7 @@
         },
         {
             "file": "src/__archetypo/load.js",
-            "line": 7,
+            "line": 8,
             "description": "The real loader.",
             "itemtype": "method",
             "name": "load",
@@ -88,7 +88,7 @@
         },
         {
             "file": "src/__archetypo/load.js",
-            "line": 28,
+            "line": 29,
             "itemtype": "method",
             "name": "load",
             "params": [
@@ -98,7 +98,7 @@
                     "type": "Jq Object"
                 },
                 {
-                    "name": "modules",
+                    "name": "loadableProperties",
                     "description": "",
                     "type": "Array"
                 }
@@ -108,7 +108,7 @@
         },
         {
             "file": "src/__archetypo/load.js",
-            "line": 59,
+            "line": 60,
             "description": "Converts a string into an array.",
             "itemtype": "method",
             "name": "tokenize",
@@ -123,7 +123,7 @@
         },
         {
             "file": "src/__archetypo/load.js",
-            "line": 70,
+            "line": 71,
             "description": "Loads the builders defined in $el.",
             "itemtype": "method",
             "name": "load.builders",

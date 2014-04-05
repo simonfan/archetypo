@@ -1,4 +1,5 @@
 define(function (require, exports, module) {
+	'use strict';
 
 	var _ = require('lodash'),
 		q = require('q');
@@ -21,7 +22,7 @@ define(function (require, exports, module) {
 		});
 
 		return defer.promise;
-	};
+	}
 
 
 
@@ -30,9 +31,9 @@ define(function (require, exports, module) {
 	 *
 	 * @method load
 	 * @param $el {jq Object}
-	 * @param modules {Array}
+	 * @param loadableProperties {Array}
 	 */
-	exports.modules = function modules($el, modules) {
+	exports.modules = function modules($el, loadableProperties) {
 
 		var data = $el.data();
 
@@ -40,7 +41,7 @@ define(function (require, exports, module) {
 		var validNames = [],
 			locations = [];
 
-		_.each(modules, function (prop) {
+		_.each(loadableProperties, function (prop) {
 			var location = data[prop];
 
 			if (_.isString(location)) {
@@ -65,7 +66,7 @@ define(function (require, exports, module) {
 	var whitespaces = /\s+/;
 	function tokenize(str) {
 		return _.isString(str) ? str.split(whitespaces) : [];
-	};
+	}
 
 	/**
 	 * Loads the builders defined in $el.

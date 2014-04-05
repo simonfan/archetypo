@@ -4,7 +4,7 @@ define(function (require, exports, module) {
 		archetypo = require('archetypo');
 
 	$('[archetypo]').archetypo({
-		modules: ['template']
+		loadable: ['template']
 	})
 	.then(function ($el) {
 		console.log('ready!')

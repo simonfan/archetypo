@@ -11,9 +11,6 @@ define(function (require, exports, module) {
 		q = require('q');
 
 	module.exports = function buildSub($el, options) {
-
-		console.log('sub')
-
 		// [0] Sub-views
 		// Look for child nodes that have an 'arch-view'
 		// attribute defined and instantiate the corresponding view.

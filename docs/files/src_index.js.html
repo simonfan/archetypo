@@ -118,8 +118,8 @@ define(function (require, exports, module) {
 		var $subs = this.find(selector);
 
 		// return wrapped object
-		return _($subs, function (sub) {
-			return $(sub).view(name)
+		return _($subs).map(function (sub) {
+			return $(sub).view(name);
 		});
 	};
 
