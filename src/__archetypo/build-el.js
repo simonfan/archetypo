@@ -37,16 +37,14 @@ define(function (require, exports, module) {
 	 */
 	module.exports = function buildEl($el, options) {
 
-		var done = $el.data('archetypo-done');
+		var archetypoPromiseChain = $el.data('archetypo-promise');
 			// if the element was already processed earlier,
 			// return a resolved promise.
 
-		if (!done) {
+		if (!archetypoPromiseChain) {
 			// otherwise ...
 
 
-			// set the archetypo done.
-			$el.data('archetypo-done', done);
 
 			// set a views data property on the $el
 			$el.data('views', {});
@@ -57,7 +55,8 @@ define(function (require, exports, module) {
 				load.modules($el, options.loadable)
 			];
 
-			return q.spread(loading, function (builders, modules) {
+			// archetypoPromiseChain wquals t
+			archetypoPromiseChain = q.spread(loading, function (builders, modules) {
 
 				// create an object to be passed to
 				// all builders
@@ -88,10 +87,17 @@ define(function (require, exports, module) {
 			.then(function () {
 				return $el;
 			});
+
+
+			// set the archetypo archetypoPromiseChain.
+			$el.data('archetypo-promise', archetypoPromiseChain);
+
+			// throw errors!!!!
+			archetypoPromiseChain.done();
 		}
 
-		// return a promise for whenever the archetypo call is done.
-		return done;
+		// return a promise for whenever the archetypo call is archetypoPromiseChain.
+		return archetypoPromiseChain;
 	};
 
 });

@@ -154,16 +154,14 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 	 */
 	module.exports = function buildEl($el, options) {
 
-		var done = $el.data('archetypo-done');
+		var archetypoPromiseChain = $el.data('archetypo-promise');
 			// if the element was already processed earlier,
 			// return a resolved promise.
 
-		if (!done) {
+		if (!archetypoPromiseChain) {
 			// otherwise ...
 
 
-			// set the archetypo done.
-			$el.data('archetypo-done', done);
 
 			// set a views data property on the $el
 			$el.data('views', {});
@@ -174,7 +172,8 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 				load.modules($el, options.loadable)
 			];
 
-			return q.spread(loading, function (builders, modules) {
+			// archetypoPromiseChain wquals t
+			archetypoPromiseChain = q.spread(loading, function (builders, modules) {
 
 				// create an object to be passed to
 				// all builders
@@ -205,10 +204,17 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 			.then(function () {
 				return $el;
 			});
+
+
+			// set the archetypo archetypoPromiseChain.
+			$el.data('archetypo-promise', archetypoPromiseChain);
+
+			// throw errors!!!!
+			archetypoPromiseChain.done();
 		}
 
-		// return a promise for whenever the archetypo call is done.
-		return done;
+		// return a promise for whenever the archetypo call is archetypoPromiseChain.
+		return archetypoPromiseChain;
 	};
 
 });
