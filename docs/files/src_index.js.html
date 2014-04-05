@@ -41,8 +41,6 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/archetypo.html">archetypo</a></li>
-            
             </ul>
 
             <ul id="api-modules" class="apis modules">
@@ -103,82 +101,28 @@
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var backbone = require(&#x27;lowercase-backbone&#x27;),
-		_ = require(&#x27;lodash&#x27;),
-		$ = require(&#x27;jquery&#x27;),
+	var _ = require(&#x27;lodash&#x27;),
+		$ = require(&#x27;jquery&#x27;);
 
-		archetypoView = require(&#x27;archetypo-view&#x27;);
+	var buildEl = require(&#x27;./__archetypo/build-el&#x27;);
 
-	// sub modules.
-	var archRouter = require(&#x27;./__archetypo/router/index&#x27;);
+	$.prototype.archetypo = function archetypo(options) {
+		return buildEl(this, options);
+	};
 
-	/**
-	 * The main class.
-	 *
-	 * @class archetypo
-	 * @builder
-	 */
-	var archetypo = module.exports = archetypoView
-		.extend(backbone.router.prototype)
-		.extend(archRouter.prototype);
+	$.prototype.view = function view(name) {
+		return this.data(&#x27;views&#x27;)[name];
+	};
 
-	// proto
-	archetypo.proto({
+	$.prototype.subviews = function subviews(selector, name) {
+		var $subs = this.find(selector);
 
-		/**
-		 * The initialization logic is different from that of a
-		 * simple archetypoView.
-		 *
-		 * @method initialize
-		 * @param options {Object [for both router and view]}
-		 */
-		initialize: function initializeArchetypo(options) {
-			this.initializeArchetypo.apply(this, arguments);
-		},
+		// return wrapped object
+		return _($subs, function (sub) {
+			return $(sub).view(name)
+		});
+	};
 
-		initializeArchetypo: function initializeArchetypo(options) {
-			// initialize the arch router.
-			// the arch router is considered part of archetypo
-			this.initializeArchRouter(options);
-
-			/**
-			 * Hash where builders are stored.
-			 *
-			 * @property builders
-			 * @type Object
-			 */
-			this.builders = {
-				&#x27;default&#x27;: archetypoView
-			};
-		},
-
-		/**
-		 * Starts the app up.
-		 *
-		 * @method
-		 * @param options
-		 */
-		start: function start(options) {
-			options = options || {};
-
-			// set app option
-			options.app = this;
-
-			options.el = options.el || $(&#x27;[data-archetypo],[archetypo]&#x27;);
-
-			// initialize basic backbone view
-			backbone.view.prototype.initialize.apply(this, arguments);
-
-			// initialize archetypoView
-			this.initializeArchetypoView(options);
-
-			backbone.history.start(options);
-
-			return this;
-		}
-	});
-
-	archetypo.proto(require(&#x27;./__archetypo/builder&#x27;));
 });
 
     </pre>

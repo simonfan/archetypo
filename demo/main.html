@@ -31,17 +31,19 @@
 
 
 	<div archetypo>
-		<ul data-builder="../../demo/views/nav">
-			<li>Home</li>
-			<li>Topics</li>
-			<li>Something</li>
+		<ul data-builder="/demo/views/nav.js">
+			<li data-to="/home">Home</li>
+			<li data-to="/topics">Topics</li>
+			<li data-to="/something">Something</li>
 		</ul>
 
-		<div data-builder="item">
+		<div data-builder="/demo/views/todo.js" data-template="text!/demo/templates/todo.html">
 			<div>Item display</div>
 		</div>
 
-		<div data-builder="list">
+		<div data-builder="/demo/views/nav.js">
+
+			<div data-to="/">Home</div>
 			List display
 		</div>
 

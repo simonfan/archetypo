@@ -1,9 +1,13 @@
 define(function (require, exports, module) {
 
+	var $ = require('jquery'),
+		archetypo = require('archetypo');
 
-	var app = require('./app');
-
-
-	app.start({ pushState: true });
+	$('[archetypo]').archetypo({
+		modules: ['template']
+	})
+	.then(function ($el) {
+		console.log('ready!')
+	});
 
 });

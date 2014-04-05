@@ -3,189 +3,115 @@
  * @submodule view
  */
 
-define('__archetypo/router/format',['require','exports','module','lodash'],function (require, exports, module) {
-	
-
-	var _ = require('lodash');
-
-
-	var optionalParam = /\((.*?)\)/g,
-		namedParam    = /(\(\?)?:\w+/g,
-		splatParam    = /\*\w+/g,
-		escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
-
-
-	/**
-	 * Removes all weird tokens from the raw string and returns the key
-	 * to be used when looking for the correspondant value.
-	 *
-	 * @method getKey
-	 * @private
-	 * @param str {String}
-	 */
-	function getKey(str) {
-		return str.replace(/(\(|\(.*:|:|\)|\*)/, '');
-	}
-
-	/**
-	 * Formats the data into the given route string.
-	 *
-	 * @method format
-	 * @private
-	 * @param route {String}
-	 * @param data {Object}
-	 */
-	module.exports = function format(route, data) {
-
-		// place named data
-		route = route.replace(namedParam, function (match) {
-
-			var key = getKey(match);
-
-			return data[key] ? data[key] : match;
-		});
-
-		// place splat data
-		route = route.replace(splatParam, function (match) {
-			var key = getKey(match);
-
-			return data[key] ? data[key] : '';
-		});
-
-		// remove optionals that were not used.
-		return route.replace(optionalParam, '');
-	};
-});
-
-/**
- * @module archetypo
- * @submodule view
- */
-
-define('__archetypo/router/index',['require','exports','module','lodash','lowercase-backbone','./format'],function (require, exports, module) {
+define('__archetypo/build-sub',['require','exports','module','lodash','jquery','q'],function (require, exports, module) {
 	
 
 	var _ = require('lodash'),
-		router = require('lowercase-backbone').router;
+		$ = require('jquery'),
+		q = require('q');
 
-	var formatRoute = require('./format');
+	module.exports = function buildSub($el, options) {
+		// [0] Sub-views
+		// Look for child nodes that have an 'arch-view'
+		// attribute defined and instantiate the corresponding view.
 
+		// [1]
+		// find all elements within this element
+		// that have an 'arch-view' attribute defined.
+		var subs = $el.find('[data-archetypo]');
 
-	var optionalParam = /\((.*?)\)/g,
-		namedParam    = /(\(\?)?:\w+/g,
-		splatParam    = /\*\w+/g,
-		escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+		// [2]
+		// Instantiate the sub-views
+		var defers = _.map(subs, function (sub) {
+			$(sub).archetypo(options);
+		}, this);
 
-	var archRouter = module.exports = router.extend({
-		initialize: function initialize() {
-			this.initializeArchRouter.apply(this, arguments);
-		},
+		return q.all(defers);
+	};
 
-
-		initializeArchRouter: function initializeArchRouter() {
-			this.routeFormats = {};
-		},
-
-		/**
-		 * Intercepts calls for the route method, so that
-		 * we can save the route strings to a formats hash for navigation use.
-		 *
-		 * @method route
-		 */
-		route: function defineRoute(route, name, callback) {
-
-			// save the route to the routeFormats if a name is defined
-			if (_.isString(name)) {
-				this.routeFormats[name] = route;
-			}
-
-			// continue normal execution
-			return router.prototype.route.apply(this, arguments);
-		},
-
-		/**
-		 * Intercepts the original navigate method,
-		 * so that the router automatically takes advantage
-		 * of format methods.
-		 *
-		 * @method navigate
-		 * @param route|format {String|Object}
-		 * @param data|options {Object}
-		 * @param [options] {Object}
-		 */
-		navigate: function navigate(first, second, third) {
-			// [1] try to get a format
-			var format = this.routeFormats[first];
-
-			if (!format) {
-				// simple navigation
-				return router.prototype.navigate.apply(this, arguments);
-			} else {
-				// build up the route
-				var route = formatRoute(format, second);
-
-				// navigate
-				return router.prototype.navigate.call(this, route, third);
-			}
-
-		},
-	});
 });
 
-define('__archetypo/builder',['require','exports','module','q'],function (require, exports, module) {
+define('__archetypo/load',['require','exports','module','lodash','q'],function (require, exports, module) {
 
-	var q = require('q');
+	var _ = require('lodash'),
+		q = require('q');
+
 
 	/**
-	 * Either defines or retrieves a builder function.
+	 * The real loader.
 	 *
-	 * @method builder
-	 * @param type {String}
-	 * @param name {String}
-	 * @param [extensions] {Object}
+	 * @method load
+	 * @private
 	 */
-	exports.builder = function defineOrGetBuilder(name, builder) {
+	var load = module.exports = function load(names, locations) {
+		var defer = q.defer();
 
-		if (arguments.length === 1) {
+		// locations default to the names themselves.
+		locations = locations || names;
 
-			return this.getBuilder(name);
-
-		} else if (arguments.length === 2) {
-
-			return this.defineBuilder(name, builder);
-
-		}
-	};
-
-	exports.defineBuilder = function defineBuilder(name, builder) {
-		// define a builder
-		this.builders[name] = builder;
-
-		// return
-		return this;
-	};
-
-	exports.getBuilder = function getBuilder(name) {
-
-		var defer = q.deferred();
-
-		// retrieve a builder.
-		var builder = this.builders[name];
-
-		if (builder) {
-			// resolve immediately
-			defer.resolve(builder);
-		} else {
-			// require, then resolve
-			require([name], defer.resolve);
-		}
+		require(locations, function (results) {
+			defer.resolve(_.zipObject(names, locations));
+		});
 
 		return defer.promise;
 	};
 
 
-})
-;
+
+	/**
+	 *
+	 *
+	 * @method load
+	 * @param $el {jq Object}
+	 * @param properties {Array}
+	 */
+	load.properties = function loadFromEl($el, properties) {
+
+		var data = $el.data();
+
+		// filter valid names and locations
+		var validNames = [],
+			locations = [];
+
+		_.each(properties, function (prop) {
+			if (_.isString(data[prop])) {
+				validNames.push(prop);
+				locations.push(locations);
+			}
+		});
+
+		return _load(validNames, locations);
+	};
+
+
+
+
+
+	/**
+	 * Converts a string into an array.
+	 *
+	 * @method tokenize
+	 * @param str
+	 */
+	var whitespaces = /\s+/;
+	function tokenize(str) {
+		return _.isString(str) ? str.split(whitespaces) : [];
+	};
+
+	/**
+	 * Loads the builders defined in $el.
+	 *
+	 * @method load.builders
+	 *
+	 */
+	load.builders = function loadBuilders($el) {
+		// retrieve the builder names
+		var builders = tokenize($el.data('archetypo'));
+
+		return load(builders);
+	};
+});
+
 //     archetypo
 //     (c) simonfan
 //     archetypo is licensed under the MIT terms.
@@ -196,84 +122,124 @@ define('__archetypo/builder',['require','exports','module','q'],function (requir
  * @module archetypo
  */
 
-define('archetypo',['require','exports','module','lowercase-backbone','lodash','jquery','archetypo-view','./__archetypo/router/index','./__archetypo/builder'],function (require, exports, module) {
+define('__archetypo/build-el',['require','exports','module','lodash','jquery','./build-sub','./load'],function (require, exports, module) {
 	
 
-	var backbone = require('lowercase-backbone'),
-		_ = require('lodash'),
-		$ = require('jquery'),
+	var _ = require('lodash'),
+		$ = require('jquery');
 
-		archetypoView = require('archetypo-view');
+	var buildSub = require('./build-sub'),
+		load = require('./load');
 
-	// sub modules.
-	var archRouter = require('./__archetypo/router/index');
+
+	function buildView($el, builder, options) {
+		// make sure options is an object
+		options = options || {};
+
+		// set el property on options
+		options.el = $el;
+	}
+
 
 	/**
-	 * The main class.
+	 * Loads anything that's needed and calls the view builder
 	 *
-	 * @class archetypo
-	 * @builder
+	 *
+	 * @method buildEl
+	 *
 	 */
-	var archetypo = module.exports = archetypoView
-		.extend(backbone.router.prototype)
-		.extend(archRouter.prototype);
+	module.exports = function buildEl($el, options) {
 
-	// proto
-	archetypo.proto({
+		var done = $el.data('archetypo-done');
+			// if the element was already processed earlier,
+			// return a resolved promise.
 
-		/**
-		 * The initialization logic is different from that of a
-		 * simple archetypoView.
-		 *
-		 * @method initialize
-		 * @param options {Object [for both router and view]}
-		 */
-		initialize: function initializeArchetypo(options) {
-			this.initializeArchetypo.apply(this, arguments);
-		},
+		if (!done) {
+			// otherwise ...
 
-		initializeArchetypo: function initializeArchetypo(options) {
-			// initialize the arch router.
-			// the arch router is considered part of archetypo
-			this.initializeArchRouter(options);
+			// set a views data property on the $el
+			$el.data('views', {});
 
-			/**
-			 * Hash where builders are stored.
-			 *
-			 * @property builders
-			 * @type Object
-			 */
-			this.builders = {
-				'default': archetypoView
-			};
-		},
+			// load stuff
+			var loading = [
+				load.builders($el),
+				load.modules($el, options.modules)
+			];
 
-		/**
-		 * Starts the app up.
-		 *
-		 * @method
-		 * @param options
-		 */
-		start: function start(options) {
-			options = options || {};
+			return q.spread(loading)
+				.then(function (builders, modules) {
 
-			// set app option
-			options.app = this;
+					// create an object to be passed to
+					// all builders
+					var buildOptions = _.extend({ el: $el }, options, modules);
 
-			options.el = options.el || $('[data-archetypo],[archetypo]');
+					var buildDefers = _.map(builders, function (builder, name) {
 
-			// initialize basic backbone view
-			backbone.view.prototype.initialize.apply(this, arguments);
+						return q.when(builder(buildOptions))
+							// save the view
+							.then(function (view) {
+								// save the view
+								$el.data('views')[builderName] = view;
 
-			// initialize archetypoView
-			this.initializeArchetypoView(options);
+								// return the promise for the sub readiness
+								return buildSub($el, options);
+							});
 
-			backbone.history.start(options);
+					});
 
-			return this;
+					// return a promise for when all
+					// the builders are ready
+					return q.all(buildDefers);
+				})
+				// finally return the $el on which archetypo was called
+				.then(function () {
+					return $el;
+				});
+
+			// set the archetypo done.
+			$el.data('archetypo-done', done);
 		}
-	});
 
-	archetypo.proto(require('./__archetypo/builder'));
+		// return a promise for whenever the archetypo call is done.
+		return done;
+	};
+
+});
+
+//     archetypo
+//     (c) simonfan
+//     archetypo is licensed under the MIT terms.
+
+/**
+ * AMD module.
+ *
+ * @module archetypo
+ */
+
+define('archetypo',['require','exports','module','lodash','jquery','./__archetypo/build-el'],function (require, exports, module) {
+	
+
+	var _ = require('lodash'),
+		$ = require('jquery');
+
+	var buildEl = require('./__archetypo/build-el');
+
+	$.prototype.archetypo = function archetypo(options) {
+		return buildEl(this, options);
+	};
+
+	$.prototype.view = function view(name) {
+		return this.data('views')[name];
+	};
+
+	$.prototype.subviews = function subviews(selector, name) {
+		var $subs = this.find(selector);
+
+		// return wrapped object
+		return _($subs, function (sub) {
+			return $(sub).view(name)
+		});
+	};
+
 });
 

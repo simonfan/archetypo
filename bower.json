@@ -4,9 +4,9 @@
   "version": "0.5.2",
   "description": "Backbone-based framework.",
   "dependencies": {
-    "lowercase-backbone": "0.2.5",
-    "archetypo-view": "0.1.1",
-    "q": "1.0.0"
+    "lowercase-backbone": "~0.2.5",
+    "q": "1.0.0",
+    "jquery": "*"
   },
   "devDependencies": {
     "requirejs": "*",

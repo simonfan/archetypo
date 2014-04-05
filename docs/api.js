@@ -1,8 +1,6 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
-    "classes": [
-        "archetypo"
-    ],
+    "classes": [],
     "modules": [
         "archetypo",
         "view"

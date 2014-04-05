@@ -4,14 +4,13 @@ define(function (require, exports, module) {
 
 	module.exports = backbone.view.extend({
 		events: {
-			'click [data-to]': 'nav'
+			'click li': 'nav'
 		},
 
-		nav: function (e) {
-			var $target = $(e.target);
-
-			alert($target.data('to'));
+		nav: function () {
+			alert('nav')
 		}
 	})
+
 
 });

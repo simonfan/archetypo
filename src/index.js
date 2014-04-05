@@ -11,80 +11,26 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var backbone = require('lowercase-backbone'),
-		_ = require('lodash'),
-		$ = require('jquery'),
+	var _ = require('lodash'),
+		$ = require('jquery');
 
-		archetypoView = require('archetypo-view');
+	var buildEl = require('./__archetypo/build-el');
 
-	// sub modules.
-	var archRouter = require('./__archetypo/router/index');
+	$.prototype.archetypo = function archetypo(options) {
+		return buildEl(this, options);
+	};
 
-	/**
-	 * The main class.
-	 *
-	 * @class archetypo
-	 * @builder
-	 */
-	var archetypo = module.exports = archetypoView
-		.extend(backbone.router.prototype)
-		.extend(archRouter.prototype);
+	$.prototype.view = function view(name) {
+		return this.data('views')[name];
+	};
 
-	// proto
-	archetypo.proto({
+	$.prototype.subviews = function subviews(selector, name) {
+		var $subs = this.find(selector);
 
-		/**
-		 * The initialization logic is different from that of a
-		 * simple archetypoView.
-		 *
-		 * @method initialize
-		 * @param options {Object [for both router and view]}
-		 */
-		initialize: function initializeArchetypo(options) {
-			this.initializeArchetypo.apply(this, arguments);
-		},
+		// return wrapped object
+		return _($subs, function (sub) {
+			return $(sub).view(name)
+		});
+	};
 
-		initializeArchetypo: function initializeArchetypo(options) {
-			// initialize the arch router.
-			// the arch router is considered part of archetypo
-			this.initializeArchRouter(options);
-
-			/**
-			 * Hash where builders are stored.
-			 *
-			 * @property builders
-			 * @type Object
-			 */
-			this.builders = {
-				'default': archetypoView
-			};
-		},
-
-		/**
-		 * Starts the app up.
-		 *
-		 * @method
-		 * @param options
-		 */
-		start: function start(options) {
-			options = options || {};
-
-			// set app option
-			options.app = this;
-
-			options.el = options.el || $('[data-archetypo],[archetypo]');
-
-			// initialize basic backbone view
-			backbone.view.prototype.initialize.apply(this, arguments);
-
-			// initialize archetypoView
-			this.initializeArchetypoView(options);
-
-			backbone.history.start(options);
-
-			return this;
-		}
-	});
-
-	archetypo.proto(require('./__archetypo/builder'));
 });

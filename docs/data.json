@@ -4,8 +4,17 @@
         "version": "0.0.0"
     },
     "files": {
-        "src/__archetypo/router/format.js": {
-            "name": "src/__archetypo/router/format.js",
+        "src/__archetypo/build-el.js": {
+            "name": "src/__archetypo/build-el.js",
+            "modules": {
+                "archetypo": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/build-sub.js": {
+            "name": "src/__archetypo/build-sub.js",
             "modules": {
                 "view": 1
             },
@@ -13,15 +22,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "src/__archetypo/router/index.js": {
-            "name": "src/__archetypo/router/index.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/builder.js": {
-            "name": "src/__archetypo/builder.js",
+        "src/__archetypo/load.js": {
+            "name": "src/__archetypo/load.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -29,12 +31,8 @@
         },
         "src/index.js": {
             "name": "src/index.js",
-            "modules": {
-                "archetypo": 1
-            },
-            "classes": {
-                "archetypo": 1
-            },
+            "modules": {},
+            "classes": {},
             "fors": {},
             "namespaces": {}
         }
@@ -45,14 +43,12 @@
             "submodules": {
                 "view": 1
             },
-            "classes": {
-                "archetypo": 1
-            },
+            "classes": {},
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "src/index.js",
-            "line": 23,
+            "file": "src/__archetypo/build-el.js",
+            "line": 5,
             "description": "AMD module."
         },
         "view": {
@@ -64,182 +60,76 @@
             "namespaces": {},
             "module": "archetypo",
             "namespace": "",
-            "file": "src/__archetypo/router/format.js",
+            "file": "src/__archetypo/build-sub.js",
             "line": 1
         }
     },
-    "classes": {
-        "archetypo": {
-            "name": "archetypo",
-            "shortname": "archetypo",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "archetypo",
-            "namespace": "",
-            "file": "src/index.js",
-            "line": 23,
-            "description": "The main class.",
-            "builder": ""
-        }
-    },
+    "classes": {},
     "classitems": [
         {
-            "file": "src/__archetypo/router/format.js",
-            "line": 18,
-            "description": "Removes all weird tokens from the raw string and returns the key\nto be used when looking for the correspondant value.",
+            "file": "src/__archetypo/build-el.js",
+            "line": 30,
+            "description": "Loads anything that's needed and calls the view builder",
             "itemtype": "method",
-            "name": "getKey",
+            "name": "buildEl",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/load.js",
+            "line": 7,
+            "description": "The real loader.",
+            "itemtype": "method",
+            "name": "load",
             "access": "private",
             "tagname": "",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/load.js",
+            "line": 28,
+            "itemtype": "method",
+            "name": "load",
+            "params": [
+                {
+                    "name": "$el",
+                    "description": "",
+                    "type": "Jq Object"
+                },
+                {
+                    "name": "properties",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/load.js",
+            "line": 57,
+            "description": "Converts a string into an array.",
+            "itemtype": "method",
+            "name": "tokenize",
             "params": [
                 {
                     "name": "str",
-                    "description": "",
-                    "type": "String"
-                }
-            ],
-            "class": "archetypo",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/router/format.js",
-            "line": 30,
-            "description": "Formats the data into the given route string.",
-            "itemtype": "method",
-            "name": "format",
-            "access": "private",
-            "tagname": "",
-            "params": [
-                {
-                    "name": "route",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "data",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "archetypo",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/router/index.js",
-            "line": 30,
-            "description": "Intercepts calls for the route method, so that\nwe can save the route strings to a formats hash for navigation use.",
-            "itemtype": "method",
-            "name": "route",
-            "class": "archetypo",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/router/index.js",
-            "line": 47,
-            "description": "Intercepts the original navigate method,\nso that the router automatically takes advantage\nof format methods.",
-            "itemtype": "method",
-            "name": "navigate",
-            "params": [
-                {
-                    "name": "route|format",
-                    "description": "",
-                    "type": "String|Object"
-                },
-                {
-                    "name": "data|options",
-                    "description": "",
-                    "type": "Object"
-                },
-                {
-                    "name": "options",
-                    "description": "",
-                    "type": "Object",
-                    "optional": true
-                }
-            ],
-            "class": "archetypo",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/builder.js",
-            "line": 5,
-            "description": "Either defines or retrieves a builder function.",
-            "itemtype": "method",
-            "name": "builder",
-            "params": [
-                {
-                    "name": "type",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "name",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "extensions",
-                    "description": "",
-                    "type": "Object",
-                    "optional": true
-                }
-            ],
-            "class": "archetypo",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 36,
-            "description": "The initialization logic is different from that of a\nsimple archetypoView.",
-            "itemtype": "method",
-            "name": "initialize",
-            "params": [
-                {
-                    "name": "options",
-                    "description": "",
-                    "type": "Object [for both router and view]"
-                }
-            ],
-            "class": "archetypo",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 52,
-            "description": "Hash where builders are stored.",
-            "itemtype": "property",
-            "name": "builders",
-            "type": "Object",
-            "class": "archetypo",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 63,
-            "description": "Starts the app up.",
-            "itemtype": "method",
-            "name": "",
-            "params": [
-                {
-                    "name": "options",
                     "description": ""
                 }
             ],
-            "class": "archetypo",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/load.js",
+            "line": 68,
+            "description": "Loads the builders defined in $el.",
+            "itemtype": "method",
+            "name": "load.builders",
+            "class": "",
             "module": "archetypo"
         }
     ],
-    "warnings": [
-        {
-            "message": "unknown tag: builder",
-            "line": " src/index.js:23"
-        }
-    ]
+    "warnings": []
 }

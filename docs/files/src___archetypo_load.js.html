@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/builder.js - archetypo</title>
+    <title>src/__archetypo/load.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -40,8 +40,6 @@
 
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
-            
-                <li><a href="../classes/archetypo.html">archetypo</a></li>
             
             </ul>
 
@@ -86,63 +84,90 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/builder.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/load.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 define(function (require, exports, module) {
 
-	var q = require(&#x27;q&#x27;);
+	var _ = require(&#x27;lodash&#x27;),
+		q = require(&#x27;q&#x27;);
+
 
 	/**
-	 * Either defines or retrieves a builder function.
+	 * The real loader.
 	 *
-	 * @method builder
-	 * @param type {String}
-	 * @param name {String}
-	 * @param [extensions] {Object}
+	 * @method load
+	 * @private
 	 */
-	exports.builder = function defineOrGetBuilder(name, builder) {
+	var load = module.exports = function load(names, locations) {
+		var defer = q.defer();
 
-		if (arguments.length === 1) {
+		// locations default to the names themselves.
+		locations = locations || names;
 
-			return this.getBuilder(name);
-
-		} else if (arguments.length === 2) {
-
-			return this.defineBuilder(name, builder);
-
-		}
-	};
-
-	exports.defineBuilder = function defineBuilder(name, builder) {
-		// define a builder
-		this.builders[name] = builder;
-
-		// return
-		return this;
-	};
-
-	exports.getBuilder = function getBuilder(name) {
-
-		var defer = q.deferred();
-
-		// retrieve a builder.
-		var builder = this.builders[name];
-
-		if (builder) {
-			// resolve immediately
-			defer.resolve(builder);
-		} else {
-			// require, then resolve
-			require([name], defer.resolve);
-		}
+		require(locations, function (results) {
+			defer.resolve(_.zipObject(names, locations));
+		});
 
 		return defer.promise;
 	};
 
 
-})
+
+	/**
+	 *
+	 *
+	 * @method load
+	 * @param $el {jq Object}
+	 * @param properties {Array}
+	 */
+	load.properties = function loadFromEl($el, properties) {
+
+		var data = $el.data();
+
+		// filter valid names and locations
+		var validNames = [],
+			locations = [];
+
+		_.each(properties, function (prop) {
+			if (_.isString(data[prop])) {
+				validNames.push(prop);
+				locations.push(locations);
+			}
+		});
+
+		return _load(validNames, locations);
+	};
+
+
+
+
+
+	/**
+	 * Converts a string into an array.
+	 *
+	 * @method tokenize
+	 * @param str
+	 */
+	var whitespaces = /\s+/;
+	function tokenize(str) {
+		return _.isString(str) ? str.split(whitespaces) : [];
+	};
+
+	/**
+	 * Loads the builders defined in $el.
+	 *
+	 * @method load.builders
+	 *
+	 */
+	load.builders = function loadBuilders($el) {
+		// retrieve the builder names
+		var builders = tokenize($el.data(&#x27;archetypo&#x27;));
+
+		return load(builders);
+	};
+});
 
     </pre>
 </div>

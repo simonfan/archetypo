@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/router/index.js - archetypo</title>
+    <title>src/__archetypo/build-sub.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -40,8 +40,6 @@
 
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
-            
-                <li><a href="../classes/archetypo.html">archetypo</a></li>
             
             </ul>
 
@@ -86,7 +84,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/router/index.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/build-sub.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -99,70 +97,28 @@ define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
 	var _ = require(&#x27;lodash&#x27;),
-		router = require(&#x27;lowercase-backbone&#x27;).router;
+		$ = require(&#x27;jquery&#x27;),
+		q = require(&#x27;q&#x27;);
 
-	var formatRoute = require(&#x27;./format&#x27;);
+	module.exports = function buildSub($el, options) {
+		// [0] Sub-views
+		// Look for child nodes that have an &#x27;arch-view&#x27;
+		// attribute defined and instantiate the corresponding view.
 
+		// [1]
+		// find all elements within this element
+		// that have an &#x27;arch-view&#x27; attribute defined.
+		var subs = $el.find(&#x27;[data-archetypo]&#x27;);
 
-	var optionalParam = /\((.*?)\)/g,
-		namedParam    = /(\(\?)?:\w+/g,
-		splatParam    = /\*\w+/g,
-		escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+		// [2]
+		// Instantiate the sub-views
+		var defers = _.map(subs, function (sub) {
+			$(sub).archetypo(options);
+		}, this);
 
-	var archRouter = module.exports = router.extend({
-		initialize: function initialize() {
-			this.initializeArchRouter.apply(this, arguments);
-		},
+		return q.all(defers);
+	};
 
-
-		initializeArchRouter: function initializeArchRouter() {
-			this.routeFormats = {};
-		},
-
-		/**
-		 * Intercepts calls for the route method, so that
-		 * we can save the route strings to a formats hash for navigation use.
-		 *
-		 * @method route
-		 */
-		route: function defineRoute(route, name, callback) {
-
-			// save the route to the routeFormats if a name is defined
-			if (_.isString(name)) {
-				this.routeFormats[name] = route;
-			}
-
-			// continue normal execution
-			return router.prototype.route.apply(this, arguments);
-		},
-
-		/**
-		 * Intercepts the original navigate method,
-		 * so that the router automatically takes advantage
-		 * of format methods.
-		 *
-		 * @method navigate
-		 * @param route|format {String|Object}
-		 * @param data|options {Object}
-		 * @param [options] {Object}
-		 */
-		navigate: function navigate(first, second, third) {
-			// [1] try to get a format
-			var format = this.routeFormats[first];
-
-			if (!format) {
-				// simple navigation
-				return router.prototype.navigate.apply(this, arguments);
-			} else {
-				// build up the route
-				var route = formatRoute(format, second);
-
-				// navigate
-				return router.prototype.navigate.call(this, route, third);
-			}
-
-		},
-	});
 });
 
     </pre>
