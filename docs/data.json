@@ -68,7 +68,7 @@
     "classitems": [
         {
             "file": "src/__archetypo/build-el.js",
-            "line": 30,
+            "line": 31,
             "description": "Loads anything that's needed and calls the view builder",
             "itemtype": "method",
             "name": "buildEl",
@@ -98,7 +98,7 @@
                     "type": "Jq Object"
                 },
                 {
-                    "name": "properties",
+                    "name": "modules",
                     "description": "",
                     "type": "Array"
                 }
@@ -108,7 +108,7 @@
         },
         {
             "file": "src/__archetypo/load.js",
-            "line": 57,
+            "line": 59,
             "description": "Converts a string into an array.",
             "itemtype": "method",
             "name": "tokenize",
@@ -123,7 +123,7 @@
         },
         {
             "file": "src/__archetypo/load.js",
-            "line": 68,
+            "line": 70,
             "description": "Loads the builders defined in $el.",
             "itemtype": "method",
             "name": "load.builders",

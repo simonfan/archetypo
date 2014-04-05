@@ -4,9 +4,10 @@
   "version": "0.5.2",
   "description": "Backbone-based framework.",
   "dependencies": {
-    "lowercase-backbone": "~0.2.5",
     "q": "1.0.0",
-    "jquery": "*"
+    "jquery": "*",
+    "lodash": "~2.4.1",
+    "archetypo-router": "*"
   },
   "devDependencies": {
     "requirejs": "*",
@@ -14,10 +15,14 @@
     "underscore": "*",
     "jquery": "*",
     "qunit": "*",
-    "dockable-view": "~0.1.4"
+    "dockable-view": "~0.1.4",
+    "model-dock": "~0.3.6",
+    "collection-dock": "~0.4.4",
+    "lowercase-backbone": "~0.2.5"
   },
   "resolutions": {
     "subject": "0.4.1",
-    "jquery": "~2.1.0"
+    "jquery": "~2.1.0",
+    "model-dock": "~0.3.6"
   }
 }

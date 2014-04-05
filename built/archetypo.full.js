@@ -11,6 +11,9 @@ define('__archetypo/build-sub',['require','exports','module','lodash','jquery','
 		q = require('q');
 
 	module.exports = function buildSub($el, options) {
+
+		console.log('sub')
+
 		// [0] Sub-views
 		// Look for child nodes that have an 'arch-view'
 		// attribute defined and instantiate the corresponding view.
@@ -18,7 +21,7 @@ define('__archetypo/build-sub',['require','exports','module','lodash','jquery','
 		// [1]
 		// find all elements within this element
 		// that have an 'arch-view' attribute defined.
-		var subs = $el.find('[data-archetypo]');
+		var subs = $el.find('[data-builder]');
 
 		// [2]
 		// Instantiate the sub-views
@@ -43,14 +46,14 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 	 * @method load
 	 * @private
 	 */
-	var load = module.exports = function load(names, locations) {
+	function load(names, locations) {
 		var defer = q.defer();
 
 		// locations default to the names themselves.
 		locations = locations || names;
 
-		require(locations, function (results) {
-			defer.resolve(_.zipObject(names, locations));
+		require(locations, function () {
+			defer.resolve(_.zipObject(names, arguments));
 		});
 
 		return defer.promise;
@@ -63,9 +66,9 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 	 *
 	 * @method load
 	 * @param $el {jq Object}
-	 * @param properties {Array}
+	 * @param modules {Array}
 	 */
-	load.properties = function loadFromEl($el, properties) {
+	exports.modules = function modules($el, modules) {
 
 		var data = $el.data();
 
@@ -73,14 +76,16 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 		var validNames = [],
 			locations = [];
 
-		_.each(properties, function (prop) {
-			if (_.isString(data[prop])) {
+		_.each(modules, function (prop) {
+			var location = data[prop];
+
+			if (_.isString(location)) {
 				validNames.push(prop);
-				locations.push(locations);
+				locations.push(location);
 			}
 		});
 
-		return _load(validNames, locations);
+		return load(validNames, locations);
 	};
 
 
@@ -104,9 +109,9 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 	 * @method load.builders
 	 *
 	 */
-	load.builders = function loadBuilders($el) {
+	exports.builders = function loadBuilders($el) {
 		// retrieve the builder names
-		var builders = tokenize($el.data('archetypo'));
+		var builders = tokenize($el.data('builder'));
 
 		return load(builders);
 	};
@@ -122,11 +127,12 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
  * @module archetypo
  */
 
-define('__archetypo/build-el',['require','exports','module','lodash','jquery','./build-sub','./load'],function (require, exports, module) {
+define('__archetypo/build-el',['require','exports','module','lodash','jquery','q','./build-sub','./load'],function (require, exports, module) {
 	
 
 	var _ = require('lodash'),
-		$ = require('jquery');
+		$ = require('jquery'),
+		q = require('q');
 
 	var buildSub = require('./build-sub'),
 		load = require('./load');
@@ -166,35 +172,37 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','.
 				load.modules($el, options.modules)
 			];
 
-			return q.spread(loading)
-				.then(function (builders, modules) {
+			return q.spread(loading, function (builders, modules) {
 
-					// create an object to be passed to
-					// all builders
-					var buildOptions = _.extend({ el: $el }, options, modules);
+				// create an object to be passed to
+				// all builders
+				var buildOptions = _.extend({ el: $el }, options, modules);
 
-					var buildDefers = _.map(builders, function (builder, name) {
+				var buildDefers = _.map(builders, function (builder, name) {
 
-						return q.when(builder(buildOptions))
+					// use q.when, so that the builder may return
+					// a promise or directly the view
+					return q.when(builder(buildOptions))
+						// save the view
+						.then(function (view) {
 							// save the view
-							.then(function (view) {
-								// save the view
-								$el.data('views')[builderName] = view;
+							$el.data('views')[name] = view;
+						});
 
-								// return the promise for the sub readiness
-								return buildSub($el, options);
-							});
-
-					});
-
-					// return a promise for when all
-					// the builders are ready
-					return q.all(buildDefers);
-				})
-				// finally return the $el on which archetypo was called
-				.then(function () {
-					return $el;
 				});
+
+				// return a promise for when all
+				// the builders are ready
+				return q.all(buildDefers);
+			})
+			.then(function () {
+				// return the promise for the sub readiness
+				return buildSub($el, options);
+			})
+			// finally return the $el on which archetypo was called
+			.then(function () {
+				return $el;
+			});
 
 			// set the archetypo done.
 			$el.data('archetypo-done', done);
