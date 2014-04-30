@@ -270,7 +270,7 @@ define('archetypo',['require','exports','module','lodash','jquery','./__archetyp
 
 			// if the storage option is set,
 			// reset the storage string
-			storage = options.storage || storage;
+			storage = options.storage = options.storage || storage;
 
 			// build up
 			return buildEl(this, options);
