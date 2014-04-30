@@ -83,12 +83,28 @@
             "name": "load",
             "access": "private",
             "tagname": "",
+            "params": [
+                {
+                    "name": "names",
+                    "description": "\n     names of the modules",
+                    "type": "Array"
+                },
+                {
+                    "name": "paths",
+                    "description": "\n     the path to the modules",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Name: module"
+            },
             "class": "",
             "module": "archetypo"
         },
         {
             "file": "src/__archetypo/load.js",
-            "line": 29,
+            "line": 35,
             "itemtype": "method",
             "name": "load",
             "params": [
@@ -108,7 +124,7 @@
         },
         {
             "file": "src/__archetypo/load.js",
-            "line": 60,
+            "line": 66,
             "description": "Converts a string into an array.",
             "itemtype": "method",
             "name": "tokenize",
@@ -123,7 +139,7 @@
         },
         {
             "file": "src/__archetypo/load.js",
-            "line": 71,
+            "line": 77,
             "description": "Loads the builders defined in $el.",
             "itemtype": "method",
             "name": "load.builders",
@@ -131,5 +147,10 @@
             "module": "archetypo"
         }
     ],
-    "warnings": []
+    "warnings": [
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " src/__archetypo/load.js:8"
+        }
+    ]
 }

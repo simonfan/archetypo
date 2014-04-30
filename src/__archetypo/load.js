@@ -10,14 +10,20 @@ define(function (require, exports, module) {
 	 *
 	 * @method load
 	 * @private
+	 * @param names {Array}
+	 *      names of the modules
+	 * @param paths {Array}
+	 *      the path to the modules
+	 * @returns { name: module }
 	 */
-	function load(names, locations) {
+	function load(names, paths) {
 		var defer = q.defer();
 
-		// locations default to the names themselves.
-		locations = locations || names;
+		// require the paths
+		require(paths, function () {
 
-		require(locations, function () {
+			// resolve the defer with an object
+			// keyed by names and valued by the loaded modules.
 			defer.resolve(_.zipObject(names, arguments));
 		});
 
@@ -37,20 +43,20 @@ define(function (require, exports, module) {
 
 		var data = $el.data();
 
-		// filter valid names and locations
-		var validNames = [],
-			locations = [];
+		// filter valid names and paths
+		var names = [],
+			paths = [];
 
 		_.each(loadableProperties, function (prop) {
 			var location = data[prop];
 
 			if (_.isString(location)) {
-				validNames.push(prop);
-				locations.push(location);
+				names.push(prop);
+				paths.push(location);
 			}
 		});
 
-		return load(validNames, locations);
+		return load(names, paths);
 	};
 
 
@@ -75,9 +81,27 @@ define(function (require, exports, module) {
 	 *
 	 */
 	exports.builders = function loadBuilders($el) {
-		// retrieve the builder names
-		var builders = tokenize($el.data('builder'));
+		// retrieve the builder definition strings
+		// they are of the format: [builderName:]builderModulePath
+		var builderStrings = tokenize($el.data('builder'));
 
-		return load(builders);
+
+		// retrieve names and paths
+		var names = [],
+			paths = [];
+
+		_.each(builderStrings, function (str) {
+			var split = str.split(':');
+
+			if (split.length === 2) {
+				names.push(split[0]);
+				paths.push(split[1]);
+			} else {
+				names.push(str);
+				paths.push(str);
+			}
+		});
+
+		return load(names, paths);
 	};
 });
