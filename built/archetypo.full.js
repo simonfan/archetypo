@@ -18,12 +18,12 @@ define('__archetypo/build-sub',['require','exports','module','lodash','jquery','
 		// [1]
 		// find all elements within this element
 		// that have an 'arch-view' attribute defined.
-		var subs = $el.find('[data-builder]');
+		var $subs = $el.find('[data-archetypo]');
 
 		// [2]
 		// Instantiate the sub-views
-		var defers = _.map(subs, function (sub) {
-			$(sub).archetypo(options);
+		var defers = _.map($subs, function (sub) {
+			return $(sub).archetypo(options);
 		}, this);
 
 		return q.all(defers);
@@ -39,18 +39,18 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 
 
 	/**
-	 * The real loader.
+	 * Loads a series of modules
 	 *
 	 * @method load
 	 * @private
-	 * @param names {Array}
-	 *      names of the modules
-	 * @param paths {Array}
-	 *      the path to the modules
-	 * @returns { name: module }
+	 * @param modules {Object} { name: path }
+	 * @returns {Object} { name: module }
 	 */
-	function load(names, paths) {
+	module.exports = function load(modules) {
 		var defer = q.defer();
+
+		var names = _.keys(modules),
+			paths = _.values(modules);
 
 		// require the paths
 		require(paths, function () {
@@ -61,82 +61,45 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 		});
 
 		return defer.promise;
-	}
+	};
+});
 
+define('__archetypo/parse-prefixed-data',['require','exports','module','lodash'],function (require, exports, module) {
+	
 
+	var _ = require('lodash');
 
-	/**
-	 *
-	 *
-	 * @method load
-	 * @param $el {jq Object}
-	 * @param loadableProperties {Array}
-	 */
-	exports.modules = function modules($el, loadableProperties) {
+	module.exports = function parsePrefixedData($el, prefix) {
 
-		var data = $el.data();
+		// [0] make sure the prefix is a RegExp
+		prefix = _.isString(prefix) ? new RegExp('^' + prefix) : prefix;
 
-		// filter valid names and paths
-		var names = [],
-			paths = [];
+		// [1] get data from $el
+		var data = $el.data(),
+			// [2] create var for unprefixedData
+			unprefixedData = {};
 
-		_.each(loadableProperties, function (prop) {
-			var location = data[prop];
+		// [3] loop through the data.
+		_.each(data, function (value, key) {
 
-			if (_.isString(location)) {
-				names.push(prop);
-				paths.push(location);
+			// if the key is a builder name,
+			// AND the value is a valid module path,
+			// add it.
+			if (prefix.test(key)) {
+
+				// remove prefix
+				var unprefixedKey = key.replace(prefix, '');
+				unprefixedKey = unprefixedKey.charAt(0).toLowerCase() + unprefixedKey.slice(1);
+
+				// set value
+				unprefixedData[unprefixedKey] = value;
 			}
 		});
 
-		return load(names, paths);
+
+		return unprefixedData;
 	};
 
-
-
-
-
-	/**
-	 * Converts a string into an array.
-	 *
-	 * @method tokenize
-	 * @param str
-	 */
-	var whitespaces = /\s+/;
-	function tokenize(str) {
-		return _.isString(str) ? str.split(whitespaces) : [];
-	}
-
-	/**
-	 * Loads the builders defined in $el.
-	 *
-	 * @method load.builders
-	 *
-	 */
-	exports.builders = function loadBuilders($el) {
-		// retrieve the builder definition strings
-		// they are of the format: [builderName:]builderModulePath
-		var builderStrings = tokenize($el.data('builder'));
-
-
-		// retrieve names and paths
-		var names = [],
-			paths = [];
-
-		_.each(builderStrings, function (str) {
-			var split = str.split(':');
-
-			if (split.length === 2) {
-				names.push(split[0]);
-				paths.push(split[1]);
-			} else {
-				names.push(str);
-				paths.push(str);
-			}
-		});
-
-		return load(names, paths);
-	};
 });
 
 //     archetypo
@@ -149,7 +112,7 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
  * @module archetypo
  */
 
-define('__archetypo/build-el',['require','exports','module','lodash','jquery','q','./build-sub','./load'],function (require, exports, module) {
+define('__archetypo/build-el',['require','exports','module','lodash','jquery','q','./build-sub','./load','./parse-prefixed-data'],function (require, exports, module) {
 	
 
 	var _ = require('lodash'),
@@ -157,7 +120,8 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 		q = require('q');
 
 	var buildSub = require('./build-sub'),
-		load = require('./load');
+		load = require('./load'),
+		parsePrefixedData = require('./parse-prefixed-data');
 
 
 	function buildView($el, builder, options) {
@@ -170,7 +134,7 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 
 
 	/**
-	 * Loads anything that's needed and calls the view builder
+	 * Loads anything that's needed and calls the view view
 	 *
 	 *
 	 * @method buildEl
@@ -178,32 +142,33 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 	 */
 	module.exports = function buildEl($el, options) {
 
-		var archetypoPromiseChain = $el.data('archetypo-promise');
+		var archetypoPromiseChain = $el.data('_arch-promise');
 			// if the element was already processed earlier,
-			// return a resolved promise.
+			// return the promise.
 
 		if (!archetypoPromiseChain) {
-			// otherwise ...
 
+			// set a _arch-views data property on the $el
+			$el.data(options.storage, {});
 
-
-			// set a views data property on the $el
-			$el.data('views', {});
+			// get modules to be loaded
+			var modules = parsePrefixedData($el, options.modulePrefix),
+				views   = parsePrefixedData($el, options.viewPrefix);
 
 			// load stuff
 			var loading = [
-				load.builders($el),
-				load.modules($el, options.loadable)
+				load(views),
+				load(modules)
 			];
 
 			// archetypoPromiseChain wquals t
-			archetypoPromiseChain = q.spread(loading, function (builders, modules) {
+			archetypoPromiseChain = q.spread(loading, function (viewBuilders, modules) {
 
 				// create an object to be passed to
-				// all builders
+				// all viewBuilders
 				var buildOptions = _.extend({ el: $el }, options, modules);
 
-				var buildDefers = _.map(builders, function (builder, name) {
+				var buildDefers = _.map(viewBuilders, function (builder, name) {
 
 					// use q.when, so that the builder may return
 					// a promise or directly the view
@@ -211,7 +176,7 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 						// save the view
 						.then(function (view) {
 							// save the view
-							$el.data('views')[name] = view;
+							$el.data(options.storage)[name] = view;
 						});
 
 				});
@@ -221,6 +186,7 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 				return q.all(buildDefers);
 			})
 			.then(function () {
+
 				// return the promise for the sub readiness
 				return buildSub($el, options);
 			})
@@ -231,7 +197,7 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 
 
 			// set the archetypo archetypoPromiseChain.
-			$el.data('archetypo-promise', archetypoPromiseChain);
+			$el.data('_arch-promise', archetypoPromiseChain);
 
 			// throw errors!!!!
 			archetypoPromiseChain.done();
@@ -261,21 +227,54 @@ define('archetypo',['require','exports','module','lodash','jquery','./__archetyp
 
 	var buildEl = require('./__archetypo/build-el');
 
-	$.prototype.archetypo = function archetypo(options) {
-		return buildEl(this, options);
+
+	// The default options
+	var defaultOptions = {
+		modulePrefix: /^module/,
+		viewPrefix:   /^view/,
 	};
 
-	$.prototype.view = function view(name) {
-		return this.data('views')[name];
-	};
+	// property onto which the views will be saved.
+	var storage = '_arch-views';
 
-	$.prototype.subviews = function subviews(selector, name) {
-		var $subs = this.find(selector);
+	$.prototype.archetypo = function archetypo() {
 
-		// return wrapped object
-		return _($subs).map(function (sub) {
-			return $(sub).view(name);
-		});
+
+		if (_.isString(arguments[0])) {
+			// view getter
+			if (arguments.length === 1) {
+				// arguments[0] === viewName
+
+				// direct view
+				return this.data(storage)[arguments[0]];
+			} else {
+
+				// arguments[0] === .sub-selector
+				// arguments[1] === viewName
+
+				// subviews
+				var $subs = this.find(arguments[0]);
+
+				// return array of subvies
+				return _.map($subs, function (sub) {
+					return $(sub).archetypo(arguments[1]);
+				})
+			}
+
+		} else {
+
+			var options = arguments[0] || {};
+
+			// set default options
+			_.defaults(options, defaultOptions);
+
+			// if the storage option is set,
+			// reset the storage string
+			storage = options.storage || storage;
+
+			// build up
+			return buildEl(this, options);
+		}
 	};
 
 });

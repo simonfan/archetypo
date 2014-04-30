@@ -68,8 +68,8 @@
     "classitems": [
         {
             "file": "src/__archetypo/build-el.js",
-            "line": 31,
-            "description": "Loads anything that's needed and calls the view builder",
+            "line": 32,
+            "description": "Loads anything that's needed and calls the view view",
             "itemtype": "method",
             "name": "buildEl",
             "class": "",
@@ -78,71 +78,22 @@
         {
             "file": "src/__archetypo/load.js",
             "line": 8,
-            "description": "The real loader.",
+            "description": "Loads a series of modules",
             "itemtype": "method",
             "name": "load",
             "access": "private",
             "tagname": "",
             "params": [
                 {
-                    "name": "names",
-                    "description": "\n     names of the modules",
-                    "type": "Array"
-                },
-                {
-                    "name": "paths",
-                    "description": "\n     the path to the modules",
-                    "type": "Array"
+                    "name": "modules",
+                    "description": "{ name: path }",
+                    "type": "Object"
                 }
             ],
             "return": {
-                "description": "",
-                "type": "Name: module"
+                "description": "{ name: module }",
+                "type": "Object"
             },
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/load.js",
-            "line": 35,
-            "itemtype": "method",
-            "name": "load",
-            "params": [
-                {
-                    "name": "$el",
-                    "description": "",
-                    "type": "Jq Object"
-                },
-                {
-                    "name": "loadableProperties",
-                    "description": "",
-                    "type": "Array"
-                }
-            ],
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/load.js",
-            "line": 66,
-            "description": "Converts a string into an array.",
-            "itemtype": "method",
-            "name": "tokenize",
-            "params": [
-                {
-                    "name": "str",
-                    "description": ""
-                }
-            ],
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/load.js",
-            "line": 77,
-            "description": "Loads the builders defined in $el.",
-            "itemtype": "method",
-            "name": "load.builders",
             "class": "",
             "module": "archetypo"
         }

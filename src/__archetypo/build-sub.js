@@ -18,12 +18,12 @@ define(function (require, exports, module) {
 		// [1]
 		// find all elements within this element
 		// that have an 'arch-view' attribute defined.
-		var subs = $el.find('[data-builder]');
+		var $subs = $el.find('[data-archetypo]');
 
 		// [2]
 		// Instantiate the sub-views
-		var defers = _.map(subs, function (sub) {
-			$(sub).archetypo(options);
+		var defers = _.map($subs, function (sub) {
+			return $(sub).archetypo(options);
 		}, this);
 
 		return q.all(defers);

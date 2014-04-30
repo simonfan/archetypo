@@ -6,18 +6,18 @@ define(function (require, exports, module) {
 
 
 	/**
-	 * The real loader.
+	 * Loads a series of modules
 	 *
 	 * @method load
 	 * @private
-	 * @param names {Array}
-	 *      names of the modules
-	 * @param paths {Array}
-	 *      the path to the modules
-	 * @returns { name: module }
+	 * @param modules {Object} { name: path }
+	 * @returns {Object} { name: module }
 	 */
-	function load(names, paths) {
+	module.exports = function load(modules) {
 		var defer = q.defer();
+
+		var names = _.keys(modules),
+			paths = _.values(modules);
 
 		// require the paths
 		require(paths, function () {
@@ -28,80 +28,5 @@ define(function (require, exports, module) {
 		});
 
 		return defer.promise;
-	}
-
-
-
-	/**
-	 *
-	 *
-	 * @method load
-	 * @param $el {jq Object}
-	 * @param loadableProperties {Array}
-	 */
-	exports.modules = function modules($el, loadableProperties) {
-
-		var data = $el.data();
-
-		// filter valid names and paths
-		var names = [],
-			paths = [];
-
-		_.each(loadableProperties, function (prop) {
-			var location = data[prop];
-
-			if (_.isString(location)) {
-				names.push(prop);
-				paths.push(location);
-			}
-		});
-
-		return load(names, paths);
-	};
-
-
-
-
-
-	/**
-	 * Converts a string into an array.
-	 *
-	 * @method tokenize
-	 * @param str
-	 */
-	var whitespaces = /\s+/;
-	function tokenize(str) {
-		return _.isString(str) ? str.split(whitespaces) : [];
-	}
-
-	/**
-	 * Loads the builders defined in $el.
-	 *
-	 * @method load.builders
-	 *
-	 */
-	exports.builders = function loadBuilders($el) {
-		// retrieve the builder definition strings
-		// they are of the format: [builderName:]builderModulePath
-		var builderStrings = tokenize($el.data('builder'));
-
-
-		// retrieve names and paths
-		var names = [],
-			paths = [];
-
-		_.each(builderStrings, function (str) {
-			var split = str.split(':');
-
-			if (split.length === 2) {
-				names.push(split[0]);
-				paths.push(split[1]);
-			} else {
-				names.push(str);
-				paths.push(str);
-			}
-		});
-
-		return load(names, paths);
 	};
 });

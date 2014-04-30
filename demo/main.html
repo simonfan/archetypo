@@ -30,18 +30,28 @@
 	<a href="../index.html">Menu</a>
 
 
-	<div archetypo>
-		<ul data-builder="/demo/views/nav.js">
+	<div id="app">
+		<ul
+			data-archetypo
+			data-view-nav="/demo/views/nav.js"
+		>
 			<li data-to="/home">Home</li>
 			<li data-to="/topics">Topics</li>
 			<li data-to="/something">Something</li>
 		</ul>
 
-		<div data-builder="/demo/views/todo/full.js" data-template="text!/demo/templates/todo/full.html">
+		<div
+			data-archetypo
+			data-view-todo="/demo/views/todo/full.js"
+			data-module-template="text!/demo/templates/todo/full.html"
+		>
 			<div>Item display</div>
 		</div>
 
-		<div data-builder="/demo/views/nav.js">
+		<div
+			data-archetypo
+			data-view-nav="/demo/views/nav.js"
+		>
 
 			<div data-to="/">Home</div>
 			List display

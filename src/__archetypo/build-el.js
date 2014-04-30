@@ -16,7 +16,8 @@ define(function (require, exports, module) {
 		q = require('q');
 
 	var buildSub = require('./build-sub'),
-		load = require('./load');
+		load = require('./load'),
+		parsePrefixedData = require('./parse-prefixed-data');
 
 
 	function buildView($el, builder, options) {
@@ -29,7 +30,7 @@ define(function (require, exports, module) {
 
 
 	/**
-	 * Loads anything that's needed and calls the view builder
+	 * Loads anything that's needed and calls the view view
 	 *
 	 *
 	 * @method buildEl
@@ -37,32 +38,33 @@ define(function (require, exports, module) {
 	 */
 	module.exports = function buildEl($el, options) {
 
-		var archetypoPromiseChain = $el.data('archetypo-promise');
+		var archetypoPromiseChain = $el.data('_arch-promise');
 			// if the element was already processed earlier,
-			// return a resolved promise.
+			// return the promise.
 
 		if (!archetypoPromiseChain) {
-			// otherwise ...
 
+			// set a _arch-views data property on the $el
+			$el.data(options.storage, {});
 
-
-			// set a views data property on the $el
-			$el.data('views', {});
+			// get modules to be loaded
+			var modules = parsePrefixedData($el, options.modulePrefix),
+				views   = parsePrefixedData($el, options.viewPrefix);
 
 			// load stuff
 			var loading = [
-				load.builders($el),
-				load.modules($el, options.loadable)
+				load(views),
+				load(modules)
 			];
 
 			// archetypoPromiseChain wquals t
-			archetypoPromiseChain = q.spread(loading, function (builders, modules) {
+			archetypoPromiseChain = q.spread(loading, function (viewBuilders, modules) {
 
 				// create an object to be passed to
-				// all builders
+				// all viewBuilders
 				var buildOptions = _.extend({ el: $el }, options, modules);
 
-				var buildDefers = _.map(builders, function (builder, name) {
+				var buildDefers = _.map(viewBuilders, function (builder, name) {
 
 					// use q.when, so that the builder may return
 					// a promise or directly the view
@@ -70,7 +72,7 @@ define(function (require, exports, module) {
 						// save the view
 						.then(function (view) {
 							// save the view
-							$el.data('views')[name] = view;
+							$el.data(options.storage)[name] = view;
 						});
 
 				});
@@ -80,6 +82,7 @@ define(function (require, exports, module) {
 				return q.all(buildDefers);
 			})
 			.then(function () {
+
 				// return the promise for the sub readiness
 				return buildSub($el, options);
 			})
@@ -90,7 +93,7 @@ define(function (require, exports, module) {
 
 
 			// set the archetypo archetypoPromiseChain.
-			$el.data('archetypo-promise', archetypoPromiseChain);
+			$el.data('_arch-promise', archetypoPromiseChain);
 
 			// throw errors!!!!
 			archetypoPromiseChain.done();
