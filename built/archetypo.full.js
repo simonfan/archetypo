@@ -18,7 +18,7 @@ define('__archetypo/build-sub',['require','exports','module','lodash','jquery','
 		// [1]
 		// find all elements within this element
 		// that have an 'arch-view' attribute defined.
-		var $subs = $el.find('[data-archetypo]');
+		var $subs = $el.find('[data-' + options.viewPrefix + ']');
 
 		// [2]
 		// Instantiate the sub-views
@@ -38,6 +38,17 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 		q = require('q');
 
 
+	function validatePaths(modules) {
+
+		_.each(modules, function (path, name) {
+
+			if (!path) {
+				throw new Error('Module \'' + name + '\' does not have a valid path.');
+			}
+		});
+
+	}
+
 	/**
 	 * Loads a series of modules
 	 *
@@ -47,6 +58,9 @@ define('__archetypo/load',['require','exports','module','lodash','q'],function (
 	 * @returns {Object} { name: module }
 	 */
 	module.exports = function load(modules) {
+
+		validatePaths(modules);
+
 		var defer = q.defer();
 
 		var names = _.keys(modules),
@@ -71,8 +85,8 @@ define('__archetypo/parse-prefixed-data',['require','exports','module','lodash']
 
 	module.exports = function parsePrefixedData($el, prefix) {
 
-		// [0] make sure the prefix is a RegExp
-		prefix = _.isString(prefix) ? new RegExp('^' + prefix) : prefix;
+		// [0] create the regexp
+		var prefixRegExp = new RegExp('^' + prefix);
 
 		// [1] get data from $el
 		var data = $el.data(),
@@ -85,11 +99,14 @@ define('__archetypo/parse-prefixed-data',['require','exports','module','lodash']
 			// if the key is a builder name,
 			// AND the value is a valid module path,
 			// add it.
-			if (prefix.test(key)) {
+			if (value && prefixRegExp.test(key)) {
 
 				// remove prefix
 				var unprefixedKey = key.replace(prefix, '');
 				unprefixedKey = unprefixedKey.charAt(0).toLowerCase() + unprefixedKey.slice(1);
+
+				// make sure unprefixedKey is not an empty string
+				unprefixedKey = unprefixedKey ? unprefixedKey : 'main';
 
 				// set value
 				unprefixedData[unprefixedKey] = value;
@@ -230,50 +247,66 @@ define('archetypo',['require','exports','module','lodash','jquery','./__archetyp
 
 	// The default options
 	var defaultOptions = {
-		modulePrefix: /^module/,
-		viewPrefix:   /^view/,
+		modulePrefix: 'module',
+		viewPrefix:   'archetypo',
 	};
+
+
 
 	// property onto which the views will be saved.
 	var storage = '_arch-views';
 
+
+
+	/**
+	 * Retrieves a single archetypo from the $el.
+	 *
+	 * @method getArchetypo
+	 * @private
+	 */
+	function getArchetypo($el, name) {
+
+		name = name || 'main';
+
+		// direct view
+		return $el.data(storage)[name];
+	}
+
+	/**
+	 * Invokes the archetypo builder on the element
+	 *
+	 * @method buildArchetypo
+	 * @private
+	 */
+	function buildArchetypo($el, options) {
+		options = options || {};
+
+		// set default options
+		_.defaults(options, defaultOptions);
+
+		// if the storage option is set,
+		// reset the storage string
+		storage = options.storage = options.storage || storage;
+
+		// build up
+		return buildEl($el, options);
+	}
+
+
 	$.prototype.archetypo = function archetypo() {
 
+		var initialized = this.data('__archetypo-initialized');
 
-		if (_.isString(arguments[0])) {
-			// view getter
-			if (arguments.length === 1) {
-				// arguments[0] === viewName
-
-				// direct view
-				return this.data(storage)[arguments[0]];
-			} else {
-
-				// arguments[0] === .sub-selector
-				// arguments[1] === viewName
-
-				// subviews
-				var $subs = this.find(arguments[0]);
-
-				// return array of subvies
-				return _.map($subs, function (sub) {
-					return $(sub).archetypo(arguments[1]);
-				})
-			}
+		if (initialized && (arguments.length === 0 || _.isString(arguments[0]))) {
+			// get the main archetypo
+			return getArchetypo(this, arguments[0]);
 
 		} else {
 
-			var options = arguments[0] || {};
+			// set archetypo as initialized
+			this.data('__archetypo-initialized', true);
 
-			// set default options
-			_.defaults(options, defaultOptions);
-
-			// if the storage option is set,
-			// reset the storage string
-			storage = options.storage = options.storage || storage;
-
-			// build up
-			return buildEl(this, options);
+			return buildArchetypo(this, arguments[0]);
 		}
 	};
 

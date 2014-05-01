@@ -18,7 +18,7 @@ define(function (require, exports, module) {
 		// [1]
 		// find all elements within this element
 		// that have an 'arch-view' attribute defined.
-		var $subs = $el.find('[data-archetypo]');
+		var $subs = $el.find('[data-' + options.viewPrefix + ']');
 
 		// [2]
 		// Instantiate the sub-views

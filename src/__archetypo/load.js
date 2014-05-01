@@ -5,6 +5,17 @@ define(function (require, exports, module) {
 		q = require('q');
 
 
+	function validatePaths(modules) {
+
+		_.each(modules, function (path, name) {
+
+			if (!path) {
+				throw new Error('Module \'' + name + '\' does not have a valid path.');
+			}
+		});
+
+	}
+
 	/**
 	 * Loads a series of modules
 	 *
@@ -14,6 +25,9 @@ define(function (require, exports, module) {
 	 * @returns {Object} { name: module }
 	 */
 	module.exports = function load(modules) {
+
+		validatePaths(modules);
+
 		var defer = q.defer();
 
 		var names = _.keys(modules),

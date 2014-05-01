@@ -5,8 +5,8 @@ define(function (require, exports, module) {
 
 	module.exports = function parsePrefixedData($el, prefix) {
 
-		// [0] make sure the prefix is a RegExp
-		prefix = _.isString(prefix) ? new RegExp('^' + prefix) : prefix;
+		// [0] create the regexp
+		var prefixRegExp = new RegExp('^' + prefix);
 
 		// [1] get data from $el
 		var data = $el.data(),
@@ -19,11 +19,14 @@ define(function (require, exports, module) {
 			// if the key is a builder name,
 			// AND the value is a valid module path,
 			// add it.
-			if (prefix.test(key)) {
+			if (value && prefixRegExp.test(key)) {
 
 				// remove prefix
 				var unprefixedKey = key.replace(prefix, '');
 				unprefixedKey = unprefixedKey.charAt(0).toLowerCase() + unprefixedKey.slice(1);
+
+				// make sure unprefixedKey is not an empty string
+				unprefixedKey = unprefixedKey ? unprefixedKey : 'main';
 
 				// set value
 				unprefixedData[unprefixedKey] = value;

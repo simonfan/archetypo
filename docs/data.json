@@ -77,7 +77,7 @@
         },
         {
             "file": "src/__archetypo/load.js",
-            "line": 8,
+            "line": 19,
             "description": "Loads a series of modules",
             "itemtype": "method",
             "name": "load",
@@ -96,12 +96,34 @@
             },
             "class": "",
             "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 33,
+            "description": "Retrieves a single archetypo from the $el.",
+            "itemtype": "method",
+            "name": "getArchetypo",
+            "access": "private",
+            "tagname": "",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 47,
+            "description": "Invokes the archetypo builder on the element",
+            "itemtype": "method",
+            "name": "buildArchetypo",
+            "access": "private",
+            "tagname": "",
+            "class": "",
+            "module": "archetypo"
         }
     ],
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src/__archetypo/load.js:8"
+            "line": " src/__archetypo/load.js:19"
         }
     ]
 }

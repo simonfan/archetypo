@@ -19,50 +19,66 @@ define(function (require, exports, module) {
 
 	// The default options
 	var defaultOptions = {
-		modulePrefix: /^module/,
-		viewPrefix:   /^view/,
+		modulePrefix: 'module',
+		viewPrefix:   'archetypo',
 	};
+
+
 
 	// property onto which the views will be saved.
 	var storage = '_arch-views';
 
+
+
+	/**
+	 * Retrieves a single archetypo from the $el.
+	 *
+	 * @method getArchetypo
+	 * @private
+	 */
+	function getArchetypo($el, name) {
+
+		name = name || 'main';
+
+		// direct view
+		return $el.data(storage)[name];
+	}
+
+	/**
+	 * Invokes the archetypo builder on the element
+	 *
+	 * @method buildArchetypo
+	 * @private
+	 */
+	function buildArchetypo($el, options) {
+		options = options || {};
+
+		// set default options
+		_.defaults(options, defaultOptions);
+
+		// if the storage option is set,
+		// reset the storage string
+		storage = options.storage = options.storage || storage;
+
+		// build up
+		return buildEl($el, options);
+	}
+
+
 	$.prototype.archetypo = function archetypo() {
 
+		var initialized = this.data('__archetypo-initialized');
 
-		if (_.isString(arguments[0])) {
-			// view getter
-			if (arguments.length === 1) {
-				// arguments[0] === viewName
-
-				// direct view
-				return this.data(storage)[arguments[0]];
-			} else {
-
-				// arguments[0] === .sub-selector
-				// arguments[1] === viewName
-
-				// subviews
-				var $subs = this.find(arguments[0]);
-
-				// return array of subvies
-				return _.map($subs, function (sub) {
-					return $(sub).archetypo(arguments[1]);
-				})
-			}
+		if (initialized && (arguments.length === 0 || _.isString(arguments[0]))) {
+			// get the main archetypo
+			return getArchetypo(this, arguments[0]);
 
 		} else {
 
-			var options = arguments[0] || {};
+			// set archetypo as initialized
+			this.data('__archetypo-initialized', true);
 
-			// set default options
-			_.defaults(options, defaultOptions);
-
-			// if the storage option is set,
-			// reset the storage string
-			storage = options.storage = options.storage || storage;
-
-			// build up
-			return buildEl(this, options);
+			return buildArchetypo(this, arguments[0]);
 		}
 	};
 
