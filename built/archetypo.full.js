@@ -181,9 +181,14 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
 			// archetypoPromiseChain wquals t
 			archetypoPromiseChain = q.spread(loading, function (viewBuilders, modules) {
 
+
+				// join modules with options, so that
+				// sub archetypos have access to ancestor loaded modules
+				options = _.extend({}, options, modules);
+
 				// create an object to be passed to
 				// all viewBuilders
-				var buildOptions = _.extend({ el: $el }, options, modules);
+				var buildOptions = _.extend({ el: $el }, options);
 
 				var buildDefers = _.map(viewBuilders, function (builder, name) {
 
