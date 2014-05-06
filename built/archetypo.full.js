@@ -198,6 +198,9 @@ define('__archetypo/data/parse',['require','exports','module','lodash'],function
 	 *
 	 */
 	module.exports = function parseArchData(data, options) {
+		console.log('parseArchData');
+		console.log(options.namespaces);
+
 
 		var archPrefix = options.prefix;
 
@@ -737,12 +740,22 @@ define('__archetypo/scope-manager',['require','exports','module','lodash','subje
 			//            but to the parent namespaces object.
 			this.parent = options.parent;
 
+			console.log('scope parent');
+			console.log(this.parent);
+
 			this.namespaces = {};
 
 			this.availableNames = this.parent ? _.clone(this.parent.availableNames) : [];
+
+
+			console.log('scope initial availableNames');
+			console.log(_.clone(this.parent.availableNames))
+			console.log(this.availableNames);
 		},
 
 		get: function getNamespace(slug) {
+
+			console.log('scope get ' + slug);
 
 			var ns = this.namespaces[slug];
 
@@ -755,15 +768,21 @@ define('__archetypo/scope-manager',['require','exports','module','lodash','subje
 
 		build: function buildNamespace(slug, data) {
 
+			console.log('scope build ' + slug);
+
 			var ns;
 
 			if (this.parent && _.isObject(this.parent.get(slug))) {
 				// there is a parent namespace
 				ns = _.create(this.parent.get(slug));
 			} else {
+
+
 				// no parent namespace
 				this.availableNames.push(slug);
 				ns = {};
+
+				console.log(this.availableNames);
 			}
 
 			// set data
