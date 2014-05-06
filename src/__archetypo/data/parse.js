@@ -193,6 +193,9 @@ define(function (require, exports, module) {
 	 *
 	 */
 	module.exports = function parseArchData(data, options) {
+		console.log('parseArchData');
+		console.log(options.namespaces);
+
 
 		var archPrefix = options.prefix;
 
