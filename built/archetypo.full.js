@@ -1,127 +1,677 @@
+//     subject
+//     (c) simonfan
+//     subject is licensed under the MIT terms.
+
+define("subject",["lodash"],function(t){var i={initialize:function(){}},e=function(){};return e.prototype=i,e.proto=function(i,e){return t.isObject(i)?t.assign(this.prototype,i):this.prototype[i]=e,this},e.protoMerge=function(i,e){if(t.isString(i)){var o=this.prototype[i],n=t.assign({},o,e);this.proto(i,n)}else t.each(i,t.bind(function(t,i){this.protoMerge(i,t)},this))},e.extend=function(i,e,o){var n,r;t.isFunction(i)?(n=t.assign({},e,{initialize:i}),r=o):t.isObject(i)&&(n=i||{},r=o);var p,s=this;return p=function(){var t=Object.create(p.prototype);return t.initialize.apply(t,arguments),t},t.assign(p,s,r),p.prototype=Object.create(s.prototype),p.prototype.constructor=p,p.proto(n),p.__super__=s.prototype,p},e.extend.bind(e)});
+define('__archetypo/data/parse',['require','exports','module','lodash'],function (require, exports, module) {
+	
+
+	var _ = require('lodash');
+
+/*
+
+{
+	archFn: 'path-to-main-function',
+	archOpDock: 'require:path-to-main-dock',
+	archOpId: 'some-id',
+
+	archInteractionFn: 'path-to-interaction-view',
+	archInteractionOpDock: 'require:path-to-interaction-dock',
+
+
+	archCssFn: 'path-to-css-view',
+	archCssOpDock: 'require:path-to-css-dock',
+}
+
+
+*/
+
+	/**
+	 * ^arch      -> prefix
+	 * (          -> start first capturing group (#namespace)
+	 *  [A-Z]      -> any Uppercase letter
+	 *  .*?        -> followed by any character (.) any number of times (*) non greedily (?)
+	 * )          -> close first capturing group (/#namespace)
+	 * ?          -> let the first capturing group be optional
+	 * (          -> start the second capturing group (#property)
+	 *  [A-Z]      -> any Uppercase letter
+	 *  .*$        -> followed by anything any number of times until the end of the string
+	 * )          -> close the second capturing group (#property)
+
+	 * first-capturing-group:  namespace
+	 * second-capturing-group: property
+	 */
+// deprecated:	var keyParserRegExp = /^arch([A-Z].*?)?([A-Z].*$)/;
+
+	var keyParserRegExp = /^archSomeFn([A-Z].*$)/;
+
+	/**
+	 * Creates a Regular Expression to capture property name.
+	 *
+	 *
+	 */
+	function buildKeyParser(prefix) {
+		return new RegExp('^' + prefix + '([A-Z].*$)');
+	};
+
+	/**
+	 * Returns the string with the first letter to lowercase.
+	 */
+	function lowercaseFirst(str) {
+		return str.charAt(0).toLowerCase() + str.slice(1);
+	};
+
+	/**
+	 * Returns the string with the first letter to uppercase.
+	 */
+	function uppercaseFirst(str) {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	}
+
+
+
+	/**
+	 * ^        -> string start
+	 * (?:      -> start non-capturing group (#processor:)
+	 *  (        -> start first capturing group (#processor)
+	 *   .*?      -> anything (.) any number of times (*) non greedily (?)
+	 *  )        -> close first capturing group (#processor)
+	 *  \s*:\s* -> ':', the 'processor' divider, prefixed or suffixed by any number of whitespaces (\s*)
+	 * )        -> close non-capturing group (#/processor:)
+	 * ?        -> make non-capturing group (#processor:) optional
+	 * (        -> start second capturing group (#value)
+	 *  .*$      -> anything (.) any number of times (*) greedily until the end of the string ($)
+	 * )        -> close second capturing group (/#value)
+	 */
+	var valueParserRegExp = /^(?:(.*?)\s*:\s*)?(.*)$/;
+//	var valueParserRegExp = /^(?:(.*?):)?(.*?)\((.*?)\)$/;
+	function parseValue(value) {
+		var res = value.match(valueParserRegExp);
+
+		return {
+			processor: res[1],
+			value:     res[2]
+		};
+	}
+
+
+	/**
+	 *
+	 * Removes the prefix from a given set of data.
+	 *
+	 *
+	 */
+	function parsePrefixedData(prefix, data) {
+
+		// [1] build keyParser RegExp
+		var keyParser = buildKeyParser(prefix);
+
+		// [2] loop through data properties
+		return _.transform(data, function (results, value, key) {
+
+			// [2.1] parse the key
+			var parsedKey = key.match(keyParser);
+			// [2.2] if key matches the parser, it means it has archData
+			if (parsedKey) {
+
+				// [3] parsedKey is an array contanining
+				//  0: the full key string
+				//  1: the unprefixedKey name (may not be undefined)
+				//
+				// set results accordingly
+
+				// [4] get unprefixedKey
+				var unprefixedKey = lowercaseFirst(parsedKey[1]);
+
+				// [5] set
+				results[unprefixedKey] = parseValue(value);
+
+			} // else it is a common data attribute, so ignore
+
+		});
+	}
+
+
+
+	// parses the fns
+//	var fnKeyParser = /^arch([A-Z].*?)Fn$/;
+	function parseNamespaces(prefix, data) {
+
+		var fnKeyParser = new RegExp('^' + prefix + '([A-Z].*?)?Fn$');
+
+		var results = [];
+
+		_.each(data, function (value, key) {
+			var parsedKey = key.match(fnKeyParser);
+
+			if (parsedKey) {
+
+				// make sure namespace is a string.
+				// it defaults to '', the local namespace
+				var namespace = parsedKey[1] || '';
+
+				results.push(lowercaseFirst(namespace));
+			}
+		});
+
+		return results;
+	}
+
+
+	/**
+	 *
+	 *
+	 * RETURNS:
+	 * {
+	 *     namespace: {
+	 *         evaluator: {
+	 *             prop: 'v',
+	 *             prop1: 'v1'
+	 *         }
+	 *     },
+	 *     namespace1: {
+	 *         evaluator: {
+	 *             property: 'value',
+	 *             prop2:    'value',
+	 *         },
+	 *         evaluator1: {
+	 *             prop1: 'v1',
+	 *             prop2: 'v2'
+	 *         }
+	 *     }
+	 * }
+	 *
+	 *	{
+	 *		$namespace: {
+				$property: {
+					evaluator: $evaluatorNamr,
+					value:     $value
+				}
+			}
+		}
+	 */
+	/**
+	 * options: {
+	 *     prefix: 'arch'	// global prefix
+	 *     namespaces: ['someNamespace', 'anotherNamespace']
+	 * }
+	 *
+	 */
+	module.exports = function parseArchData(data, options) {
+
+		var archPrefix = options.prefix;
+
+		// [1] parse out the namespaces available
+		var namespaces = parseNamespaces(archPrefix, data);
+
+
+		// [2] join the namespaces with those passed in at options
+		namespaces = _.union(namespaces, options.namespaces);
+
+
+
+		// [3] build results
+		var results = {};
+		_.each(namespaces, function (namespace) {
+
+			// [3.1] build the prefix
+			var namespacePrefix = archPrefix + uppercaseFirst(namespace);
+
+			// [3.2] get the data available for the namespace
+			var namespaceData = parsePrefixedData(namespacePrefix, data);
+
+			// [3.3] ignore data that has no contents.
+			if (_.size(namespaceData) > 0) {
+				results[namespace] = namespaceData;
+			}
+		});
+
+
+		return results;
+	};
+
+	// make parseNamespaces available.
+	exports.namespaces = parseNamespaces;
+
+	// make parseValue available
+	exports.value = parseValue;
+});
+
+//     Q
+//     (c) simonfan
+//     Q is licensed under the MIT terms.
+
+/**
+ * AMD and CJS module.
+ *
+ * @module Q
+ */
+
+/* jshint ignore:start */
+
+/* jshint ignore:end */
+
+define('_q',['require','exports','module','lodash','q'],function (require, exports, module) {
+	
+
+	var _ = require('lodash'),
+		q = require('q');
+
+
+	exports.each = function qEach(obj, fn, ctx) {
+
+	};
+
+	exports.map = function qMap(obj, fn, ctx) {
+		var promises = _.map.apply(_, arguments);
+
+		return q.all(promises);
+	};
+
+	exports.mapValues = function qMapValues(obj, fn, ctx) {
+		var keys     = _.keys(obj),
+			promises = _.map.apply(_, arguments);
+
+		return q.all(promises).then(function (results) {
+			return _.zipObject(keys, results);
+		});
+	};
+});
+
+define('__archetypo/data/process/property',['require','exports','module','lodash','q'],function (require, exports, module) {
+	
+
+	var _ = require('lodash'),
+		q = require('q');
+
+	/**
+	 * Runs the logic for retrieving the processor function
+	 *
+	 *
+	 */
+	function retrievePropertyProcessor(propertyName, valueData, options) {
+
+
+		// [1] get processor
+		// [1.1] get the name of the processor.
+		var processor = valueData.processor || _.find(options.defaultProcessors, function (processor, regexpStr) {
+			var re = new RegExp(regexpStr);
+
+			return re.test(propertyName);
+		});
+
+
+		// [2] if there is a processor defined...
+		if (processor) {
+
+			if (_.isString(processor)) {
+				// [2.1] the processor defined is a string
+				//       try to fetch it from the processors hash
+				processor = options.processors[processor];
+
+				// [2.1.1] throw error if no processor was found
+				//         in order to make debugging (and life) easier..
+				//         throw error if no processor function is found
+				if (!processor) {
+					throw new Error('No processor named ' + processor + ' was found. Make sure it exists');
+				}
+
+				// [2.1.2] happily return the processor :)
+				return processor;
+
+			} else {
+				// [2.2] the processor defined is a function already.
+				//       just return it :]
+				return processor;
+			}
+
+		} else {
+
+			// no processor
+			return false;
+		}
+
+	}
+
+	/**
+	 *
+	 *
+	 * @method processProperty
+	 * @private
+	 * @param valueData {Object}
+	 *     @param value {String}
+	 *     @param [processor] {String|Undefined}
+	 * @param propertyName {String}
+	 */
+	module.exports = function processProperty(propertyName, valueData, options) {
+
+		console.log('processProperty invoked on ' + propertyName);
+
+		// [1] build the deferred object
+		var processPropertyDeferred = q.defer();
+
+
+		// [2] evaluate value
+		console.log(valueData.value);
+		var value = options.evaluator.call(options.context, valueData.value);
+		console.log('1!!!!!!!!!!!! ' + propertyName)
+		console.log(value);
+
+		// [3] get processor
+		// [3.1] get the name of the processor.
+		var processor = retrievePropertyProcessor.apply(this, arguments);
+
+
+		// [4] if there is a processor defined,
+		//     go on and do the processing
+		if (processor) {
+
+			// [4.2] invoke processor
+			// [4.3] check argument length of processor
+			if (processor.length === 1) {
+				// [4.4] one argument
+				// args: [value]
+				//  ctx: options.context
+
+				// resolve the defer IMMEDIATELY with the evaluation return value
+				processPropertyDeferred.resolve(processor.call(options.context, value));
+
+			} else if (processor.length === 2) {
+				// [4.5] two arguments
+				// args: [value, processPropertyDeferred.resolve]
+				//  ctx: options.context
+
+				// pass the processPropertyDeferred object to the processor
+				processor.call(options.context, value, processPropertyDeferred.resolve);
+			}
+
+
+		} else {
+			// [5] if no processor was defined,
+			//     just return the value
+			processPropertyDeferred.resolve(value);
+		}
+
+		// [6] always return the promise
+		return processPropertyDeferred.promise;
+	};
+});
+
+define('__archetypo/data/process/index',['require','exports','module','lodash','q','_q','./property'],function (require, exports, module) {
+	
+
+	var _ = require('lodash'),
+		q = require('q'),
+		_q = require('_q');
+
+	var processProperty = require('./property');
+
+	// process the data of a given namespace.
+	function processNamespaceData(nsSlug, nsData, options) {
+
+		// set defaultProperties
+		_.extend(nsData, options.defaultProperties);
+
+		return _q.mapValues(nsData, function (value, property) {
+
+			return processProperty(property, value, options);
+
+		}, this);
+
+	}
+
+
+	/**
+	 *
+	 *
+	 */
+	module.exports = function processArchData(archData, options) {
+
+		// returns promise for the fully processed archData
+		return _q.mapValues(archData, function (nsData, nsSlug) {
+
+			return processNamespaceData(nsSlug, nsData, options);
+
+		}, this);
+
+	};
+
+});
+
+define('__archetypo/build/build-namespaces',['require','exports','module','lodash','q','../data/parse','../data/process/index'],function (require, exports, module) {
+	
+
+	var _ = require('lodash'),
+		q = require('q');
+
+		// arch data parser
+	var parseArchData = require('../data/parse'),
+		// arch data processor
+		processArchData = require('../data/process/index');
+
+	/**
+	 * Build-step
+	 * Builds the namespaces of the archetypo object.
+	 *
+	 *
+	 */
+	module.exports = function buildNamespaces() {
+
+		console.log('buildNamespaces invoked');
+		console.log(this.scope.availableNames);
+
+		// [0] buildNamespacesDeferred object
+		var buildNamespacesDeferred = q.defer();
+
+
+
+
+		// [1] get the archData
+		var archData = parseArchData(this.el.data(), {
+			prefix: this.prefix,
+			namespaces: this.scope.availableNames
+		});
+
+
+
+		// [2] process archData
+		// [2.1] build processing options
+		var processingOptions = {
+			context:           this.el,
+			evaluator:         this.evaluator,
+			processors:        this.processors,
+			defaultProcessors: this.defaultProcessors,
+			defaultProperties: this.defaultProperties,
+		};
+
+		// [2.2] process
+		var process = processArchData(archData, processingOptions);
+
+		// [3] when the data has been processed, create the namespaces
+		process.done(_.bind(function (processedArchData) {
+
+			// [3.1] loop through processedArchData
+			//       and build a namespace for each.
+			_.each(processedArchData, function (nsData, nsSlug) {
+				this.scope.build(nsSlug, nsData);
+			}, this);
+
+			console.log('namespaces built')
+
+			// resolve with no arguments
+			buildNamespacesDeferred.resolve();
+
+		}, this));
+
+
+		// return promise
+		return buildNamespacesDeferred.promise;
+	};
+
+});
+
+define('__archetypo/build/build-invoke-fns',['require','exports','module','lodash','q','_q'],function (require, exports, module) {
+	
+
+	var _ = require('lodash'),
+		q = require('q'),
+		_q = require('_q');
+
+	/**
+	 * Builds the Fn of a given namespace.
+	 *
+	 *
+	 */
+	function invokeFn(nsData, nsSlug) {
+		// 'this' = archetypo object
+
+		console.log('invokeFn');
+		console.log(nsData);
+
+		// [0] buildDefer
+		var invokeFnDeferred = q.defer();
+
+
+		// [2.1] get Fn
+		var fn = nsData.fn;
+
+		if (!_.isFunction(fn)) {
+			throw new Error('There is no function(fn) for ' + nsSlug + ' namespace.');
+		}
+
+		// [2.2] build options (just remove the fn from processed)
+		var options = _.create(nsData);
+		options.fn = void(0);
+
+		// [2.3] invoke fn
+		// args: [options]
+		//  ctx: this.el
+		var invocation = fn.call(this.el, options);
+
+		// [2.4] check if the invocation returned a promise.
+		if (q.isPromise(invocation)) {
+			// [2.5] if so, resolve the buildDefer when that promise is done
+			invocation.done(invokeFnDeferred.resolve);
+		} else {
+			// [2.6] otherwise, resolve the buildDefer immediately with the invocation itself.
+			invokeFnDeferred.resolve(invocation);
+		}
+
+
+		// [3] return the promise
+		return invokeFnDeferred.promise;
+	};
+
+
+	/**
+	 * Build-step
+	 * BUILD STEPS TAKE NO ARGUMENTS.
+	 * They should be understood as partial steps running within the main builder's context.
+	 * Builds the Fns of ALL the namespaces found on this archetypo object
+	 *
+	 */
+	module.exports = function invokeAllFns() {
+		// 'this' = archetypo object
+
+
+
+
+		console.log('invokeAllFns invoked');
+
+		// [0] buildDefer
+		var invokeAllFnsDeferred = q.defer();
+
+		console.log('!!!')
+		console.log(this.scope.namespaces);
+
+		var invocations = _q.mapValues(this.scope.namespaces, _.bind(invokeFn, this));
+
+
+		invocations.done(_.bind(function (results) {
+
+			// [3.1] save the fnResults to 'this.fns';
+			this.fns = results;
+
+			// [3.2] resolve the invokeAllFnsDeferred
+			//       with undefined value.
+			invokeAllFnsDeferred.resolve();
+		}, this));
+
+		// [4] return buildDefer promise
+		return invokeAllFnsDeferred.promise;
+	};
+
+});
+
 /**
  * @module archetypo
  * @submodule view
  */
 
-define('__archetypo/build-sub',['require','exports','module','lodash','jquery','q'],function (require, exports, module) {
+define('__archetypo/build/build-subs',['require','exports','module','lodash','jquery','q'],function (require, exports, module) {
 	
 
 	var _ = require('lodash'),
 		$ = require('jquery'),
 		q = require('q');
 
-	module.exports = function buildSub($el, options) {
-		// [0] Sub-views
-		// Look for child nodes that have an 'arch-view'
-		// attribute defined and instantiate the corresponding view.
+	/**
+	 *
+	 *
+	 * STEPS TAKE NO ARGUMENTS
+	 *
+	 */
+	module.exports = function buildSubs() {
+
+		console.log('buildSubs invoked')
+
+		var buildSubsDeferred = q.defer();
 
 		// [1]
 		// find all elements within this element
-		// that have an 'arch-view' attribute defined.
-		var $subs = $el.find('[data-' + options.viewPrefix + ']');
+		// that have an 'data-archetypo' attribute defined.
+		var subEls = this.el.find('[data-archetypo]');
 
 		// [2]
 		// Instantiate the sub-views
-		var defers = _.map($subs, function (sub) {
-			return $(sub).archetypo(options);
+		var subArchetypoPromises = _.map(subEls, function (el) {
+
+			el = $(el);
+
+			var elArchetypo = el.data('archetypo');
+
+			// [0] check if the element already has an archetypo
+			//     and only build if it has NOT
+			if (!_.isObject(elArchetypo)) {
+
+
+				// constructor is a reference to the
+				// archetypo constructor that is available through
+				// subject extension module. :)
+				var subArchetypo = this.constructor(el, this.options);
+
+				// return the promise
+				return subArchetypo.promise;
+			} else {
+				return elArchetypo.promise;
+			}
+
 		}, this);
 
-		return q.all(defers);
+		// [3] resolve the buildSubsDeferred object
+		//     when all the subArchetypoPromises are done
+		q.all(subArchetypoPromises)
+			.done(function () {
+
+				// resolve with 0 arguments.
+				buildSubsDeferred.resolve();
+			});
+
+		// [4] return the promise
+		return buildSubsDeferred.promise;
 	};
 
 });
-
-define('__archetypo/load',['require','exports','module','lodash','q'],function (require, exports, module) {
-	
-
-	var _ = require('lodash'),
-		q = require('q');
-
-
-	function validatePaths(modules) {
-
-		_.each(modules, function (path, name) {
-
-			if (!path) {
-				throw new Error('Module \'' + name + '\' does not have a valid path.');
-			}
-		});
-
-	}
-
-	/**
-	 * Loads a series of modules
-	 *
-	 * @method load
-	 * @private
-	 * @param modules {Object} { name: path }
-	 * @returns {Object} { name: module }
-	 */
-	module.exports = function load(modules) {
-
-		validatePaths(modules);
-
-		var defer = q.defer();
-
-		var names = _.keys(modules),
-			paths = _.values(modules);
-
-		// require the paths
-		require(paths, function () {
-
-			// resolve the defer with an object
-			// keyed by names and valued by the loaded modules.
-			defer.resolve(_.zipObject(names, arguments));
-		});
-
-		return defer.promise;
-	};
-});
-
-define('__archetypo/parse-prefixed-data',['require','exports','module','lodash'],function (require, exports, module) {
-	
-
-	var _ = require('lodash');
-
-	module.exports = function parsePrefixedData($el, prefix) {
-
-		// [0] create the regexp
-		var prefixRegExp = new RegExp('^' + prefix);
-
-		// [1] get data from $el
-		var data = $el.data(),
-			// [2] create var for unprefixedData
-			unprefixedData = {};
-
-		// [3] loop through the data.
-		_.each(data, function (value, key) {
-
-			// if the key is a builder name,
-			// AND the value is a valid module path,
-			// add it.
-			if (value && prefixRegExp.test(key)) {
-
-				// remove prefix
-				var unprefixedKey = key.replace(prefix, '');
-				unprefixedKey = unprefixedKey.charAt(0).toLowerCase() + unprefixedKey.slice(1);
-
-				// make sure unprefixedKey is not an empty string
-				unprefixedKey = unprefixedKey ? unprefixedKey : 'main';
-
-				// set value
-				unprefixedData[unprefixedKey] = value;
-			}
-		});
-
-
-		return unprefixedData;
-	};
-
-});
-
-//     archetypo
-//     (c) simonfan
-//     archetypo is licensed under the MIT terms.
 
 /**
  * AMD module.
@@ -129,105 +679,103 @@ define('__archetypo/parse-prefixed-data',['require','exports','module','lodash']
  * @module archetypo
  */
 
-define('__archetypo/build-el',['require','exports','module','lodash','jquery','q','./build-sub','./load','./parse-prefixed-data'],function (require, exports, module) {
+define('__archetypo/build/index',['require','exports','module','lodash','jquery','q','./build-namespaces','./build-invoke-fns','./build-subs'],function (require, exports, module) {
 	
 
 	var _ = require('lodash'),
 		$ = require('jquery'),
 		q = require('q');
 
-	var buildSub = require('./build-sub'),
-		load = require('./load'),
-		parsePrefixedData = require('./parse-prefixed-data');
-
-
-	function buildView($el, builder, options) {
-		// make sure options is an object
-		options = options || {};
-
-		// set el property on options
-		options.el = $el;
-	}
-
+	var buildNamespaces = require('./build-namespaces'),
+		buildInvokeFns     = require('./build-invoke-fns'),
+		buildSubs       = require('./build-subs');
 
 	/**
-	 * Loads anything that's needed and calls the view view
+	 * This is mostly a script invoker.
+	 * It invokes
+	 *    -namespace builder,
+	 *    -fns builder
 	 *
-	 *
-	 * @method buildEl
+	 * @method build
 	 *
 	 */
-	module.exports = function buildEl($el, options) {
+	module.exports = function build() {
+		// 'this' = archetypo object
+		var archetypo = this;
 
-		var archetypoPromiseChain = $el.data('_arch-promise');
-			// if the element was already processed earlier,
-			// return the promise.
+		// [0] create a deferred object
+		var buildDeferred = q.defer();
 
-		if (!archetypoPromiseChain) {
-
-			// set a _arch-views data property on the $el
-			$el.data(options.storage, {});
-
-			// get modules to be loaded
-			var modules = parsePrefixedData($el, options.modulePrefix),
-				views   = parsePrefixedData($el, options.viewPrefix);
-
-			// load stuff
-			var loading = [
-				load(views),
-				load(modules)
-			];
-
-			// archetypoPromiseChain wquals t
-			archetypoPromiseChain = q.spread(loading, function (viewBuilders, modules) {
-
-
-				// join modules with options, so that
-				// sub archetypos have access to ancestor loaded modules
-				options = _.extend({}, options, modules);
-
-				// create an object to be passed to
-				// all viewBuilders
-				var buildOptions = _.extend({ el: $el }, options);
-
-				var buildDefers = _.map(viewBuilders, function (builder, name) {
-
-					// use q.when, so that the builder may return
-					// a promise or directly the view
-					return q.when(builder(buildOptions))
-						// save the view
-						.then(function (view) {
-							// save the view
-							$el.data(options.storage)[name] = view;
-						});
-
-				});
-
-				// return a promise for when all
-				// the builders are ready
-				return q.all(buildDefers);
-			})
-			.then(function () {
-
-				// return the promise for the sub readiness
-				return buildSub($el, options);
-			})
-			// finally return the $el on which archetypo was called
-			.then(function () {
-				return $el;
+		// [1] asynchronous: build namespaces
+		buildNamespaces.call(this)
+		// [2] asynchronous: build fns
+			.then(_.bind(buildInvokeFns, this))
+		// [3] asynchronous: build subs
+			.then(_.bind(buildSubs, this))
+			.done(function (/* no args */) {
+				buildDeferred.resolve(archetypo);
 			});
 
-
-			// set the archetypo archetypoPromiseChain.
-			$el.data('_arch-promise', archetypoPromiseChain);
-
-			// throw errors!!!!
-			archetypoPromiseChain.done();
-		}
-
-		// return a promise for whenever the archetypo call is archetypoPromiseChain.
-		return archetypoPromiseChain;
+		// [4] return the promise
+		return buildDeferred.promise;
 	};
+
+});
+
+define('__archetypo/scope-manager',['require','exports','module','lodash','subject'],function (require, exports, module) {
+	
+
+	var _ = require('lodash'),
+		subject = require('subject');
+
+
+	module.exports = subject({
+		initialize: function initializeNamespaces(options) {
+
+			// reference to the parent namespaces object
+			// ATTENTION: refer not to the parent archetypo object,
+			//            but to the parent namespaces object.
+			this.parent = options.parent;
+
+			this.namespaces = {};
+
+			this.availableNames = this.parent ? _.clone(this.parent.availableNames) : [];
+		},
+
+		get: function getNamespace(slug) {
+
+			var ns = this.namespaces[slug];
+
+			if (!ns) {
+				ns = this.parent.namespaces.get(slug);
+			}
+
+			return ns;
+		},
+
+		build: function buildNamespace(slug, data) {
+
+			var ns;
+
+			if (this.parent && _.isObject(this.parent.get(slug))) {
+				// there is a parent namespace
+				ns = _.create(this.parent.get(slug));
+			} else {
+				// no parent namespace
+				this.availableNames.push(slug);
+				ns = {};
+			}
+
+			// set data
+			_.extend(ns, data);
+
+			// save ns
+			this.namespaces[slug] = ns;
+
+			// return this
+			return this;
+		},
+	});
 
 });
 
@@ -241,26 +789,181 @@ define('__archetypo/build-el',['require','exports','module','lodash','jquery','q
  * @module archetypo
  */
 
-define('archetypo',['require','exports','module','lodash','jquery','./__archetypo/build-el'],function (require, exports, module) {
+define('archetypo',['require','exports','module','lodash','jquery','subject','q','./__archetypo/build/index','./__archetypo/scope-manager'],function (require, exports, module) {
 	
 
 	var _ = require('lodash'),
-		$ = require('jquery');
+		$ = require('jquery'),
+		subject = require('subject'),
+		q = require('q');
 
-	var buildEl = require('./__archetypo/build-el');
+	// internal
+	var build = require('./__archetypo/build/index'),
+		scopeManager = require('./__archetypo/scope-manager');
+
+	/**
+	 * The archetypo object
+	 *
+	 *
+	 */
+	var archetypo = module.exports = subject({
+
+		prefix: 'arch',
+
+		/**
+		 *
+		 *
+		 * Hash to hold all functions.
+		 *
+		 */
+		fns: {
+
+		},
 
 
-	// The default options
-	var defaultOptions = {
-		modulePrefix: 'module',
-		viewPrefix:   'archetypo',
-	};
+		/**
+		 * This method evaluates the value string
+		 * It is called upon any value string.
+		 *
+		 * The default version returns the jq-object if value === 'this'
+		 *
+		 * @method evaluator
+		 * @param value
+		 */
+		evaluator: function evaluate(value) {
+			if (value === 'this') {
+				return this;
+			} else {
+				return value;
+			}
+		},
+
+		/**
+		 * Hash holding processors to be called for evaluation
+		 *
+		 * Processors are 'argument-length-aware' functions.
+		 * If the processor function takes ...
+		 *     1 argument : [value]       (synchronous)
+		 *     2 arguments: [value, done] (asynchronous)
+		 *
+		 * @property processors
+		 * @type Object
+		 */
+		processors: {
+			require: function archRequire(modulePath, done) {
+
+				console.log('required ' + modulePath);
+
+				require([modulePath], function (module) {
+					done(module);
+				});
+			}
+		},
+
+		/**
+		 * Hash holding the default processors for each archProperty.
+		 *
+		 * @property defaultProcessors
+		 * @type Object
+		 */
+		defaultProcessors: {
+			fn: 'require',
+		},
+
+		/**
+		 * Hash holding the default properties
+		 * and their values (pre-evaluated and pre-processed)
+		 *
+		 * @property defaultProperties
+		 * @type Object
+		 */
+		defaultProperties: {
+			el: {
+				processor: void(0),
+				value: 'this',
+			},
+		},
+
+		/**
+		 *
+		 * @param el {jq-object}
+		 * @param options
+		 *     @param processors {Object}
+		 *     @param defaultProcessors {Object}
+		 */
+		initialize: function initializeArchetypo(el, options) {
+
+			options = options || {};
+
+			// [0] el reference.
+			// [0.1] save the archetypo object to the el
+			el.data('archetypo', this);
+			// [0.2] save reference to the el on archetypo object
+			//////////////////////////////////////////////////////////////
+			// OBS:  YES, circular reference... will this bring issues? //
+			//////////////////////////////////////////////////////////////
+			this.el = el;
+
+
+			// [1] ancestor chain
+			// [1.1] get closest ancestor that has data-archetypo
+			var ancestorArchetypoEl = el.parent().closest('[data-archetypo]');
+
+			// [1.2] get the archetypo object from ancestor and keep reference to it.
+			/**
+			 * Reference to the nearest archetypo ascendant.
+			 *
+			 * @property parent
+			 * @type archetypo-object
+			 */
+			this.parent = ancestorArchetypoEl.data('archetypo');
+
+
+			// [2] extend some options
+			// [2.1] extensions
+			_.each(
+				_.pick(options, ['processors', 'defaultProcessors']),
+				function (extensions, key) {
+					_.extend(this[key], extensions);
+				}, this);
+
+			// [2.2] direct values
+			this.evaluator = options.evaluator || this.evaluator;
+
+
+			// [3] build a namespace manager
+			this.scope = scopeManager({
+				// parent refers not to the archetypo object parent
+				// but to the scope manager of the parent
+				parent: this.parent ? this.parent.scope : false
+			});
+
+			// [4] invoke build
+			/**
+			 * Promise to be resolved only when the view is ready.
+			 *
+			 * @property promise
+			 * @type q-promise-object
+			 */
+			this.promise = build.call(this);
+
+		},
+
+		/**
+		 * Retrieves a namespace object.
+		 *
+		 * @method namespace
+		 * @param slug {String}
+		 */
+		namespace: function getNamespace(slug) {
+			return this.namespaces[slug];
+		},
+	});
 
 
 
-	// property onto which the views will be saved.
-	var storage = '_arch-views';
 
+	// PLUGIN AREA //
 
 
 	/**

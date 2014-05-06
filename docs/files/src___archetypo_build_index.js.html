@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/build-sub.js - archetypo</title>
+    <title>src/__archetypo/build/index.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -84,13 +84,14 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/build-sub.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/build/index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 /**
+ * AMD module.
+ *
  * @module archetypo
- * @submodule view
  */
 
 define(function (require, exports, module) {
@@ -100,23 +101,38 @@ define(function (require, exports, module) {
 		$ = require(&#x27;jquery&#x27;),
 		q = require(&#x27;q&#x27;);
 
-	module.exports = function buildSub($el, options) {
-		// [0] Sub-views
-		// Look for child nodes that have an &#x27;arch-view&#x27;
-		// attribute defined and instantiate the corresponding view.
+	var buildNamespaces = require(&#x27;./build-namespaces&#x27;),
+		buildInvokeFns     = require(&#x27;./build-invoke-fns&#x27;),
+		buildSubs       = require(&#x27;./build-subs&#x27;);
 
-		// [1]
-		// find all elements within this element
-		// that have an &#x27;arch-view&#x27; attribute defined.
-		var $subs = $el.find(&#x27;[data-&#x27; + options.viewPrefix + &#x27;]&#x27;);
+	/**
+	 * This is mostly a script invoker.
+	 * It invokes
+	 *    -namespace builder,
+	 *    -fns builder
+	 *
+	 * @method build
+	 *
+	 */
+	module.exports = function build() {
+		// &#x27;this&#x27; = archetypo object
+		var archetypo = this;
 
-		// [2]
-		// Instantiate the sub-views
-		var defers = _.map($subs, function (sub) {
-			return $(sub).archetypo(options);
-		}, this);
+		// [0] create a deferred object
+		var buildDeferred = q.defer();
 
-		return q.all(defers);
+		// [1] asynchronous: build namespaces
+		buildNamespaces.call(this)
+		// [2] asynchronous: build fns
+			.then(_.bind(buildInvokeFns, this))
+		// [3] asynchronous: build subs
+			.then(_.bind(buildSubs, this))
+			.done(function (/* no args */) {
+				buildDeferred.resolve(archetypo);
+			});
+
+		// [4] return the promise
+		return buildDeferred.promise;
 	};
 
 });

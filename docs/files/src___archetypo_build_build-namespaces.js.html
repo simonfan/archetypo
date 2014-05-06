@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/build-el.js - archetypo</title>
+    <title>src/__archetypo/build/build-namespaces.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -84,118 +84,78 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/build-el.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/build/build-namespaces.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-//     archetypo
-//     (c) simonfan
-//     archetypo is licensed under the MIT terms.
-
-/**
- * AMD module.
- *
- * @module archetypo
- */
-
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
 	var _ = require(&#x27;lodash&#x27;),
-		$ = require(&#x27;jquery&#x27;),
 		q = require(&#x27;q&#x27;);
 
-	var buildSub = require(&#x27;./build-sub&#x27;),
-		load = require(&#x27;./load&#x27;),
-		parsePrefixedData = require(&#x27;./parse-prefixed-data&#x27;);
-
-
-	function buildView($el, builder, options) {
-		// make sure options is an object
-		options = options || {};
-
-		// set el property on options
-		options.el = $el;
-	}
-
+		// arch data parser
+	var parseArchData = require(&#x27;../data/parse&#x27;),
+		// arch data processor
+		processArchData = require(&#x27;../data/process/index&#x27;);
 
 	/**
-	 * Loads anything that&#x27;s needed and calls the view view
+	 * Build-step
+	 * Builds the namespaces of the archetypo object.
 	 *
-	 *
-	 * @method buildEl
 	 *
 	 */
-	module.exports = function buildEl($el, options) {
+	module.exports = function buildNamespaces() {
 
-		var archetypoPromiseChain = $el.data(&#x27;_arch-promise&#x27;);
-			// if the element was already processed earlier,
-			// return the promise.
+		console.log(&#x27;buildNamespaces invoked&#x27;);
+		console.log(this.scope.availableNames);
 
-		if (!archetypoPromiseChain) {
-
-			// set a _arch-views data property on the $el
-			$el.data(options.storage, {});
-
-			// get modules to be loaded
-			var modules = parsePrefixedData($el, options.modulePrefix),
-				views   = parsePrefixedData($el, options.viewPrefix);
-
-			// load stuff
-			var loading = [
-				load(views),
-				load(modules)
-			];
-
-			// archetypoPromiseChain wquals t
-			archetypoPromiseChain = q.spread(loading, function (viewBuilders, modules) {
+		// [0] buildNamespacesDeferred object
+		var buildNamespacesDeferred = q.defer();
 
 
-				// join modules with options, so that
-				// sub archetypos have access to ancestor loaded modules
-				options = _.extend({}, options, modules);
-
-				// create an object to be passed to
-				// all viewBuilders
-				var buildOptions = _.extend({ el: $el }, options);
-
-				var buildDefers = _.map(viewBuilders, function (builder, name) {
-
-					// use q.when, so that the builder may return
-					// a promise or directly the view
-					return q.when(builder(buildOptions))
-						// save the view
-						.then(function (view) {
-							// save the view
-							$el.data(options.storage)[name] = view;
-						});
-
-				});
-
-				// return a promise for when all
-				// the builders are ready
-				return q.all(buildDefers);
-			})
-			.then(function () {
-
-				// return the promise for the sub readiness
-				return buildSub($el, options);
-			})
-			// finally return the $el on which archetypo was called
-			.then(function () {
-				return $el;
-			});
 
 
-			// set the archetypo archetypoPromiseChain.
-			$el.data(&#x27;_arch-promise&#x27;, archetypoPromiseChain);
+		// [1] get the archData
+		var archData = parseArchData(this.el.data(), {
+			prefix: this.prefix,
+			namespaces: this.scope.availableNames
+		});
 
-			// throw errors!!!!
-			archetypoPromiseChain.done();
-		}
 
-		// return a promise for whenever the archetypo call is archetypoPromiseChain.
-		return archetypoPromiseChain;
+
+		// [2] process archData
+		// [2.1] build processing options
+		var processingOptions = {
+			context:           this.el,
+			evaluator:         this.evaluator,
+			processors:        this.processors,
+			defaultProcessors: this.defaultProcessors,
+			defaultProperties: this.defaultProperties,
+		};
+
+		// [2.2] process
+		var process = processArchData(archData, processingOptions);
+
+		// [3] when the data has been processed, create the namespaces
+		process.done(_.bind(function (processedArchData) {
+
+			// [3.1] loop through processedArchData
+			//       and build a namespace for each.
+			_.each(processedArchData, function (nsData, nsSlug) {
+				this.scope.build(nsSlug, nsData);
+			}, this);
+
+			console.log(&#x27;namespaces built&#x27;)
+
+			// resolve with no arguments
+			buildNamespacesDeferred.resolve();
+
+		}, this));
+
+
+		// return promise
+		return buildNamespacesDeferred.promise;
 	};
 
 });

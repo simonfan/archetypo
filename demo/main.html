@@ -33,26 +33,43 @@
 	<div id="app">
 		<ul
 			id="main-nav"
-			data-archetypo="/demo/views/nav.js"
+			data-archetypo
+
+			data-arch-test-fn="/demo/views/test.js"
+			data-arch-test-banana-color="yellow"
 
 
-			data-arch-fn=""
+			data-arch-nav-fn="/demo/views/nav.js"
 		>
 			<li data-to="/home">Home</li>
-			<li data-to="/topics">Topics</li>
+			<li data-to="/topics">
+				Topics
+				<ul>
+					<li
+						data-archetypo
+
+						data-arch-test-fn="/demo/views/test.js"
+						data-to="/topic-1"
+					>
+						Topic 1
+					</li>
+				</ul>
+			</li>
 			<li data-to="/something">Something</li>
 		</ul>
 
 		<div
 			data-archetypo
-			data-archetypo-todo="/demo/views/todo/full.js"
-			data-module-template="text!/demo/templates/todo/full.html"
+			data-arch-fn="/demo/views/todo/full.js"
+			data-arch-el="this"
+			data-arch-template="require:text!/demo/templates/todo/full.html"
 		>
 			<div>Item display</div>
 		</div>
 
 		<div
-			data-archetypo="/demo/views/nav.js"
+			data-archetypo
+			data-arch-fn="/demo/views/nav.js"
 		>
 
 			<div data-to="/">Home</div>

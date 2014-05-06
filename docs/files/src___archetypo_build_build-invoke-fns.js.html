@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/load.js - archetypo</title>
+    <title>src/__archetypo/build/build-invoke-fns.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -84,7 +84,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/load.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/build/build-invoke-fns.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -92,47 +92,93 @@ define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
 	var _ = require(&#x27;lodash&#x27;),
-		q = require(&#x27;q&#x27;);
-
-
-	function validatePaths(modules) {
-
-		_.each(modules, function (path, name) {
-
-			if (!path) {
-				throw new Error(&#x27;Module \&#x27;&#x27; + name + &#x27;\&#x27; does not have a valid path.&#x27;);
-			}
-		});
-
-	}
+		q = require(&#x27;q&#x27;),
+		_q = require(&#x27;_q&#x27;);
 
 	/**
-	 * Loads a series of modules
+	 * Builds the Fn of a given namespace.
 	 *
-	 * @method load
-	 * @private
-	 * @param modules {Object} { name: path }
-	 * @returns {Object} { name: module }
+	 *
 	 */
-	module.exports = function load(modules) {
+	function invokeFn(nsData, nsSlug) {
+		// &#x27;this&#x27; = archetypo object
 
-		validatePaths(modules);
+		console.log(&#x27;invokeFn&#x27;);
+		console.log(nsData);
 
-		var defer = q.defer();
+		// [0] buildDefer
+		var invokeFnDeferred = q.defer();
 
-		var names = _.keys(modules),
-			paths = _.values(modules);
 
-		// require the paths
-		require(paths, function () {
+		// [2.1] get Fn
+		var fn = nsData.fn;
 
-			// resolve the defer with an object
-			// keyed by names and valued by the loaded modules.
-			defer.resolve(_.zipObject(names, arguments));
-		});
+		if (!_.isFunction(fn)) {
+			throw new Error(&#x27;There is no function(fn) for &#x27; + nsSlug + &#x27; namespace.&#x27;);
+		}
 
-		return defer.promise;
+		// [2.2] build options (just remove the fn from processed)
+		var options = _.create(nsData);
+		options.fn = void(0);
+
+		// [2.3] invoke fn
+		// args: [options]
+		//  ctx: this.el
+		var invocation = fn.call(this.el, options);
+
+		// [2.4] check if the invocation returned a promise.
+		if (q.isPromise(invocation)) {
+			// [2.5] if so, resolve the buildDefer when that promise is done
+			invocation.done(invokeFnDeferred.resolve);
+		} else {
+			// [2.6] otherwise, resolve the buildDefer immediately with the invocation itself.
+			invokeFnDeferred.resolve(invocation);
+		}
+
+
+		// [3] return the promise
+		return invokeFnDeferred.promise;
 	};
+
+
+	/**
+	 * Build-step
+	 * BUILD STEPS TAKE NO ARGUMENTS.
+	 * They should be understood as partial steps running within the main builder&#x27;s context.
+	 * Builds the Fns of ALL the namespaces found on this archetypo object
+	 *
+	 */
+	module.exports = function invokeAllFns() {
+		// &#x27;this&#x27; = archetypo object
+
+
+
+
+		console.log(&#x27;invokeAllFns invoked&#x27;);
+
+		// [0] buildDefer
+		var invokeAllFnsDeferred = q.defer();
+
+		console.log(&#x27;!!!&#x27;)
+		console.log(this.scope.namespaces);
+
+		var invocations = _q.mapValues(this.scope.namespaces, _.bind(invokeFn, this));
+
+
+		invocations.done(_.bind(function (results) {
+
+			// [3.1] save the fnResults to &#x27;this.fns&#x27;;
+			this.fns = results;
+
+			// [3.2] resolve the invokeAllFnsDeferred
+			//       with undefined value.
+			invokeAllFnsDeferred.resolve();
+		}, this));
+
+		// [4] return buildDefer promise
+		return invokeAllFnsDeferred.promise;
+	};
+
 });
 
     </pre>

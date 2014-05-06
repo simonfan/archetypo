@@ -1,14 +1,15 @@
 {
   "name": "archetypo",
   "main": "built/archetypo.js",
-  "version": "0.8.5",
+  "version": "0.9.5",
   "description": "Backbone-based framework.",
   "dependencies": {
     "q": "1.0.0",
     "jquery": "*",
     "lodash": "~2.4.1",
     "archetypo-router": "*",
-    "lazy.js": "~0.3.2"
+    "lazy.js": "~0.3.2",
+    "_q": "*"
   },
   "devDependencies": {
     "requirejs": "*",
@@ -22,8 +23,9 @@
     "lowercase-backbone": "~0.2.5"
   },
   "resolutions": {
-    "subject": "0.4.1",
+    "subject": "~0.4.1",
     "jquery": "~2.1.0",
-    "model-dock": "~0.3.6"
+    "model-dock": "~0.3.6",
+    "q": "1.0.0"
   }
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>archetypo - archetypo</title>
+    <title>src/__archetypo/build/build-subs.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -84,54 +84,81 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>archetypo Module</h1>
-<div class="box clearfix meta">
-    
+                        <h1 class="file-heading">File: src/__archetypo/build/build-subs.js</h1>
 
-    
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * @module archetypo
+ * @submodule view
+ */
 
-    
-        <div class="foundat">
-            Defined in: <a href="../files/src___archetypo_build_index.js.html#l1"><code>src&#x2F;__archetypo&#x2F;build&#x2F;index.js:1</code></a>
-        </div>
-    
+define(function (require, exports, module) {
+	&#x27;use strict&#x27;;
 
-    
-</div>
+	var _ = require(&#x27;lodash&#x27;),
+		$ = require(&#x27;jquery&#x27;),
+		q = require(&#x27;q&#x27;);
+
+	/**
+	 *
+	 *
+	 * STEPS TAKE NO ARGUMENTS
+	 *
+	 */
+	module.exports = function buildSubs() {
+
+		console.log(&#x27;buildSubs invoked&#x27;)
+
+		var buildSubsDeferred = q.defer();
+
+		// [1]
+		// find all elements within this element
+		// that have an &#x27;data-archetypo&#x27; attribute defined.
+		var subEls = this.el.find(&#x27;[data-archetypo]&#x27;);
+
+		// [2]
+		// Instantiate the sub-views
+		var subArchetypoPromises = _.map(subEls, function (el) {
+
+			el = $(el);
+
+			var elArchetypo = el.data(&#x27;archetypo&#x27;);
+
+			// [0] check if the element already has an archetypo
+			//     and only build if it has NOT
+			if (!_.isObject(elArchetypo)) {
 
 
+				// constructor is a reference to the
+				// archetypo constructor that is available through
+				// subject extension module. :)
+				var subArchetypo = this.constructor(el, this.options);
 
-<div class="box intro">
-    <p>AMD module.</p>
+				// return the promise
+				return subArchetypo.promise;
+			} else {
+				return elArchetypo.promise;
+			}
 
-</div>
+		}, this);
 
+		// [3] resolve the buildSubsDeferred object
+		//     when all the subArchetypoPromises are done
+		q.all(subArchetypoPromises)
+			.done(function () {
 
+				// resolve with 0 arguments.
+				buildSubsDeferred.resolve();
+			});
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-        
-    </div>
+		// [4] return the promise
+		return buildSubsDeferred.promise;
+	};
 
-    <div class="yui3-u-1-2">
-        
-            <p>This module is a rollup of the following modules:</p>
+});
 
-            <ul class="module-submodules">
-            
-                <li class="module-submodule">
-                    <a href="../modules/view.html">
-                        view
-                    </a>
-
-                    <div class="module-submodule-description">
-                        
-                    </div>
-                </li>
-            
-            </ul>
-        
-    </div>
+    </pre>
 </div>
 
                     </div>

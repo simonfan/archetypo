@@ -29,7 +29,11 @@ require.config({
 		'dockable-view': '../bower_components/dockable-view/built/dockable-view',
 		'jquery.filler': '../bower_components/jquery.filler/built/jquery.filler',
 		'model-dock': '../bower_components/model-dock/built/model-dock',
-		'archetypo-router': '../bower_components/archetypo-router/built/archetypo-router'
+		'archetypo-router': '../bower_components/archetypo-router/built/archetypo-router',
+		_q: '../bower_components/_q/built/_q',
+		parseArchData: '__archetypo/data/parse',
+		processArchData: '__archetypo/data/process/index',
+		property: '__archetypo/data/process/property'
 	},
 	shim: {
 		backbone: {

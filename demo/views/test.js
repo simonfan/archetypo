@@ -8,21 +8,11 @@ define(function (require, exports, module) {
 
 			backbone.view.prototype.initialize.call(this, options);
 
-			console.log('initialize nav')
+			console.log('TESTTESTTEST')
 			console.log(options);
+
+			console.log(options.bananaColor)
 		},
-
-		events: {
-			'click [data-to]': 'nav'
-		},
-
-		nav: function (e) {
-			var $target = $(e.target);
-
-			alert($target.data('to'));
-
-			return false;
-		}
 	})
 
 });

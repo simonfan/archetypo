@@ -3,14 +3,13 @@ define(function (require, exports, module) {
 	var $ = require('jquery'),
 		archetypo = require('archetypo');
 
-	$('#app').archetypo()
-		.done(function ($el) {
 
-			var $mainNav = $el.find('#main-nav');
+	var arch = window.arch = archetypo($('#app'), {
 
-			console.log($mainNav.archetypo());
+	});
 
-			console.log('ready!')
-		});
+	arch.promise.then(function () {
+		console.log('this should be the last log, after everything is done!')
+	});
 
 });
