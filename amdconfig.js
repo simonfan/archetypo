@@ -33,7 +33,10 @@ require.config({
 		_q: '../bower_components/_q/built/_q',
 		parseArchData: '__archetypo/data/parse',
 		processArchData: '__archetypo/data/process/index',
-		property: '__archetypo/data/process/property'
+		property: '__archetypo/data/process/property',
+		'jquery-meta-data': '../bower_components/jquery-meta-data/built/jquery-meta-data',
+		'jquery-scope': '../bower_components/jquery-scope/built/jquery-scope',
+		scope: '../bower_components/scope/built/scope'
 	},
 	shim: {
 		backbone: {

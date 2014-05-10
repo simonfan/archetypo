@@ -9,7 +9,8 @@
     "lodash": "~2.4.1",
     "archetypo-router": "*",
     "lazy.js": "~0.3.2",
-    "_q": "*"
+    "_q": "*",
+    "jquery-scope": "~0.1.0"
   },
   "devDependencies": {
     "requirejs": "*",
@@ -23,8 +24,8 @@
     "lowercase-backbone": "~0.2.5"
   },
   "resolutions": {
-    "subject": "~0.4.1",
-    "jquery": "~2.1.0",
+    "subject": "0.5.5",
+    "jquery": "~2.1.1",
     "model-dock": "~0.3.6",
     "q": "1.0.0"
   }

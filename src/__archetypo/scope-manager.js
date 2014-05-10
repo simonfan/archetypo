@@ -13,17 +13,11 @@ define(function (require, exports, module) {
 			//            but to the parent namespaces object.
 			this.parent = options.parent;
 
-			console.log('scope parent');
-			console.log(this.parent);
-
 			this.namespaces = {};
 
 			this.availableNames = this.parent ? _.clone(this.parent.availableNames) : [];
 
 
-			console.log('scope initial availableNames');
-			console.log(_.clone(this.parent.availableNames))
-			console.log(this.availableNames);
 		},
 
 		get: function getNamespace(slug) {

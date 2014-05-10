@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src/__archetypo/data/parse/index.js - archetypo</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="archetypo"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/archetypo.html">archetypo</a></li>
+            
+                <li><a href="../modules/view.html">view</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: src/__archetypo/data/parse/index.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+define(function (require, exports, module) {
+	&#x27;use strict&#x27;;
+
+	var _ = require(&#x27;lodash&#x27;);
+
+/*
+
+{
+	archFn: &#x27;path-to-main-function&#x27;,
+	archOpDock: &#x27;require:path-to-main-dock&#x27;,
+	archOpId: &#x27;some-id&#x27;,
+
+	archInteractionFn: &#x27;path-to-interaction-view&#x27;,
+	archInteractionOpDock: &#x27;require:path-to-interaction-dock&#x27;,
+
+
+	archCssFn: &#x27;path-to-css-view&#x27;,
+	archCssOpDock: &#x27;require:path-to-css-dock&#x27;,
+}
+
+
+*/
+
+	/**
+	 * ^arch      -&gt; prefix
+	 * (          -&gt; start first capturing group (#namespace)
+	 *  [A-Z]      -&gt; any Uppercase letter
+	 *  .*?        -&gt; followed by any character (.) any number of times (*) non greedily (?)
+	 * )          -&gt; close first capturing group (/#namespace)
+	 * ?          -&gt; let the first capturing group be optional
+	 * (          -&gt; start the second capturing group (#property)
+	 *  [A-Z]      -&gt; any Uppercase letter
+	 *  .*$        -&gt; followed by anything any number of times until the end of the string
+	 * )          -&gt; close the second capturing group (#property)
+
+	 * first-capturing-group:  namespace
+	 * second-capturing-group: property
+	 */
+// deprecated:	var keyParserRegExp = /^arch([A-Z].*?)?([A-Z].*$)/;
+
+	var keyParserRegExp = /^archSomeFn([A-Z].*$)/;
+
+	/**
+	 * Creates a Regular Expression to capture property name.
+	 *
+	 *
+	 */
+	function buildKeyParser(prefix) {
+		return new RegExp(&#x27;^&#x27; + prefix + &#x27;([A-Z].*$)&#x27;);
+	};
+
+	/**
+	 * Returns the string with the first letter to lowercase.
+	 */
+	function lowercaseFirst(str) {
+		return str.charAt(0).toLowerCase() + str.slice(1);
+	};
+
+	/**
+	 * Returns the string with the first letter to uppercase.
+	 */
+	function uppercaseFirst(str) {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	}
+
+
+
+	/**
+	 * ^        -&gt; string start
+	 * (?:      -&gt; start non-capturing group (#processor:)
+	 *  (        -&gt; start first capturing group (#processor)
+	 *   .*?      -&gt; anything (.) any number of times (*) non greedily (?)
+	 *  )        -&gt; close first capturing group (#processor)
+	 *  \s*:\s* -&gt; &#x27;:&#x27;, the &#x27;processor&#x27; divider, prefixed or suffixed by any number of whitespaces (\s*)
+	 * )        -&gt; close non-capturing group (#/processor:)
+	 * ?        -&gt; make non-capturing group (#processor:) optional
+	 * (        -&gt; start second capturing group (#value)
+	 *  .*$      -&gt; anything (.) any number of times (*) greedily until the end of the string ($)
+	 * )        -&gt; close second capturing group (/#value)
+	 */
+	var valueParserRegExp = /^(?:(.*?)\s*:\s*)?(.*)$/;
+//	var valueParserRegExp = /^(?:(.*?):)?(.*?)\((.*?)\)$/;
+	function parseValue(value) {
+		var res = value.match(valueParserRegExp);
+
+		return {
+			processor: res[1],
+			value:     res[2]
+		};
+	}
+
+
+	/**
+	 *
+	 * Removes the prefix from a given set of data.
+	 *
+	 *
+	 */
+	function parsePrefixedData(prefix, data) {
+
+		// [1] build keyParser RegExp
+		var keyParser = buildKeyParser(prefix);
+
+		// [2] loop through data properties
+		return _.transform(data, function (results, value, key) {
+
+			// [2.1] parse the key
+			var parsedKey = key.match(keyParser);
+			// [2.2] if key matches the parser, it means it has archData
+			if (parsedKey) {
+
+				// [3] parsedKey is an array contanining
+				//  0: the full key string
+				//  1: the unprefixedKey name (may not be undefined)
+				//
+				// set results accordingly
+
+				// [4] get unprefixedKey
+				var unprefixedKey = lowercaseFirst(parsedKey[1]);
+
+				// [5] set
+				results[unprefixedKey] = parseValue(value);
+
+			} // else it is a common data attribute, so ignore
+
+		});
+	}
+
+
+
+	// parses the fns
+//	var fnKeyParser = /^arch([A-Z].*?)Fn$/;
+	function parseNamespaces(prefix, data) {
+
+		var fnKeyParser = new RegExp(&#x27;^&#x27; + prefix + &#x27;([A-Z].*?)?Fn$&#x27;);
+
+		var results = [];
+
+		_.each(data, function (value, key) {
+			var parsedKey = key.match(fnKeyParser);
+
+			if (parsedKey) {
+
+				// make sure namespace is a string.
+				// it defaults to &#x27;&#x27;, the local namespace
+				var namespace = parsedKey[1] || &#x27;&#x27;;
+
+				results.push(lowercaseFirst(namespace));
+			}
+		});
+
+		return results;
+	}
+
+
+	/**
+	 *
+	 *
+	 * RETURNS:
+	 * {
+	 *     namespace: {
+	 *         evaluator: {
+	 *             prop: &#x27;v&#x27;,
+	 *             prop1: &#x27;v1&#x27;
+	 *         }
+	 *     },
+	 *     namespace1: {
+	 *         evaluator: {
+	 *             property: &#x27;value&#x27;,
+	 *             prop2:    &#x27;value&#x27;,
+	 *         },
+	 *         evaluator1: {
+	 *             prop1: &#x27;v1&#x27;,
+	 *             prop2: &#x27;v2&#x27;
+	 *         }
+	 *     }
+	 * }
+	 *
+	 *	{
+	 *		$namespace: {
+				$property: {
+					evaluator: $evaluatorNamr,
+					value:     $value
+				}
+			}
+		}
+	 */
+	/**
+	 * options: {
+	 *     prefix: &#x27;arch&#x27;	// global prefix
+	 *     namespaces: [&#x27;someNamespace&#x27;, &#x27;anotherNamespace&#x27;]
+	 * }
+	 *
+	 */
+	module.exports = function parseArchData(data, options) {
+		console.log(&#x27;parseArchData&#x27;);
+		console.log(options.namespaces);
+
+
+		var archPrefix = options.prefix;
+
+		// [1] parse out the namespaces available
+		var namespaces = parseNamespaces(archPrefix, data);
+
+
+		// [2] join the namespaces with those passed in at options
+		namespaces = _.union(namespaces, options.namespaces);
+
+
+
+		// [3] build results
+		var results = {};
+		_.each(namespaces, function (namespace) {
+
+			// [3.1] build the prefix
+			var namespacePrefix = archPrefix + uppercaseFirst(namespace);
+
+			// [3.2] get the data available for the namespace
+			var namespaceData = parsePrefixedData(namespacePrefix, data);
+
+			// [3.3] ignore data that has no contents.
+			if (_.size(namespaceData) &gt; 0) {
+				results[namespace] = namespaceData;
+			}
+		});
+
+
+		return results;
+	};
+
+	// make parseNamespaces available.
+	exports.namespaces = parseNamespaces;
+
+	// make parseValue available
+	exports.value = parseValue;
+});
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

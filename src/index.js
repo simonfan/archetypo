@@ -29,6 +29,21 @@ define(function (require, exports, module) {
 
 		prefix: 'arch',
 
+
+		availableMethods: [],
+
+		methods: {
+
+			require: function archRequire(modulePath, done) {
+
+				console.log('required ' + modulePath);
+
+				require([modulePath], function (module) {
+					done(module);
+				});
+			}
+		},
+
 		/**
 		 *
 		 *

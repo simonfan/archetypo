@@ -36,6 +36,20 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/__archetypo/data/parse/index.js": {
+            "name": "src/__archetypo/data/parse/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/data/parse/methods.js": {
+            "name": "src/__archetypo/data/parse/methods.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "src/__archetypo/data/process/index.js": {
             "name": "src/__archetypo/data/process/index.js",
             "modules": {},
@@ -50,8 +64,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "src/__archetypo/data/parse.js": {
-            "name": "src/__archetypo/data/parse.js",
+        "src/__archetypo/scope/index.js": {
+            "name": "src/__archetypo/scope/index.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -130,6 +144,118 @@
             "module": "archetypo"
         },
         {
+            "file": "src/__archetypo/data/parse/index.js",
+            "line": 24,
+            "description": "^arch      -> prefix\n(          -> start first capturing group (#namespace)\n [A-Z]      -> any Uppercase letter\n .*?        -> followed by any character (.) any number of times (*) non greedily (?)\n)          -> close first capturing group (/#namespace)\n?          -> let the first capturing group be optional\n(          -> start the second capturing group (#property)\n [A-Z]      -> any Uppercase letter\n .*$        -> followed by anything any number of times until the end of the string\n)          -> close the second capturing group (#property)\n\nfirst-capturing-group:  namespace\nsecond-capturing-group: property",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/index.js",
+            "line": 43,
+            "description": "Creates a Regular Expression to capture property name.",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/index.js",
+            "line": 52,
+            "description": "Returns the string with the first letter to lowercase.",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/index.js",
+            "line": 59,
+            "description": "Returns the string with the first letter to uppercase.",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/index.js",
+            "line": 68,
+            "description": "^        -> string start\n(?:      -> start non-capturing group (#processor:)\n (        -> start first capturing group (#processor)\n  .*?      -> anything (.) any number of times (*) non greedily (?)\n )        -> close first capturing group (#processor)\n \\s*:\\s* -> ':', the 'processor' divider, prefixed or suffixed by any number of whitespaces (\\s*)\n)        -> close non-capturing group (#/processor:)\n?        -> make non-capturing group (#processor:) optional\n(        -> start second capturing group (#value)\n .*$      -> anything (.) any number of times (*) greedily until the end of the string ($)\n)        -> close second capturing group (/#value)",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/index.js",
+            "line": 93,
+            "description": "Removes the prefix from a given set of data.",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/index.js",
+            "line": 156,
+            "description": "RETURNS:\n {\n     namespace: {\n         evaluator: {\n             prop: 'v',\n             prop1: 'v1'\n         }\n     },\n     namespace1: {\n         evaluator: {\n             property: 'value',\n             prop2:    'value',\n         },\n         evaluator1: {\n             prop1: 'v1',\n             prop2: 'v2'\n         }\n     }\n }\n\n\t{\n\t\t$namespace: {\n\t\t\t\t$property: {\n\t\t\t\t\tevaluator: $evaluatorNamr,\n\t\t\t\t\tvalue:     $value\n\t\t\t\t}\n\t\t\t}\n\t\t}",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/index.js",
+            "line": 188,
+            "description": "options: {\n    prefix: 'arch'\t// global prefix\n    namespaces: ['someNamespace', 'anotherNamespace']\n}",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/methods.js",
+            "line": 24,
+            "description": "^arch      -> prefix\n(          -> start first capturing group (#namespace)\n [A-Z]      -> any Uppercase letter\n .*?        -> followed by any character (.) any number of times (*) non greedily (?)\n)          -> close first capturing group (/#namespace)\n?          -> let the first capturing group be optional\n(          -> start the second capturing group (#property)\n [A-Z]      -> any Uppercase letter\n .*$        -> followed by anything any number of times until the end of the string\n)          -> close the second capturing group (#property)\n\nfirst-capturing-group:  namespace\nsecond-capturing-group: property",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/methods.js",
+            "line": 43,
+            "description": "Creates a Regular Expression to capture property name.",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/methods.js",
+            "line": 52,
+            "description": "Returns the string with the first letter to lowercase.",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/methods.js",
+            "line": 59,
+            "description": "Returns the string with the first letter to uppercase.",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/methods.js",
+            "line": 68,
+            "description": "^        -> string start\n(?:      -> start non-capturing group (#processor:)\n (        -> start first capturing group (#processor)\n  .*?      -> anything (.) any number of times (*) non greedily (?)\n )        -> close first capturing group (#processor)\n \\s*:\\s* -> ':', the 'processor' divider, prefixed or suffixed by any number of whitespaces (\\s*)\n)        -> close non-capturing group (#/processor:)\n?        -> make non-capturing group (#processor:) optional\n(        -> start second capturing group (#value)\n .*$      -> anything (.) any number of times (*) greedily until the end of the string ($)\n)        -> close second capturing group (/#value)",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/methods.js",
+            "line": 93,
+            "description": "Removes the prefix from a given set of data.",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/methods.js",
+            "line": 156,
+            "description": "RETURNS:\n {\n     namespace: {\n         evaluator: {\n             prop: 'v',\n             prop1: 'v1'\n         }\n     },\n     namespace1: {\n         evaluator: {\n             property: 'value',\n             prop2:    'value',\n         },\n         evaluator1: {\n             prop1: 'v1',\n             prop2: 'v2'\n         }\n     }\n }\n\n\t{\n\t\t$namespace: {\n\t\t\t\t$property: {\n\t\t\t\t\tevaluator: $evaluatorNamr,\n\t\t\t\t\tvalue:     $value\n\t\t\t\t}\n\t\t\t}\n\t\t}",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/data/parse/methods.js",
+            "line": 188,
+            "description": "options: {\n    prefix: 'arch'\t// global prefix\n    namespaces: ['someNamespace', 'anotherNamespace']\n}",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
             "file": "src/__archetypo/data/process/index.js",
             "line": 25,
             "class": "",
@@ -176,58 +302,16 @@
             "module": "archetypo"
         },
         {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 24,
-            "description": "^arch      -> prefix\n(          -> start first capturing group (#namespace)\n [A-Z]      -> any Uppercase letter\n .*?        -> followed by any character (.) any number of times (*) non greedily (?)\n)          -> close first capturing group (/#namespace)\n?          -> let the first capturing group be optional\n(          -> start the second capturing group (#property)\n [A-Z]      -> any Uppercase letter\n .*$        -> followed by anything any number of times until the end of the string\n)          -> close the second capturing group (#property)\n\nfirst-capturing-group:  namespace\nsecond-capturing-group: property",
+            "file": "src/__archetypo/scope/index.js",
+            "line": 1,
+            "description": "A very special object. It controls the scope of each archetypo object.\n\n\nTakes into consideration",
             "class": "",
             "module": "archetypo"
         },
         {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 43,
-            "description": "Creates a Regular Expression to capture property name.",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 52,
-            "description": "Returns the string with the first letter to lowercase.",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 59,
-            "description": "Returns the string with the first letter to uppercase.",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 68,
-            "description": "^        -> string start\n(?:      -> start non-capturing group (#processor:)\n (        -> start first capturing group (#processor)\n  .*?      -> anything (.) any number of times (*) non greedily (?)\n )        -> close first capturing group (#processor)\n \\s*:\\s* -> ':', the 'processor' divider, prefixed or suffixed by any number of whitespaces (\\s*)\n)        -> close non-capturing group (#/processor:)\n?        -> make non-capturing group (#processor:) optional\n(        -> start second capturing group (#value)\n .*$      -> anything (.) any number of times (*) greedily until the end of the string ($)\n)        -> close second capturing group (/#value)",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 93,
-            "description": "Removes the prefix from a given set of data.",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 156,
-            "description": "RETURNS:\n {\n     namespace: {\n         evaluator: {\n             prop: 'v',\n             prop1: 'v1'\n         }\n     },\n     namespace1: {\n         evaluator: {\n             property: 'value',\n             prop2:    'value',\n         },\n         evaluator1: {\n             prop1: 'v1',\n             prop2: 'v2'\n         }\n     }\n }\n\n\t{\n\t\t$namespace: {\n\t\t\t\t$property: {\n\t\t\t\t\tevaluator: $evaluatorNamr,\n\t\t\t\t\tvalue:     $value\n\t\t\t\t}\n\t\t\t}\n\t\t}",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 188,
-            "description": "options: {\n    prefix: 'arch'\t// global prefix\n    namespaces: ['someNamespace', 'anotherNamespace']\n}",
+            "file": "src/__archetypo/scope/index.js",
+            "line": 28,
+            "description": "retrieves all modules loaded up to this scope.",
             "class": "",
             "module": "archetypo"
         },
@@ -240,14 +324,14 @@
         },
         {
             "file": "src/index.js",
-            "line": 32,
+            "line": 47,
             "description": "Hash to hold all functions.",
             "class": "",
             "module": "archetypo"
         },
         {
             "file": "src/index.js",
-            "line": 43,
+            "line": 58,
             "description": "This method evaluates the value string\nIt is called upon any value string.\n\nThe default version returns the jq-object if value === 'this'",
             "itemtype": "method",
             "name": "evaluator",
@@ -262,7 +346,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 60,
+            "line": 75,
             "description": "Hash holding processors to be called for evaluation\n\nProcessors are 'argument-length-aware' functions.\nIf the processor function takes ...\n    1 argument : [value]       (synchronous)\n    2 arguments: [value, done] (asynchronous)",
             "itemtype": "property",
             "name": "processors",
@@ -272,7 +356,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 82,
+            "line": 97,
             "description": "Hash holding the default processors for each archProperty.",
             "itemtype": "property",
             "name": "defaultProcessors",
@@ -282,7 +366,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 92,
+            "line": 107,
             "description": "Hash holding the default properties\nand their values (pre-evaluated and pre-processed)",
             "itemtype": "property",
             "name": "defaultProperties",
@@ -292,7 +376,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 106,
+            "line": 121,
             "params": [
                 {
                     "name": "el",
@@ -319,7 +403,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 132,
+            "line": 147,
             "description": "Reference to the nearest archetypo ascendant.",
             "itemtype": "property",
             "name": "parent",
@@ -329,7 +413,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 161,
+            "line": 176,
             "description": "Promise to be resolved only when the view is ready.",
             "itemtype": "property",
             "name": "promise",
@@ -339,7 +423,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 171,
+            "line": 186,
             "description": "Retrieves a namespace object.",
             "itemtype": "method",
             "name": "namespace",
@@ -355,7 +439,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 188,
+            "line": 203,
             "description": "Retrieves a single archetypo from the $el.",
             "itemtype": "method",
             "name": "getArchetypo",
@@ -366,7 +450,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 202,
+            "line": 217,
             "description": "Invokes the archetypo builder on the element",
             "itemtype": "method",
             "name": "buildArchetypo",
@@ -394,6 +478,70 @@
             "line": " src/__archetypo/build/build-subs.js:13"
         },
         {
+            "message": "Missing item type\n^arch      -> prefix\n(          -> start first capturing group (#namespace)\n [A-Z]      -> any Uppercase letter\n .*?        -> followed by any character (.) any number of times (*) non greedily (?)\n)          -> close first capturing group (/#namespace)\n?          -> let the first capturing group be optional\n(          -> start the second capturing group (#property)\n [A-Z]      -> any Uppercase letter\n .*$        -> followed by anything any number of times until the end of the string\n)          -> close the second capturing group (#property)\n\nfirst-capturing-group:  namespace\nsecond-capturing-group: property",
+            "line": " src/__archetypo/data/parse/index.js:24"
+        },
+        {
+            "message": "Missing item type\nCreates a Regular Expression to capture property name.",
+            "line": " src/__archetypo/data/parse/index.js:43"
+        },
+        {
+            "message": "Missing item type\nReturns the string with the first letter to lowercase.",
+            "line": " src/__archetypo/data/parse/index.js:52"
+        },
+        {
+            "message": "Missing item type\nReturns the string with the first letter to uppercase.",
+            "line": " src/__archetypo/data/parse/index.js:59"
+        },
+        {
+            "message": "Missing item type\n^        -> string start\n(?:      -> start non-capturing group (#processor:)\n (        -> start first capturing group (#processor)\n  .*?      -> anything (.) any number of times (*) non greedily (?)\n )        -> close first capturing group (#processor)\n \\s*:\\s* -> ':', the 'processor' divider, prefixed or suffixed by any number of whitespaces (\\s*)\n)        -> close non-capturing group (#/processor:)\n?        -> make non-capturing group (#processor:) optional\n(        -> start second capturing group (#value)\n .*$      -> anything (.) any number of times (*) greedily until the end of the string ($)\n)        -> close second capturing group (/#value)",
+            "line": " src/__archetypo/data/parse/index.js:68"
+        },
+        {
+            "message": "Missing item type\nRemoves the prefix from a given set of data.",
+            "line": " src/__archetypo/data/parse/index.js:93"
+        },
+        {
+            "message": "Missing item type\nRETURNS:\n {\n     namespace: {\n         evaluator: {\n             prop: 'v',\n             prop1: 'v1'\n         }\n     },\n     namespace1: {\n         evaluator: {\n             property: 'value',\n             prop2:    'value',\n         },\n         evaluator1: {\n             prop1: 'v1',\n             prop2: 'v2'\n         }\n     }\n }\n\n\t{\n\t\t$namespace: {\n\t\t\t\t$property: {\n\t\t\t\t\tevaluator: $evaluatorNamr,\n\t\t\t\t\tvalue:     $value\n\t\t\t\t}\n\t\t\t}\n\t\t}",
+            "line": " src/__archetypo/data/parse/index.js:156"
+        },
+        {
+            "message": "Missing item type\noptions: {\n    prefix: 'arch'\t// global prefix\n    namespaces: ['someNamespace', 'anotherNamespace']\n}",
+            "line": " src/__archetypo/data/parse/index.js:188"
+        },
+        {
+            "message": "Missing item type\n^arch      -> prefix\n(          -> start first capturing group (#namespace)\n [A-Z]      -> any Uppercase letter\n .*?        -> followed by any character (.) any number of times (*) non greedily (?)\n)          -> close first capturing group (/#namespace)\n?          -> let the first capturing group be optional\n(          -> start the second capturing group (#property)\n [A-Z]      -> any Uppercase letter\n .*$        -> followed by anything any number of times until the end of the string\n)          -> close the second capturing group (#property)\n\nfirst-capturing-group:  namespace\nsecond-capturing-group: property",
+            "line": " src/__archetypo/data/parse/methods.js:24"
+        },
+        {
+            "message": "Missing item type\nCreates a Regular Expression to capture property name.",
+            "line": " src/__archetypo/data/parse/methods.js:43"
+        },
+        {
+            "message": "Missing item type\nReturns the string with the first letter to lowercase.",
+            "line": " src/__archetypo/data/parse/methods.js:52"
+        },
+        {
+            "message": "Missing item type\nReturns the string with the first letter to uppercase.",
+            "line": " src/__archetypo/data/parse/methods.js:59"
+        },
+        {
+            "message": "Missing item type\n^        -> string start\n(?:      -> start non-capturing group (#processor:)\n (        -> start first capturing group (#processor)\n  .*?      -> anything (.) any number of times (*) non greedily (?)\n )        -> close first capturing group (#processor)\n \\s*:\\s* -> ':', the 'processor' divider, prefixed or suffixed by any number of whitespaces (\\s*)\n)        -> close non-capturing group (#/processor:)\n?        -> make non-capturing group (#processor:) optional\n(        -> start second capturing group (#value)\n .*$      -> anything (.) any number of times (*) greedily until the end of the string ($)\n)        -> close second capturing group (/#value)",
+            "line": " src/__archetypo/data/parse/methods.js:68"
+        },
+        {
+            "message": "Missing item type\nRemoves the prefix from a given set of data.",
+            "line": " src/__archetypo/data/parse/methods.js:93"
+        },
+        {
+            "message": "Missing item type\nRETURNS:\n {\n     namespace: {\n         evaluator: {\n             prop: 'v',\n             prop1: 'v1'\n         }\n     },\n     namespace1: {\n         evaluator: {\n             property: 'value',\n             prop2:    'value',\n         },\n         evaluator1: {\n             prop1: 'v1',\n             prop2: 'v2'\n         }\n     }\n }\n\n\t{\n\t\t$namespace: {\n\t\t\t\t$property: {\n\t\t\t\t\tevaluator: $evaluatorNamr,\n\t\t\t\t\tvalue:     $value\n\t\t\t\t}\n\t\t\t}\n\t\t}",
+            "line": " src/__archetypo/data/parse/methods.js:156"
+        },
+        {
+            "message": "Missing item type\noptions: {\n    prefix: 'arch'\t// global prefix\n    namespaces: ['someNamespace', 'anotherNamespace']\n}",
+            "line": " src/__archetypo/data/parse/methods.js:188"
+        },
+        {
             "message": "Missing item type",
             "line": " src/__archetypo/data/process/index.js:25"
         },
@@ -402,36 +550,12 @@
             "line": " src/__archetypo/data/process/property.js:7"
         },
         {
-            "message": "Missing item type\n^arch      -> prefix\n(          -> start first capturing group (#namespace)\n [A-Z]      -> any Uppercase letter\n .*?        -> followed by any character (.) any number of times (*) non greedily (?)\n)          -> close first capturing group (/#namespace)\n?          -> let the first capturing group be optional\n(          -> start the second capturing group (#property)\n [A-Z]      -> any Uppercase letter\n .*$        -> followed by anything any number of times until the end of the string\n)          -> close the second capturing group (#property)\n\nfirst-capturing-group:  namespace\nsecond-capturing-group: property",
-            "line": " src/__archetypo/data/parse.js:24"
+            "message": "Missing item type\nA very special object. It controls the scope of each archetypo object.\n\n\nTakes into consideration",
+            "line": " src/__archetypo/scope/index.js:1"
         },
         {
-            "message": "Missing item type\nCreates a Regular Expression to capture property name.",
-            "line": " src/__archetypo/data/parse.js:43"
-        },
-        {
-            "message": "Missing item type\nReturns the string with the first letter to lowercase.",
-            "line": " src/__archetypo/data/parse.js:52"
-        },
-        {
-            "message": "Missing item type\nReturns the string with the first letter to uppercase.",
-            "line": " src/__archetypo/data/parse.js:59"
-        },
-        {
-            "message": "Missing item type\n^        -> string start\n(?:      -> start non-capturing group (#processor:)\n (        -> start first capturing group (#processor)\n  .*?      -> anything (.) any number of times (*) non greedily (?)\n )        -> close first capturing group (#processor)\n \\s*:\\s* -> ':', the 'processor' divider, prefixed or suffixed by any number of whitespaces (\\s*)\n)        -> close non-capturing group (#/processor:)\n?        -> make non-capturing group (#processor:) optional\n(        -> start second capturing group (#value)\n .*$      -> anything (.) any number of times (*) greedily until the end of the string ($)\n)        -> close second capturing group (/#value)",
-            "line": " src/__archetypo/data/parse.js:68"
-        },
-        {
-            "message": "Missing item type\nRemoves the prefix from a given set of data.",
-            "line": " src/__archetypo/data/parse.js:93"
-        },
-        {
-            "message": "Missing item type\nRETURNS:\n {\n     namespace: {\n         evaluator: {\n             prop: 'v',\n             prop1: 'v1'\n         }\n     },\n     namespace1: {\n         evaluator: {\n             property: 'value',\n             prop2:    'value',\n         },\n         evaluator1: {\n             prop1: 'v1',\n             prop2: 'v2'\n         }\n     }\n }\n\n\t{\n\t\t$namespace: {\n\t\t\t\t$property: {\n\t\t\t\t\tevaluator: $evaluatorNamr,\n\t\t\t\t\tvalue:     $value\n\t\t\t\t}\n\t\t\t}\n\t\t}",
-            "line": " src/__archetypo/data/parse.js:156"
-        },
-        {
-            "message": "Missing item type\noptions: {\n    prefix: 'arch'\t// global prefix\n    namespaces: ['someNamespace', 'anotherNamespace']\n}",
-            "line": " src/__archetypo/data/parse.js:188"
+            "message": "Missing item type\nretrieves all modules loaded up to this scope.",
+            "line": " src/__archetypo/scope/index.js:28"
         },
         {
             "message": "Missing item type\nThe archetypo object",
@@ -439,11 +563,11 @@
         },
         {
             "message": "Missing item type\nHash to hold all functions.",
-            "line": " src/index.js:32"
+            "line": " src/index.js:47"
         },
         {
             "message": "Missing item type",
-            "line": " src/index.js:106"
+            "line": " src/index.js:121"
         }
     ]
 }
