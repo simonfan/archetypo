@@ -10,7 +10,8 @@
     "archetypo-router": "*",
     "lazy.js": "~0.3.2",
     "_q": "*",
-    "jquery-scope": "~0.1.0"
+    "jquery-scope": "~0.1.0",
+    "scope": "simonfan/scope#0.4.1"
   },
   "devDependencies": {
     "requirejs": "*",
@@ -27,6 +28,7 @@
     "subject": "0.5.5",
     "jquery": "~2.1.1",
     "model-dock": "~0.3.6",
-    "q": "1.0.0"
+    "q": "1.0.0",
+    "scope": "0.4.1"
   }
 }
