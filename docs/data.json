@@ -4,54 +4,29 @@
         "version": "0.0.0"
     },
     "files": {
-        "src/__archetypo/build/build-invoke-fns.js": {
-            "name": "src/__archetypo/build/build-invoke-fns.js",
+        "src/__archetypo/build/evaluate/index.js": {
+            "name": "src/__archetypo/build/evaluate/index.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "src/__archetypo/build/build-namespaces.js": {
-            "name": "src/__archetypo/build/build-namespaces.js",
+        "src/__archetypo/build/evaluate/invoke.js": {
+            "name": "src/__archetypo/build/evaluate/invoke.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "src/__archetypo/build/build-subs.js": {
-            "name": "src/__archetypo/build/build-subs.js",
-            "modules": {
-                "view": 1
-            },
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/build/index.js": {
-            "name": "src/__archetypo/build/index.js",
-            "modules": {
-                "archetypo": 1
-            },
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/data/process/index.js": {
-            "name": "src/__archetypo/data/process/index.js",
+        "src/__archetypo/build/sub/index.js": {
+            "name": "src/__archetypo/build/sub/index.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "src/__archetypo/data/process/property.js": {
-            "name": "src/__archetypo/data/process/property.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/data/parse.js": {
-            "name": "src/__archetypo/data/parse.js",
+        "src/__archetypo/parse/value.js": {
+            "name": "src/__archetypo/parse/value.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -59,7 +34,9 @@
         },
         "src/index.js": {
             "name": "src/index.js",
-            "modules": {},
+            "modules": {
+                "archetypo": 1
+            },
             "classes": {},
             "fors": {},
             "namespaces": {}
@@ -68,382 +45,159 @@
     "modules": {
         "archetypo": {
             "name": "archetypo",
-            "submodules": {
-                "view": 1
-            },
+            "submodules": {},
             "classes": {},
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "src/__archetypo/build/index.js",
-            "line": 1,
+            "file": "src/index.js",
+            "line": 5,
             "description": "AMD module."
-        },
-        "view": {
-            "name": "view",
-            "submodules": {},
-            "classes": {},
-            "fors": {},
-            "is_submodule": 1,
-            "namespaces": {},
-            "module": "archetypo",
-            "namespace": "",
-            "file": "src/__archetypo/build/build-subs.js",
-            "line": 1
         }
     },
     "classes": {},
     "classitems": [
         {
-            "file": "src/__archetypo/build/build-invoke-fns.js",
-            "line": 8,
-            "description": "Builds the Fn of a given namespace.",
-            "class": ""
-        },
-        {
-            "file": "src/__archetypo/build/build-invoke-fns.js",
-            "line": 54,
-            "description": "Build-step\nBUILD STEPS TAKE NO ARGUMENTS.\nThey should be understood as partial steps running within the main builder's context.\nBuilds the Fns of ALL the namespaces found on this archetypo object",
-            "class": ""
-        },
-        {
-            "file": "src/__archetypo/build/build-namespaces.js",
-            "line": 12,
-            "description": "Build-step\nBuilds the namespaces of the archetypo object.",
-            "class": ""
-        },
-        {
-            "file": "src/__archetypo/build/build-subs.js",
+            "file": "src/__archetypo/build/evaluate/index.js",
             "line": 13,
-            "description": "STEPS TAKE NO ARGUMENTS",
-            "class": "",
-            "module": "archetypo",
-            "submodule": "view"
-        },
-        {
-            "file": "src/__archetypo/build/index.js",
-            "line": 18,
-            "description": "This is mostly a script invoker.\nIt invokes\n   -namespace builder,\n   -fns builder",
+            "description": "Evaluates the data parsed from the el into modules.\n Returns a promise for all properties evaluated.",
             "itemtype": "method",
-            "name": "build",
-            "class": "",
-            "module": "archetypo"
+            "name": "archEvaluate",
+            "access": "private",
+            "tagname": "",
+            "class": ""
         },
         {
-            "file": "src/__archetypo/data/process/index.js",
-            "line": 25,
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/process/property.js",
-            "line": 7,
-            "description": "Runs the logic for retrieving the processor function",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/process/property.js",
-            "line": 56,
+            "file": "src/__archetypo/build/evaluate/invoke.js",
+            "line": 10,
+            "description": "Invokes a single method",
             "itemtype": "method",
-            "name": "processProperty",
+            "name": "invokeSingle",
             "access": "private",
             "tagname": "",
             "params": [
                 {
-                    "name": "valueData",
-                    "description": "",
+                    "name": "invocation",
+                    "description": "{ value: v, method: m }",
                     "type": "Object"
                 },
                 {
-                    "name": "value",
-                    "description": "",
-                    "type": "String"
-                },
-                {
-                    "name": "processor",
-                    "description": "",
-                    "type": "String|Undefined",
-                    "optional": true
-                },
-                {
-                    "name": "propertyName",
+                    "name": "prop",
                     "description": "",
                     "type": "String"
                 }
             ],
-            "class": "",
-            "module": "archetypo"
+            "class": ""
         },
         {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 24,
-            "description": "^arch      -> prefix\n(          -> start first capturing group (#namespace)\n [A-Z]      -> any Uppercase letter\n .*?        -> followed by any character (.) any number of times (*) non greedily (?)\n)          -> close first capturing group (/#namespace)\n?          -> let the first capturing group be optional\n(          -> start the second capturing group (#property)\n [A-Z]      -> any Uppercase letter\n .*$        -> followed by anything any number of times until the end of the string\n)          -> close the second capturing group (#property)\n\nfirst-capturing-group:  namespace\nsecond-capturing-group: property",
-            "class": "",
-            "module": "archetypo"
+            "file": "src/__archetypo/build/evaluate/invoke.js",
+            "line": 44,
+            "description": "Runs the invocations for a group of invocations.",
+            "itemtype": "method",
+            "name": "invokeGroup",
+            "params": [
+                {
+                    "name": "invocations",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": ""
         },
         {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 43,
-            "description": "Creates a Regular Expression to capture property name.",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 52,
-            "description": "Returns the string with the first letter to lowercase.",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 59,
-            "description": "Returns the string with the first letter to uppercase.",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/parse.js",
+            "file": "src/__archetypo/build/evaluate/invoke.js",
             "line": 68,
-            "description": "^        -> string start\n(?:      -> start non-capturing group (#processor:)\n (        -> start first capturing group (#processor)\n  .*?      -> anything (.) any number of times (*) non greedily (?)\n )        -> close first capturing group (#processor)\n \\s*:\\s* -> ':', the 'processor' divider, prefixed or suffixed by any number of whitespaces (\\s*)\n)        -> close non-capturing group (#/processor:)\n?        -> make non-capturing group (#processor:) optional\n(        -> start second capturing group (#value)\n .*$      -> anything (.) any number of times (*) greedily until the end of the string ($)\n)        -> close second capturing group (/#value)",
-            "class": "",
-            "module": "archetypo"
+            "description": "Evaluates the invocations parsed from the el into modules.\n Returns a promise for all properties evaluated.",
+            "itemtype": "method",
+            "name": "archInvoke",
+            "access": "private",
+            "tagname": "",
+            "class": ""
         },
         {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 93,
-            "description": "Removes the prefix from a given set of data.",
-            "class": "",
-            "module": "archetypo"
+            "file": "src/__archetypo/build/sub/index.js",
+            "line": 8,
+            "description": "Checks whether there are sub archetypos to build.",
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": ""
         },
         {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 156,
-            "description": "RETURNS:\n {\n     namespace: {\n         evaluator: {\n             prop: 'v',\n             prop1: 'v1'\n         }\n     },\n     namespace1: {\n         evaluator: {\n             property: 'value',\n             prop2:    'value',\n         },\n         evaluator1: {\n             prop1: 'v1',\n             prop2: 'v2'\n         }\n     }\n }\n\n\t{\n\t\t$namespace: {\n\t\t\t\t$property: {\n\t\t\t\t\tevaluator: $evaluatorNamr,\n\t\t\t\t\tvalue:     $value\n\t\t\t\t}\n\t\t\t}\n\t\t}",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/data/parse.js",
-            "line": 188,
-            "description": "options: {\n    prefix: 'arch'\t// global prefix\n    namespaces: ['someNamespace', 'anotherNamespace']\n}",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 23,
-            "description": "The archetypo object",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
+            "file": "src/__archetypo/parse/value.js",
             "line": 32,
-            "description": "Hash to hold all functions.",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 43,
-            "description": "This method evaluates the value string\nIt is called upon any value string.\n\nThe default version returns the jq-object if value === 'this'",
+            "description": "Prepare the string to be evaluated by scope.evaluate(argString);\nFor now, basically add brackets.\nFuture modifications should be added here.",
             "itemtype": "method",
-            "name": "evaluator",
+            "name": "buildArgsString",
+            "access": "private",
+            "tagname": "",
             "params": [
                 {
-                    "name": "value",
-                    "description": ""
-                }
-            ],
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 60,
-            "description": "Hash holding processors to be called for evaluation\n\nProcessors are 'argument-length-aware' functions.\nIf the processor function takes ...\n    1 argument : [value]       (synchronous)\n    2 arguments: [value, done] (asynchronous)",
-            "itemtype": "property",
-            "name": "processors",
-            "type": "Object",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 82,
-            "description": "Hash holding the default processors for each archProperty.",
-            "itemtype": "property",
-            "name": "defaultProcessors",
-            "type": "Object",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 92,
-            "description": "Hash holding the default properties\nand their values (pre-evaluated and pre-processed)",
-            "itemtype": "property",
-            "name": "defaultProperties",
-            "type": "Object",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 106,
-            "params": [
-                {
-                    "name": "el",
-                    "description": "",
-                    "type": "Jq-object"
-                },
-                {
-                    "name": "options",
-                    "description": ""
-                },
-                {
-                    "name": "processors",
-                    "description": "",
-                    "type": "Object"
-                },
-                {
-                    "name": "defaultProcessors",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 132,
-            "description": "Reference to the nearest archetypo ascendant.",
-            "itemtype": "property",
-            "name": "parent",
-            "type": "archetypo-object",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 161,
-            "description": "Promise to be resolved only when the view is ready.",
-            "itemtype": "property",
-            "name": "promise",
-            "type": "q-promise-object",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 171,
-            "description": "Retrieves a namespace object.",
-            "itemtype": "method",
-            "name": "namespace",
-            "params": [
-                {
-                    "name": "slug",
-                    "description": "",
+                    "name": "str",
+                    "description": "[description]",
                     "type": "String"
                 }
             ],
+            "return": {
+                "description": "[description]",
+                "type": "String"
+            },
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/parse/value.js",
+            "line": 48,
+            "description": "Parses the match returned object (an array)\nand returns better structured data.",
+            "itemtype": "method",
+            "name": "parseArgsStringMatch",
+            "params": [
+                {
+                    "name": "match",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": ""
+        },
+        {
+            "file": "src/index.js",
+            "line": 28,
+            "itemtype": "method",
+            "name": "initialize",
+            "params": [
+                {
+                    "name": "properties",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
             "class": "",
             "module": "archetypo"
         },
         {
             "file": "src/index.js",
-            "line": 188,
-            "description": "Retrieves a single archetypo from the $el.",
-            "itemtype": "method",
-            "name": "getArchetypo",
-            "access": "private",
-            "tagname": "",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 202,
-            "description": "Invokes the archetypo builder on the element",
-            "itemtype": "method",
-            "name": "buildArchetypo",
-            "access": "private",
-            "tagname": "",
+            "line": 72,
+            "description": "Options for the jquery-meta-data reader.",
+            "itemtype": "property",
+            "name": "jqMetaDataOptions",
+            "type": "Object",
             "class": "",
             "module": "archetypo"
         }
     ],
     "warnings": [
         {
-            "message": "Missing item type\nBuilds the Fn of a given namespace.",
-            "line": " src/__archetypo/build/build-invoke-fns.js:8"
-        },
-        {
-            "message": "Missing item type\nBuild-step\nBUILD STEPS TAKE NO ARGUMENTS.\nThey should be understood as partial steps running within the main builder's context.\nBuilds the Fns of ALL the namespaces found on this archetypo object",
-            "line": " src/__archetypo/build/build-invoke-fns.js:54"
-        },
-        {
-            "message": "Missing item type\nBuild-step\nBuilds the namespaces of the archetypo object.",
-            "line": " src/__archetypo/build/build-namespaces.js:12"
-        },
-        {
-            "message": "Missing item type\nSTEPS TAKE NO ARGUMENTS",
-            "line": " src/__archetypo/build/build-subs.js:13"
-        },
-        {
-            "message": "Missing item type",
-            "line": " src/__archetypo/data/process/index.js:25"
-        },
-        {
-            "message": "Missing item type\nRuns the logic for retrieving the processor function",
-            "line": " src/__archetypo/data/process/property.js:7"
-        },
-        {
-            "message": "Missing item type\n^arch      -> prefix\n(          -> start first capturing group (#namespace)\n [A-Z]      -> any Uppercase letter\n .*?        -> followed by any character (.) any number of times (*) non greedily (?)\n)          -> close first capturing group (/#namespace)\n?          -> let the first capturing group be optional\n(          -> start the second capturing group (#property)\n [A-Z]      -> any Uppercase letter\n .*$        -> followed by anything any number of times until the end of the string\n)          -> close the second capturing group (#property)\n\nfirst-capturing-group:  namespace\nsecond-capturing-group: property",
-            "line": " src/__archetypo/data/parse.js:24"
-        },
-        {
-            "message": "Missing item type\nCreates a Regular Expression to capture property name.",
-            "line": " src/__archetypo/data/parse.js:43"
-        },
-        {
-            "message": "Missing item type\nReturns the string with the first letter to lowercase.",
-            "line": " src/__archetypo/data/parse.js:52"
-        },
-        {
-            "message": "Missing item type\nReturns the string with the first letter to uppercase.",
-            "line": " src/__archetypo/data/parse.js:59"
-        },
-        {
-            "message": "Missing item type\n^        -> string start\n(?:      -> start non-capturing group (#processor:)\n (        -> start first capturing group (#processor)\n  .*?      -> anything (.) any number of times (*) non greedily (?)\n )        -> close first capturing group (#processor)\n \\s*:\\s* -> ':', the 'processor' divider, prefixed or suffixed by any number of whitespaces (\\s*)\n)        -> close non-capturing group (#/processor:)\n?        -> make non-capturing group (#processor:) optional\n(        -> start second capturing group (#value)\n .*$      -> anything (.) any number of times (*) greedily until the end of the string ($)\n)        -> close second capturing group (/#value)",
-            "line": " src/__archetypo/data/parse.js:68"
-        },
-        {
-            "message": "Missing item type\nRemoves the prefix from a given set of data.",
-            "line": " src/__archetypo/data/parse.js:93"
-        },
-        {
-            "message": "Missing item type\nRETURNS:\n {\n     namespace: {\n         evaluator: {\n             prop: 'v',\n             prop1: 'v1'\n         }\n     },\n     namespace1: {\n         evaluator: {\n             property: 'value',\n             prop2:    'value',\n         },\n         evaluator1: {\n             prop1: 'v1',\n             prop2: 'v2'\n         }\n     }\n }\n\n\t{\n\t\t$namespace: {\n\t\t\t\t$property: {\n\t\t\t\t\tevaluator: $evaluatorNamr,\n\t\t\t\t\tvalue:     $value\n\t\t\t\t}\n\t\t\t}\n\t\t}",
-            "line": " src/__archetypo/data/parse.js:156"
-        },
-        {
-            "message": "Missing item type\noptions: {\n    prefix: 'arch'\t// global prefix\n    namespaces: ['someNamespace', 'anotherNamespace']\n}",
-            "line": " src/__archetypo/data/parse.js:188"
-        },
-        {
-            "message": "Missing item type\nThe archetypo object",
-            "line": " src/index.js:23"
-        },
-        {
-            "message": "Missing item type\nHash to hold all functions.",
-            "line": " src/index.js:32"
-        },
-        {
-            "message": "Missing item type",
-            "line": " src/index.js:106"
+            "message": "Missing item type\nChecks whether there are sub archetypos to build.",
+            "line": " src/__archetypo/build/sub/index.js:8"
         }
     ]
 }

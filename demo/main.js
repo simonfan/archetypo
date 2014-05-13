@@ -4,11 +4,12 @@ define(function (require, exports, module) {
 		archetypo = require('archetypo');
 
 
-	var arch = window.arch = archetypo($('#app'), {
-
+	var arch = window.arch = archetypo({
+		el: $('#app'),
 	});
 
-	arch.promise.then(function () {
+	arch.done.then(function (app) {
+
 		console.log('this should be the last log, after everything is done!')
 	});
 

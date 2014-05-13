@@ -2,18 +2,13 @@ YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [],
     "modules": [
-        "archetypo",
-        "view"
+        "archetypo"
     ],
     "allModules": [
         {
             "displayName": "archetypo",
             "name": "archetypo",
             "description": "AMD module."
-        },
-        {
-            "displayName": "view",
-            "name": "view"
         }
     ]
 } };

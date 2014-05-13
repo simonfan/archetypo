@@ -35,6 +35,7 @@ require.config({
 		processArchData: '__archetypo/data/process/index',
 		property: '__archetypo/data/process/property',
 		'jquery-meta-data': '../bower_components/jquery-meta-data/built/jquery-meta-data',
+		'jquery-scope': '../bower_components/jquery-scope/built/jquery-scope',
 		scope: '../bower_components/scope/built/scope'
 	},
 	shim: {

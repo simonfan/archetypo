@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/build/build-namespaces.js - archetypo</title>
+    <title>src/__archetypo/build/evaluate/index.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -47,8 +47,6 @@
             
                 <li><a href="../modules/archetypo.html">archetypo</a></li>
             
-                <li><a href="../modules/view.html">view</a></li>
-            
             </ul>
         </div>
     </div>
@@ -84,80 +82,59 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/build/build-namespaces.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/build/evaluate/index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var _ = require(&#x27;lodash&#x27;),
-		q = require(&#x27;q&#x27;);
+	var _              = require(&#x27;lodash&#x27;),
+		q              = require(&#x27;q&#x27;),
+		jqueryMetaData = require(&#x27;jquery-meta-data&#x27;);
 
-		// arch data parser
-	var parseArchData = require(&#x27;../data/parse&#x27;),
-		// arch data processor
-		processArchData = require(&#x27;../data/process/index&#x27;);
+		// parse the value string into { evaluator: &#x27;evaluator&#x27;, value: &#x27;value&#x27;}
+	var parseArchValue = require(&#x27;../../parse/value&#x27;),
+		// invoke methods
+		archInvoke     = require(&#x27;./invoke&#x27;);
 
 	/**
-	 * Build-step
-	 * Builds the namespaces of the archetypo object.
 	 *
+	 * Evaluates the data parsed from the el into modules.
+	 * Returns a promise for all properties evaluated.
 	 *
+	 * @method archEvaluate
+	 * @private
 	 */
-	module.exports = function buildNamespaces() {
+	module.exports = function archEvaluate() {
 
-		console.log(&#x27;buildNamespaces invoked&#x27;);
-		console.log(this.scope.availableNames);
+		var deferred = q.defer();
 
-		// [0] buildNamespacesDeferred object
-		var buildNamespacesDeferred = q.defer();
-
-
-
-
-		// [1] get the archData
-		var archData = parseArchData(this.el.data(), {
-			prefix: this.prefix,
-			namespaces: this.scope.availableNames
+		// [1] get the arch-meta-data
+		var data = this.el.metaData({
+			prefix:  &#x27;arch&#x27;,
+			parse:   parseArchValue,
+	//		replace: true,
 		});
 
+		// [2] set literal data properties
+		var literals = _.pick(data, function (d) {
+			return d.type === &#x27;literal&#x27;;
+		});
+		this.assign(literals);
 
+		// [3] invoke methods
+		var invocations = _.pick(data, function (d) {
+			return d.type === &#x27;invocation&#x27;;
+		});
 
-		// [2] process archData
-		// [2.1] build processing options
-		var processingOptions = {
-			context:           this.el,
-			evaluator:         this.evaluator,
-			processors:        this.processors,
-			defaultProcessors: this.defaultProcessors,
-			defaultProperties: this.defaultProperties,
-		};
+		archInvoke.call(this, invocations).done(function () {
+			deferred.resolve();
+		});
 
-		// [2.2] process
-		var process = processArchData(archData, processingOptions);
-
-		// [3] when the data has been processed, create the namespaces
-		process.done(_.bind(function (processedArchData) {
-
-			// [3.1] loop through processedArchData
-			//       and build a namespace for each.
-			_.each(processedArchData, function (nsData, nsSlug) {
-				this.scope.build(nsSlug, nsData);
-			}, this);
-
-			console.log(&#x27;namespaces built&#x27;)
-
-			// resolve with no arguments
-			buildNamespacesDeferred.resolve();
-
-		}, this));
-
-
-		// return promise
-		return buildNamespacesDeferred.promise;
+		// [4] return the promise
+		return deferred.promise;
 	};
-
 });
 
     </pre>
