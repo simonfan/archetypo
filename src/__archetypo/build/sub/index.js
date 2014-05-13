@@ -1,33 +1,50 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var q  = require('q');
+	var q  = require('q'),
+		_q = require('_q'),
+		$  = require('jquery');
 
 	/**
-	 * Invokes a single method.
-	 *
-	 *
+	 * Checks whether there are sub archetypos to build.
+	 * @return {[type]} [description]
 	 */
-	function invokeSingle(data) {
-
-	}
-
-	// invocation string example: "method method2 method3"
-
-	/**
-	 * Checks out what is to be invoked on current archetypo object,
-	 * runs invocations and returns promise for whenever the thing is ready.
-	 *
-	 * @method archInvoke
-	 * @private
-	 * @param data {Object} {key: { value: v, method: m }}
-	 */
-	module.exports = function archInvoke() {
+	module.exports = function archSubs() {
 		var deferred = q.defer();
 
+		// [1]
+		// find all elements within this element
+		// that have an 'data-archetypo' attribute defined.
+		var subEls = this.el.find('[data-archetypo]');
 
-		var invocations = this.el.data('archetypo');
+		// [2]
+		// Instantiate the sub-views
+		_q.map(subEls, function (el) {
 
-		return deferred;
+			el = $(el);
+
+			var elArchetypo = el.data('archetypo');
+
+			// [0] check if the element already has an archetypo
+			//     and only build if it has NOT
+			if (!elArchetypo) {
+
+				var subArchetypo = this.createSubArchetypo({ el: el });
+
+				// return the promise
+				return subArchetypo.done;
+			} else {
+				return elArchetypo.done;
+			}
+
+		}, this)
+			.done(function () {
+
+				// resolve with 0 arguments.
+				deferred.resolve();
+			});
+
+		// [4] return the promise
+		return deferred.promise;
 	};
 });

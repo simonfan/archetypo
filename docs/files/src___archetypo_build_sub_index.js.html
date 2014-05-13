@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/scope/index.js - archetypo</title>
+    <title>src/__archetypo/build/sub/index.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -47,8 +47,6 @@
             
                 <li><a href="../modules/archetypo.html">archetypo</a></li>
             
-                <li><a href="../modules/view.html">view</a></li>
-            
             </ul>
         </div>
     </div>
@@ -84,64 +82,59 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/scope/index.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/build/sub/index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-/**
- * A very special object. It controls the scope of each archetypo object.
- *
- *
- * Takes into consideration
- */
-
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var _ = require(&#x27;lodash&#x27;),
-		subject = require(&#x27;subject&#x27;);
+	var q  = require(&#x27;q&#x27;),
+		_q = require(&#x27;_q&#x27;),
+		$  = require(&#x27;jquery&#x27;);
 
+	/**
+	 * Checks whether there are sub archetypos to build.
+	 * @return {[type]} [description]
+	 */
+	module.exports = function archSubs() {
+		var deferred = q.defer();
 
-	module.exports = subject({
-		initialize: function initializeScope(options) {
+		// [1]
+		// find all elements within this element
+		// that have an &#x27;data-archetypo&#x27; attribute defined.
+		var subEls = this.el.find(&#x27;[data-archetypo]&#x27;);
 
-			// reference to the parent namespaces object
-			// ATTENTION: refer not to the parent archetypo object,
-			//            but to the parent namespaces object.
-			this.parent = options.parent;
+		// [2]
+		// Instantiate the sub-views
+		_q.map(subEls, function (el) {
 
-			// hash on which scope data will be stored.
-			this.data = {};
+			el = $(el);
 
-		},
+			var elArchetypo = el.data(&#x27;archetypo&#x27;);
 
-		/**
-		 * retrieves all modules loaded up to this scope.
-		 *
-		 */
-		modules: function getModules() {
+			// [0] check if the element already has an archetypo
+			//     and only build if it has NOT
+			if (!elArchetypo) {
 
-		},
+				var subArchetypo = this.createSubArchetypo({ el: el });
 
-
-		get: function get(key) {
-
-			console.log(&#x27;scope get &#x27; + slug);
-
-			var ns = this.namespaces[slug];
-
-			if (!ns) {
-				ns = this.parent.namespaces.get(slug);
+				// return the promise
+				return subArchetypo.done;
+			} else {
+				return elArchetypo.done;
 			}
 
-			return ns;
-		},
+		}, this)
+			.done(function () {
 
-		set: function set(key, value) {
+				// resolve with 0 arguments.
+				deferred.resolve();
+			});
 
-		},
-	});
-
+		// [4] return the promise
+		return deferred.promise;
+	};
 });
 
     </pre>

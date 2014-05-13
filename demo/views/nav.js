@@ -21,7 +21,7 @@ define(function (require, exports, module) {
 
 			alert($target.data('to'));
 
-			return false;
+//			return false;
 		}
 	})
 

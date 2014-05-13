@@ -11,14 +11,16 @@ define(function (require, exports, module) {
 		require([modname], deferred.resolve);
 
 		return deferred.promise;
-	};
+	}
 
-	function archRequireFn(modnameAndArgs, done) {
+	function archRequireFn(modname, args) {
 
-		// [1] parse mod name out
+		return this.require(modname).then(_.bind(function (fn) {
+			return this.partial(fn, args);
 
+		}, this));
 
-	};
+	}
 
 	exports.require = archRequire;
 	exports.requireFn = archRequireFn;

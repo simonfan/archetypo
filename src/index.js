@@ -18,14 +18,12 @@ define(function (require, exports, module) {
 
 
 		// reads and evaluates the data asynchronously
-	var archRead   = require('./__archetypo/build/read/index'),
-		// invokes whatever needs to be invoked asynchronously
-		archInvoke = require('./__archetypo/build/invoke/index'),
+	var archEvaluate   = require('./__archetypo/build/evaluate/index'),
 		// builds sub
 		archSub    = require('./__archetypo/build/sub/index');
 
 
-	var archetypo = scope.extend({
+	var archetypo = module.exports = scope.extend({
 
 		/**
 		 *
@@ -33,11 +31,19 @@ define(function (require, exports, module) {
 		 * @param properties {Object}
 		 *
 		 */
-		initialize: function initializeArchetypo(properties) {
+		initialize: function initialize() {
 			// scope initialize will assign all properties
 			// of the first argument to the 'this' object.
 			scope.prototype.initialize.apply(this, arguments);
 
+			this.initializeArchetypo();
+		},
+
+		initializeArchetypo: function initializeArchetypo() {
+
+			// replace the original archetypo value with
+			// the archetypo object.
+			this.el.data('archetypo', this);
 
 			// [1] get reference to the el.
 			var el = this.el;
@@ -49,20 +55,18 @@ define(function (require, exports, module) {
 			this.done = deferred.promise;
 
 			// [3] read and evaluate the data using the scope methods
-			archRead.call(this)
-				.then(_.bind(archInvoke, this))
+			archEvaluate.call(this)
 				.then(_.bind(archSub, this))
-				.done(_.bind(function () {
+				.done(_.partial(deferred.resolve, this));
+		},
 
-					// replace the original archetypo value with
-					// the archetypo object.
-					this.el.data('archetypo', this);
+		createSubArchetypo: function createSubArchetypo(data) {
 
-					// resolve with the archetypo
-					deferred.resolve(this);
+			var subArchetypo = this.create(data);
 
-				}, this));
+			subArchetypo.initializeArchetypo();
 
+			return subArchetypo;
 		},
 
 		/**
@@ -73,7 +77,7 @@ define(function (require, exports, module) {
 		 */
 		jqMetaDataOptions: {
 			prefix:  'arch',
-			parse:   parseArchValue,
+		//	parse:   parseArchValue,
 			replace: true,
 		},
 

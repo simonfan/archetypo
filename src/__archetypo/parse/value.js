@@ -1,7 +1,33 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var regexp = require('./regexp');
+	// sample value string: "1! method(literal/path/to/somewhere, $argumentToBeScopeEvaluated)"
+	var whitespace = '\\s*',
+		priority   = '(?:(\\d*)!)?',
+		word       = '([\\w$\\-]*)',
+		argString  = '\\(' + whitespace + '(.*)' + whitespace + '\\)',
+		whatever   = '(.*)';
+
+
+	var invocationRegExpString = [
+			// any starting whitespaces
+			whitespace,
+			// either
+			'(?:',
+				// the optional priority tag
+				priority, whitespace,
+				// method(argString)
+				word, whitespace,
+				argString,
+				'|',
+				// some unparsed value
+				word,
+			')' + whitespace
+		].join(''),
+		// /\s*(?:(?:(\d*)!)?\s*([\w$\-]*)\s*\(\s*(.*)\s*\)|([\w$\-]*))\s*/
+		invocationRegExp       = new RegExp(invocationRegExpString);
+
+
 
 	/**
 	 * Prepare the string to be evaluated by scope.evaluate(argString);
@@ -17,35 +43,42 @@ define(function (require, exports, module) {
 		return '[' + str + ']';
 	}
 
-	// sample value string: "method(literal, $evaluated, {$arg3, key: $arg4})"
-	exports.single = function parseArchValue(str) {
+
+
+	/**
+	 * Parses the match returned object (an array)
+	 * and returns better structured data.
+	 *
+	 * @method  parseArgsStringMatch
+	 * @param  {[type]} match [description]
+	 * @return {[type]}       [description]
+	 */
+	function parseArgsStringMatch(match) {
 		// the response object
 		var res = {};
 
-
-		var match = str.match(regexp.invocationRegExp);
-
-
 		if (match) {
 		// [0] = full matched string
-		// [1] = METHOD NAME
-		// [2] = ARGUMENTS STRING
-		// [3] = LITERAL VALUE
+		// [1] = PRIORITY TAG
+		// [2] = METHOD NAME
+		// [3] = ARGUMENTS STRING
+		// [4] = LITERAL VALUE
 
 
-			if (match[1]) {
+			if (match[2]) {
 
-				// it is a value that must be evaluated
+				// it is a value that must be invocation
 				// before assignment
-				res.type = 'evaluated';
-				res.method = match[1];
-				res.value  = buildArgsString(match[2]);
+				res.type = 'invocation';
+				res.priority = (match[1] === '') ? '0' : match[1];
+				res.method = match[2];
+				res.value  = buildArgsString(match[3]);
 
-			} else if (match[3]) {
+			} else if (match[4]) {
 
 				// it is a value that will be immediately available
 				res.type = 'literal';
-				res.value = match[3];
+				res.value = match[4];
 
 			}
 
@@ -55,17 +88,14 @@ define(function (require, exports, module) {
 		}
 
 		return res;
-	};
+	}
 
-	/**
-	 * Parses multiple invocations.
-	 *
-	 * @method multiple
-	 * @param  {[type]} str [description]
-	 * @return {[type]}     [description]
-	 */
-	var invocationsRegExp = new RegExp(regexp.invocationsRegExpString, 'g');
-	exports.multiple = function parseArchValues(str) {
 
+	// sample value string: "[$priorityNo!] method(literal, $evaluated, {$arg3, key: $arg4})"
+	module.exports = function parseArchValue(str) {
+
+		var invocationMatch = str.match(invocationRegExp);
+
+		return parseArgsStringMatch(invocationMatch);
 	};
 });
