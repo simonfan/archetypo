@@ -133,6 +133,7 @@ module.exports = function (grunt) {
 				}
 			},
 
+			// with all dependencies
 			full: {
 				options: {
 					// base url where to look for module files
@@ -143,6 +144,37 @@ module.exports = function (grunt) {
 					name: 'archetypo',
 					// output here
 					out: './built/archetypo.full.js',
+					// config file
+					mainConfigFile: 'amdconfig.js',
+
+					// include these modules
+					include: ["requirejs"],
+
+					// exclude these modules AND their dependencies
+					// (excluding your bower dependencies)
+				//	exclude: ["lodash", "jquery", "q", "_q", "scope", "subject", "jquery-meta-data"],
+
+					// excludeShallow
+					excludeShallow: [],
+
+					optimize: 'uglify2',
+
+					pragmas: {
+						exclude: true,
+					},
+				}
+			},
+
+			dev: {
+				options: {
+					// base url where to look for module files
+					// and relative to which the module paths will be defined
+					// (must coincide with that defined in mainConfigFile)
+					baseUrl: './src',
+					// module name
+					name: 'archetypo',
+					// output here
+					out: './built/archetypo.dev.js',
 					// config file
 					mainConfigFile: 'amdconfig.js',
 

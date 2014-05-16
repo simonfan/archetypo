@@ -140,7 +140,7 @@ define(function (require, exports, module) {
 			// [2] create a deferred object to
 			//     be resolved only when this archetypo is completely built.
 			var deferred = q.defer();
-			this.done = deferred.promise;
+			this.done    = deferred.promise.done;
 
 			// [3] read and evaluate the data using the scope methods
 			archEvaluate.call(this)
