@@ -11,17 +11,20 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var _              = require('lodash'),
-		$              = require('jquery'),
-		scope          = require('scope'),
-		q              = require('q');
+	var _     = require('lodash'),
+		$     = require('jquery'),
+		scope = require('scope'),
+		q     = require('q');
 
 
 		// reads and evaluates the data asynchronously
-	var archEvaluate   = require('./__archetypo/build/evaluate/index'),
+	var archEvaluate = require('./__archetypo/build/evaluate/index'),
 		// builds sub
-		archSub    = require('./__archetypo/build/sub/index');
+		archSub      = require('./__archetypo/build/sub/index');
 
+
+
+	var nonEnum = { enumerable: false };
 
 	var archetypo = module.exports = scope.extend({
 
@@ -36,10 +39,14 @@ define(function (require, exports, module) {
 			// of the first argument to the 'this' object.
 			scope.prototype.initialize.apply(this, arguments);
 
-			this.initializeArchetypo();
+			this.archInit();
 		},
 
-		initializeArchetypo: function initializeArchetypo() {
+		/**
+		 * @method archInit description]
+		 * @return {[type]} [description]
+		 */
+		archInit: function archInit() {
 
 			// replace the original archetypo value with
 			// the archetypo object.
@@ -52,7 +59,8 @@ define(function (require, exports, module) {
 			// [2] create a deferred object to
 			//     be resolved only when this archetypo is completely built.
 			var deferred = q.defer();
-			this.done    = deferred.promise.done;
+			this.promise = deferred.promise;
+			this.done    = _.bind(deferred.promise.done, deferred.promise);
 
 			// [3] read and evaluate the data using the scope methods
 			archEvaluate.call(this)
@@ -60,31 +68,26 @@ define(function (require, exports, module) {
 				.done(_.partial(deferred.resolve, this));
 		},
 
-		createSubArchetypo: function createSubArchetypo(data) {
-
-			var subArchetypo = this.create(data);
-
-			subArchetypo.initializeArchetypo();
-
-			return subArchetypo;
-		},
-
 		/**
-		 * Options for the jquery-meta-data reader.
+		 * The jquery-selector string that
+		 * selects elements that are within the archetypo scope chain.
 		 *
-		 * @property jqMetaDataOptions
-		 * @type Object
+		 * @property archSelector description]
+		 * @type {String}
 		 */
-		jqMetaDataOptions: {
-			prefix:  'arch',
-		//	parse:   parseArchValue,
-			replace: true,
-		},
+		archSelector: '[data-archetypo]'
 
-	}, { enumerable: false });
+	}, nonEnum);
+
+	// methods related to archetypo-creation
+	archetypo.assignProto(require('./__archetypo/methods/create'), nonEnum);
 
 	// methods related to require
-	archetypo.assignProto(require('./__archetypo/methods/require'));
+	archetypo.assignProto(require('./__archetypo/methods/require'), nonEnum);
 
+	// methods related to data reading
+	archetypo.assignProto(require('./__archetypo/methods/data'), nonEnum);
 
+	// methods related to data evaluation
+	archetypo.assignProto(require('./__archetypo/methods/eval'), nonEnum);
 });

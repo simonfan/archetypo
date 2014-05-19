@@ -8,7 +8,7 @@ define(function (require, exports, module) {
 		el: $('#app'),
 	});
 
-	arch.done.then(function (app) {
+	arch.done(function (app) {
 
 		console.log('this should be the last log, after everything is done!')
 	});

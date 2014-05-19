@@ -1,1 +1,0 @@
-define(["require","exports","module","lodash","jquery"],function(e,t,n){var r=e("lodash"),i=e("jquery");n.exports=function(){var t=this.app(),n=this.$el.find("[data-arch-view]");r.each(n,r.bind(function(n){var s=i(n),o=s.data(),u=t.constructor("view",o.archView),a=r.extend(o,{el:s,ancestorView:this});u(a)},this))}});

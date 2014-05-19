@@ -1,0 +1,20 @@
+methods:
+	☐	requireAndInvoke - tests
+	☐	evaluation methods:
+		☐	eval: must be careful for conflicts with 'scope.evaluate'
+		☐	invoke:
+		☐	json:
+
+documentation:
+	☐	provide list of 'natively available methods and properties'
+		☐	'scope' methods
+		☐	'subject' methods
+		☐	'archetypo' methods
+
+
+unit-tests:
+
+	scope:
+
+	invocation:
+

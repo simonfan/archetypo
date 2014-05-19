@@ -89,14 +89,12 @@
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var _              = require(&#x27;lodash&#x27;),
-		q              = require(&#x27;q&#x27;),
-		jqueryMetaData = require(&#x27;jquery-meta-data&#x27;);
+	var _ = require(&#x27;lodash&#x27;),
+		q = require(&#x27;q&#x27;);
 
-		// parse the value string into { evaluator: &#x27;evaluator&#x27;, value: &#x27;value&#x27;}
-	var parseArchValue = require(&#x27;../../parse/value&#x27;),
+
 		// invoke methods
-		archInvoke     = require(&#x27;./invoke&#x27;);
+	var archInvoke = require(&#x27;./invoke&#x27;);
 
 	/**
 	 *
@@ -111,11 +109,7 @@ define(function (require, exports, module) {
 		var deferred = q.defer();
 
 		// [1] get the arch-meta-data
-		var data = this.el.metaData({
-			prefix:  &#x27;arch&#x27;,
-			parse:   parseArchValue,
-	//		replace: true,
-		});
+		var data = this.archData();
 
 		// [2] set literal data properties
 		var literals = _.pick(data, function (d) {

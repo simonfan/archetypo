@@ -25,6 +25,34 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/__archetypo/methods/create.js": {
+            "name": "src/__archetypo/methods/create.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/methods/data.js": {
+            "name": "src/__archetypo/methods/data.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/methods/eval.js": {
+            "name": "src/__archetypo/methods/eval.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__archetypo/methods/require.js": {
+            "name": "src/__archetypo/methods/require.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "src/__archetypo/parse/value.js": {
             "name": "src/__archetypo/parse/value.js",
             "modules": {},
@@ -59,7 +87,7 @@
     "classitems": [
         {
             "file": "src/__archetypo/build/evaluate/index.js",
-            "line": 13,
+            "line": 11,
             "description": "Evaluates the data parsed from the el into modules.\n Returns a promise for all properties evaluated.",
             "itemtype": "method",
             "name": "archEvaluate",
@@ -124,6 +152,101 @@
             "description": "Checks whether there are sub archetypos to build.",
             "return": {
                 "description": "[description]",
+                "type": "Q promise"
+            },
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/methods/create.js",
+            "line": 6,
+            "description": "Override the original scope's create method.\nReplace it with an sub archetypo creating method.",
+            "itemtype": "method",
+            "name": "create",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/methods/data.js",
+            "line": 9,
+            "description": "Reads arch data from the element.\nUses jquery-meta-data plugin.",
+            "itemtype": "method",
+            "name": "archData",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/methods/data.js",
+            "line": 30,
+            "description": "The default options to be passed to jquery meta data.\nOverride this if you wish to modify the data reading/parsing.",
+            "itemtype": "property",
+            "name": "archDataOptions",
+            "type": "{Object}",
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/methods/eval.js",
+            "line": 9,
+            "description": "Alias for 'evaluate', the method available for scope evaluation.\nUsage:\ndata-arch-whatever=\"eval({ key1: $v1, k2: $v2 })\"",
+            "itemtype": "method",
+            "name": "eval",
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/methods/eval.js",
+            "line": 23,
+            "description": "Evaluates a JSON formatted string\nUsage:\ndata-arch-whatever=\"eval(json, { key1: v1, k2: v2 })\"",
+            "itemtype": "method",
+            "name": "eval",
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/methods/require.js",
+            "line": 16,
+            "description": "Requires the module and partializes\nthe function with arguments passed as the second invocation arg.\nUSAGE:\ndata-some-fn=\"require-and-partialize(module/path, [literal, $ev, { $ev }])\"\ndata-another-fn=\"require-and-partialize(module/path, {$arg})\"",
+            "itemtype": "method",
+            "name": "requireAndPartialize",
+            "params": [
+                {
+                    "name": "modname",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "args",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
                 "type": "[type]"
             },
             "class": ""
@@ -170,7 +293,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 28,
+            "line": 31,
             "itemtype": "method",
             "name": "initialize",
             "params": [
@@ -185,11 +308,23 @@
         },
         {
             "file": "src/index.js",
-            "line": 72,
-            "description": "Options for the jquery-meta-data reader.",
+            "line": 45,
+            "itemtype": "method",
+            "name": "archInit description]",
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 71,
+            "description": "The jquery-selector string that\nselects elements that are within the archetypo scope chain.",
             "itemtype": "property",
-            "name": "jqMetaDataOptions",
-            "type": "Object",
+            "name": "archSelector description]",
+            "type": "{String}",
             "class": "",
             "module": "archetypo"
         }

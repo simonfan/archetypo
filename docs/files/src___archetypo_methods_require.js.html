@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/index.js - archetypo</title>
+    <title>src/__archetypo/methods/require.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,102 +82,52 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/index.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/methods/require.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-//     archetypo
-//     (c) simonfan
-//     archetypo is licensed under the MIT terms.
-
-/**
- * AMD module.
- *
- * @module archetypo
- */
-
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var _     = require(&#x27;lodash&#x27;),
-		$     = require(&#x27;jquery&#x27;),
-		scope = require(&#x27;scope&#x27;),
-		q     = require(&#x27;q&#x27;);
+	var _ = require(&#x27;lodash&#x27;),
+		q = require(&#x27;q&#x27;);
 
+	exports.require = function archRequire(modname) {
 
-		// reads and evaluates the data asynchronously
-	var archEvaluate = require(&#x27;./__archetypo/build/evaluate/index&#x27;),
-		// builds sub
-		archSub      = require(&#x27;./__archetypo/build/sub/index&#x27;);
+		var deferred = q.defer();
 
+		require([modname], deferred.resolve);
 
+		return deferred.promise;
+	};
 
-	var nonEnum = { enumerable: false };
+	/**
+	 * Requires the module and partializes
+	 * the function with arguments passed as the second invocation arg.
+	 * USAGE:
+	 * data-some-fn=&quot;require-and-partialize(module/path, [literal, $ev, { $ev }])&quot;
+	 * data-another-fn=&quot;require-and-partialize(module/path, {$arg})&quot;
+	 *
+	 * @method requireAndPartialize
+	 * @param  {[type]} modname [description]
+	 * @param  {[type]} args    [description]
+	 * @return {[type]}         [description]
+	 */
+	exports.requireAndPartialize = function archRequireAndPartialize(modname, args) {
+		return this.require(modname).then(_.bind(function (fn) {
+			return this.partial(fn, args);
 
-	var archetypo = module.exports = scope.extend({
+		}, this));
 
-		/**
-		 *
-		 * @method initialize
-		 * @param properties {Object}
-		 *
-		 */
-		initialize: function initialize() {
-			// scope initialize will assign all properties
-			// of the first argument to the &#x27;this&#x27; object.
-			scope.prototype.initialize.apply(this, arguments);
+	};
 
-			this.archInit();
-		},
+	exports.requireAndInvoke = function archRequireAndInvoke(modname, args) {
+		return this.require(modname).then(_.bind(function (fn) {
+			return this.invoke(fn, args);
 
-		/**
-		 * @method archInit description]
-		 * @return {[type]} [description]
-		 */
-		archInit: function archInit() {
+		}, this));
 
-			// replace the original archetypo value with
-			// the archetypo object.
-			this.el.data(&#x27;archetypo&#x27;, this);
-
-			// [1] get reference to the el.
-			var el = this.el;
-			if (!el) { throw new Error(&#x27;No el on archetypo.&#x27;); }
-
-			// [2] create a deferred object to
-			//     be resolved only when this archetypo is completely built.
-			var deferred = q.defer();
-			this.promise = deferred.promise;
-			this.done    = _.bind(deferred.promise.done, deferred.promise);
-
-			// [3] read and evaluate the data using the scope methods
-			archEvaluate.call(this)
-				.then(_.bind(archSub, this))
-				.done(_.partial(deferred.resolve, this));
-		},
-
-		/**
-		 * The jquery-selector string that
-		 * selects elements that are within the archetypo scope chain.
-		 *
-		 * @property archSelector description]
-		 * @type {String}
-		 */
-		archSelector: &#x27;[data-archetypo]&#x27;
-
-	}, nonEnum);
-
-	// methods related to archetypo-creation
-	archetypo.assignProto(require(&#x27;./__archetypo/methods/create&#x27;), nonEnum);
-
-	// methods related to require
-	archetypo.assignProto(require(&#x27;./__archetypo/methods/require&#x27;), nonEnum);
-
-	// methods related to data reading
-	archetypo.assignProto(require(&#x27;./__archetypo/methods/data&#x27;), nonEnum);
-
-	// methods related to data evaluation
-	archetypo.assignProto(require(&#x27;./__archetypo/methods/eval&#x27;), nonEnum);
+	};
 });
 
     </pre>

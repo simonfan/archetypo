@@ -7,34 +7,34 @@ define(function (require, exports, module) {
 
 	/**
 	 * Checks whether there are sub archetypos to build.
-	 * @return {[type]} [description]
+	 * @return {q promise} [description]
 	 */
 	module.exports = function archSubs() {
 		var deferred = q.defer();
 
 		// [1]
 		// find all elements within this element
-		// that have an 'data-archetypo' attribute defined.
-		var subEls = this.el.find('[data-archetypo]');
+		// that are selected by the archSelector defined on the scope
+		var subEls = this.el.find(this.archSelector);
 
 		// [2]
 		// Instantiate the sub-views
-		_q.map(subEls, function (el) {
+		_q.map(subEls, function (subEl) {
 
-			el = $(el);
+			subEl = $(subEl);
 
-			var elArchetypo = el.data('archetypo');
+			var elArchetypo = subEl.data('archetypo');
 
 			// [0] check if the element already has an archetypo
 			//     and only build if it has NOT
 			if (!elArchetypo) {
 
-				var subArchetypo = this.createSubArchetypo({ el: el });
+				var subArchetypo = this.create({ el: subEl });
 
 				// return the promise
-				return subArchetypo.done;
+				return subArchetypo.promise;
 			} else {
-				return elArchetypo.done;
+				return elArchetypo.promise;
 			}
 
 		}, this)

@@ -1,1 +1,0 @@
-define(["require","exports","module","lodash"],function(e,t,n){function a(e){return e.replace(/(\(|\(.*:|:|\)|\*)/,"")}var r=e("lodash"),i=/\((.*?)\)/g,s=/(\(\?)?:\w+/g,o=/\*\w+/g,u=/[\-{}\[\]+?.,\\\^$|#\s]/g;n.exports=function(t,n){return t=t.replace(s,function(e){var t=a(e);return n[t]?n[t]:e}),t=t.replace(o,function(e){var t=a(e);return n[t]?n[t]:""}),t.replace(i,"")}});
