@@ -120,9 +120,9 @@ define(function (require, exports, module) {
 				var subArchetypo = this.create({ el: subEl });
 
 				// return the promise
-				return subArchetypo.done;
+				return subArchetypo.promise;
 			} else {
-				return elArchetypo.done;
+				return elArchetypo.promise;
 			}
 
 		}, this)

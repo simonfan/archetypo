@@ -117,7 +117,7 @@ define(function (require, exports, module) {
 		// [2.2] check evaluation returns
 		if (q.isPromise(res)) {
 			// [2.2.1] it is a promise, thus, ASYNCHRONOUS
-			res.then(deferred.resolve);
+			res.done(deferred.resolve);
 		} else {
 			// [2.2.2] it is not a prmoise, thus, SYNCHRONOUS
 			deferred.resolve(res);

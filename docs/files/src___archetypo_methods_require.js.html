@@ -123,7 +123,10 @@ define(function (require, exports, module) {
 
 	exports.requireAndInvoke = function archRequireAndInvoke(modname, args) {
 		return this.require(modname).then(_.bind(function (fn) {
-			return this.invoke(fn, args);
+
+			// invoke with null partialized arguments.
+
+			return this.invoke(fn, [], args);
 
 		}, this));
 

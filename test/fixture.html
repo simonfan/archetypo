@@ -1,1 +1,40 @@
-<div> Place whatever html you need here </div>
+<div
+	id="root"
+	data-archetypo
+
+	data-arch-view="summon(/test/scope/first.js)"
+>
+
+	<!-- branch for promise-chain tests -->
+	<div
+
+		id="p0"
+		data-archetypo
+
+		data-arch-remote-dep="!require(text!/test/data/first.json)"
+		data-arch-remote-builder="summon(/test/scope/first.js, { $remoteDep })"
+	>
+
+		<div id="p1"
+		></div>
+
+	</div>
+	<!-- branch for promise-chain tests -->
+
+
+
+	<!-- branch for scope tests -->
+	<div
+		id="branch-2"
+	>
+		<div
+			id="branch-2-1"
+		></div>
+	</div>
+	<!-- branch for scope tests -->
+
+
+	<div
+
+	></div>
+</div>

@@ -6,7 +6,7 @@
 		// browser
 		'archetypo',
 		// dependencies for the test
-		deps = [mod, 'should', 'jquery'];
+		deps = [mod, 'should'];
 
 	if (typeof define !== 'function') {
 		// node
@@ -16,22 +16,17 @@
 		define(deps, factory);
 	}
 
-})('test', function(archetypo, should, $) {
+})('test', function(Archetypo, should) {
 	'use strict';
 
-	describe('archetypo scope', function () {
+	describe('Archetypo promise-chain', function () {
+		beforeEach(function (done) {
+			done();
+		});
 
-		it('is fine (:', function (done) {
-
-			var app = archetypo({
-				el: $('#root')
-			});
-
-			app.done(function () {
-				console.log('app done');
-
-					done();
-			});
+		it('is fine (:', function () {
+			var fruit = { name: 'banana' }
+			fruit.should.have.property('name', 'banana');
 		});
 	});
 });
