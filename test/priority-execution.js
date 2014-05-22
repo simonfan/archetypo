@@ -19,17 +19,22 @@
 })('test', function(archetypo, should, $) {
 	'use strict';
 
-	describe('archetypo scope', function () {
+	describe('archetypo priority-execution', function () {
+		beforeEach(function (done) {
+			done();
+		});
 
-		it('is fine (:', function (done) {
+		it('runs methods prefixed with "!" before other methods.', function (done) {
 
-			var app = archetypo({
-				el: $('#scope')
+			var arch = archetypo({
+				el: $('#priority')
 			});
 
-			app.done(function () {
-				done();
+
+			arch.done(function () {
+				done()
 			});
+
 		});
 	});
 });

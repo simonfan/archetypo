@@ -5,9 +5,12 @@ define(function (require, exports, module) {
 	var whitespace = '\\s*',
 		priority   = '(?:(\\d*)!)?',
 		word       = '([\\w$\\-]*)',
-		argString  = '\\(' + whitespace + '(.*)' + whitespace + '\\)',
+		argString  = ':' + whitespace + '(.*)' + whitespace,
 		whatever   = '(.*)';
 
+
+
+	// sample invocation: "method: literalArg, $evaluatedArg, { $another, $evaluated }"
 
 	var invocationRegExpString = [
 			// any starting whitespaces

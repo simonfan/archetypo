@@ -230,9 +230,9 @@
         {
             "file": "src/__archetypo/methods/require.js",
             "line": 16,
-            "description": "Requires the module and partializes\nthe function with arguments passed as the second invocation arg.\nUSAGE:\ndata-some-fn=\"require-and-partialize(module/path, [literal, $ev, { $ev }])\"\ndata-another-fn=\"require-and-partialize(module/path, {$arg})\"",
+            "description": "Requires a module and invokes it.",
             "itemtype": "method",
-            "name": "requireAndPartialize",
+            "name": "summon",
             "params": [
                 {
                     "name": "modname",
@@ -253,7 +253,7 @@
         },
         {
             "file": "src/__archetypo/parse/value.js",
-            "line": 32,
+            "line": 35,
             "description": "Prepare the string to be evaluated by scope.evaluate(argString);\nFor now, basically add brackets.\nFuture modifications should be added here.",
             "itemtype": "method",
             "name": "buildArgsString",
@@ -274,7 +274,7 @@
         },
         {
             "file": "src/__archetypo/parse/value.js",
-            "line": 48,
+            "line": 51,
             "description": "Parses the match returned object (an array)\nand returns better structured data.",
             "itemtype": "method",
             "name": "parseArgsStringMatch",

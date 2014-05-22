@@ -5,36 +5,56 @@
 	data-arch-view="summon(/test/scope/first.js)"
 >
 
+
+
 	<!-- branch for promise-chain tests -->
 	<div
 
-		id="p0"
+		id="promise"
 		data-archetypo
-
-		data-arch-remote-dep="!require(text!/test/data/first.json)"
-		data-arch-remote-builder="summon(/test/scope/first.js, { $remoteDep })"
 	>
 
-		<div id="p1"
+		<div
+			id="promise-1"
+			data-archetypo
+			data-arch-view="summon(/test/)"
 		></div>
 
 	</div>
 	<!-- branch for promise-chain tests -->
 
-
-
-	<!-- branch for scope tests -->
+	<!-- branch for priority-execution tests -->
 	<div
-		id="branch-2"
+		id="priority"
+		data-archetypo
+		data-arch-parsed="summon(/test/priority-execution/parse-json.js, $remoteData)"
+		data-arch-remote-data="!require(text!/test/priority-execution/data.json)"
 	>
 		<div
-			id="branch-2-1"
+			id="priority-branch-1"
+			data-archetypo
+			data-arch-remote-data="!require(text!/test/priority-execution/data1.json)"
+			data-arch-parsed="summon(/test/priority-execution/parse-json1.js, $remoteData)"
 		></div>
 	</div>
-	<!-- branch for scope tests -->
+	<!-- branch for priority tests -->
 
 
 	<div
 
 	></div>
 </div>
+
+
+
+<!-- branch for data-parsing tests -->
+<div
+	id="data-parsing"
+	data-archetypo
+	data-arch-another-thing="!load: path/to/module, path.to.property"
+	data-arch-something="1!require: path/to/module.js"
+	data-arch-invocation="summon: path/to/summoned, $something, { $something, $anotherThing }"
+	data-arch-literal="    trimmed-and-continuous-literal-value  *this will be forgotten    "
+>
+</div>
+<!-- branch for data-parsing tests -->

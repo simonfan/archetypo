@@ -93,9 +93,12 @@ define(function (require, exports, module) {
 	var whitespace = &#x27;\\s*&#x27;,
 		priority   = &#x27;(?:(\\d*)!)?&#x27;,
 		word       = &#x27;([\\w$\\-]*)&#x27;,
-		argString  = &#x27;\\(&#x27; + whitespace + &#x27;(.*)&#x27; + whitespace + &#x27;\\)&#x27;,
+		argString  = &#x27;:&#x27; + whitespace + &#x27;(.*)&#x27; + whitespace,
 		whatever   = &#x27;(.*)&#x27;;
 
+
+
+	// sample invocation: &quot;method: literalArg, $evaluatedArg, { $another, $evaluated }&quot;
 
 	var invocationRegExpString = [
 			// any starting whitespaces
