@@ -101,8 +101,8 @@ define(function (require, exports, module) {
 	// sample invocation: &quot;method: literalArg, $evaluatedArg, { $another, $evaluated }&quot;
 
 	var invocationRegExpString = [
-			// any starting whitespaces
-			whitespace,
+			// any starting whitespaces (not captured)
+			&#x27;^&#x27;, whitespace,
 			// either
 			&#x27;(?:&#x27;,
 				// the optional priority tag
@@ -111,9 +111,11 @@ define(function (require, exports, module) {
 				word, whitespace,
 				argString,
 				&#x27;|&#x27;,
-				// some unparsed value
-				word,
-			&#x27;)&#x27; + whitespace
+				// anything but invocation
+				&#x27;(.*?)&#x27;,
+			&#x27;)&#x27;,
+			// any trailing whitespaces (not captured)
+			whitespace, &#x27;$&#x27;
 		].join(&#x27;&#x27;),
 		// /\s*(?:(?:(\d*)!)?\s*([\w$\-]*)\s*\(\s*(.*)\s*\)|([\w$\-]*))\s*/
 		invocationRegExp       = new RegExp(invocationRegExpString);
@@ -168,7 +170,7 @@ define(function (require, exports, module) {
 			} else if (match[4]) {
 
 				// it is a value that will be immediately available
-				res.type = &#x27;literal&#x27;;
+				res.type = &#x27;value&#x27;;
 				res.value = match[4];
 
 			}

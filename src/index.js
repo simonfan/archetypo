@@ -16,11 +16,8 @@ define(function (require, exports, module) {
 		scope = require('scope'),
 		q     = require('q');
 
-
-		// reads and evaluates the data asynchronously
-	var archEvaluate = require('./__archetypo/build/evaluate/index'),
 		// builds sub
-		archSub      = require('./__archetypo/build/sub/index');
+	var archSub      = require('./__archetypo/build/sub');
 
 
 
@@ -54,7 +51,7 @@ define(function (require, exports, module) {
 
 			// [1] get reference to the el.
 			var el = this.el;
-			if (!el) { throw new Error('No el on archetypo.'); }
+			if (!el || el.length === 0) { throw new Error('No el on for archetypo constructor.'); }
 
 			// [2] create a deferred object to
 			//     be resolved only when this archetypo is completely built.
@@ -63,7 +60,11 @@ define(function (require, exports, module) {
 			this.done    = _.bind(deferred.promise.done, deferred.promise);
 
 			// [3] read and evaluate the data using the scope methods
-			archEvaluate.call(this)
+			// [3.1] archData
+			var archData = this.archData();
+
+			// [3.2] archEvaluate
+			this.archEvaluate(archData)
 				.then(_.bind(archSub, this))
 				.done(_.partial(deferred.resolve, this));
 		},
@@ -79,15 +80,14 @@ define(function (require, exports, module) {
 
 	}, nonEnum);
 
-	// methods related to archetypo-creation
-	archetypo.assignProto(require('./__archetypo/methods/create'), nonEnum);
-
-	// methods related to require
-	archetypo.assignProto(require('./__archetypo/methods/require'), nonEnum);
-
 	// methods related to data reading
 	archetypo.assignProto(require('./__archetypo/methods/data'), nonEnum);
 
 	// methods related to data evaluation
-	archetypo.assignProto(require('./__archetypo/methods/eval'), nonEnum);
+	// this is a special evaluation, as it parses the data and runs defined invocations.
+	archetypo.assignProto(require('./__archetypo/methods/arch-evaluate/index'), nonEnum);
+
+	// methods related to archetypo-creation
+	archetypo.assignProto(require('./__archetypo/methods/index'), nonEnum);
+
 });

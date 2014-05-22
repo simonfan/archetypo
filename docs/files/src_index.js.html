@@ -104,11 +104,8 @@ define(function (require, exports, module) {
 		scope = require(&#x27;scope&#x27;),
 		q     = require(&#x27;q&#x27;);
 
-
-		// reads and evaluates the data asynchronously
-	var archEvaluate = require(&#x27;./__archetypo/build/evaluate/index&#x27;),
 		// builds sub
-		archSub      = require(&#x27;./__archetypo/build/sub/index&#x27;);
+	var archSub      = require(&#x27;./__archetypo/build/sub&#x27;);
 
 
 
@@ -142,7 +139,7 @@ define(function (require, exports, module) {
 
 			// [1] get reference to the el.
 			var el = this.el;
-			if (!el) { throw new Error(&#x27;No el on archetypo.&#x27;); }
+			if (!el || el.length === 0) { throw new Error(&#x27;No el on for archetypo constructor.&#x27;); }
 
 			// [2] create a deferred object to
 			//     be resolved only when this archetypo is completely built.
@@ -151,7 +148,11 @@ define(function (require, exports, module) {
 			this.done    = _.bind(deferred.promise.done, deferred.promise);
 
 			// [3] read and evaluate the data using the scope methods
-			archEvaluate.call(this)
+			// [3.1] archData
+			var archData = this.archData();
+
+			// [3.2] archEvaluate
+			this.archEvaluate(archData)
 				.then(_.bind(archSub, this))
 				.done(_.partial(deferred.resolve, this));
 		},
@@ -167,17 +168,16 @@ define(function (require, exports, module) {
 
 	}, nonEnum);
 
-	// methods related to archetypo-creation
-	archetypo.assignProto(require(&#x27;./__archetypo/methods/create&#x27;), nonEnum);
-
-	// methods related to require
-	archetypo.assignProto(require(&#x27;./__archetypo/methods/require&#x27;), nonEnum);
-
 	// methods related to data reading
 	archetypo.assignProto(require(&#x27;./__archetypo/methods/data&#x27;), nonEnum);
 
 	// methods related to data evaluation
-	archetypo.assignProto(require(&#x27;./__archetypo/methods/eval&#x27;), nonEnum);
+	// this is a special evaluation, as it parses the data and runs defined invocations.
+	archetypo.assignProto(require(&#x27;./__archetypo/methods/arch-evaluate/index&#x27;), nonEnum);
+
+	// methods related to archetypo-creation
+	archetypo.assignProto(require(&#x27;./__archetypo/methods/index&#x27;), nonEnum);
+
 });
 
     </pre>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/build/evaluate/invoke.js - archetypo</title>
+    <title>src/__archetypo/build/sub.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,7 +82,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/build/evaluate/invoke.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/build/sub.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -91,101 +91,48 @@ define(function (require, exports, module) {
 
 	var q  = require(&#x27;q&#x27;),
 		_q = require(&#x27;_q&#x27;),
-		_  = require(&#x27;lodash&#x27;);
-
-	var helpers = require(&#x27;../../helpers&#x27;);
+		$  = require(&#x27;jquery&#x27;);
 
 	/**
-	 *
-	 * Invokes a single method
-	 *
-	 * @method invokeSingle
-	 * @private
-	 * @param invocation {Object} { value: v, method: m }
-	 * @param prop {String}
+	 * Checks whether there are sub archetypos to build.
+	 * @return {q promise} [description]
 	 */
-	function invokeSingle(invocation, prop) {
-
-		// [1] create a deferred object to be returned.
+	module.exports = function archSubs() {
 		var deferred = q.defer();
 
-		// with evaluation
-		// [2.1] execute evaluation
-		var method = helpers.camelCase(invocation.method);
-		var res = this.invoke(method, invocation.value);
+		// [1]
+		// find all elements within this element
+		// that are selected by the archSelector defined on the scope
+		var subEls = this.el.find(this.archSelector);
 
-		// [2.2] check evaluation returns
-		if (q.isPromise(res)) {
-			// [2.2.1] it is a promise, thus, ASYNCHRONOUS
-			res.done(deferred.resolve);
-		} else {
-			// [2.2.2] it is not a prmoise, thus, SYNCHRONOUS
-			deferred.resolve(res);
-		}
+		// [2]
+		// Instantiate the sub-views
+		_q.map(subEls, function (subEl) {
 
-		// return promise no matter what
-		return deferred.promise;
-	}
+			subEl = $(subEl);
 
+			var elArchetypo = subEl.data(&#x27;archetypo&#x27;);
 
+			// [0] check if the element already has an archetypo
+			//     and only build if it has NOT
+			if (!elArchetypo) {
 
-	/**
-	 * Runs the invocations for a group of invocations.
-	 *
-	 * @method invokeGroup
-	 * @param  {[type]} invocations [description]
-	 * @return {[type]}             [description]
-	 */
-	function invokeGroup(invocations) {
+				var subArchetypo = this.create({ el: subEl });
 
-		var deferred = q.defer();
+				// return the promise
+				return subArchetypo.promise;
+			} else {
+				return elArchetypo.promise;
+			}
 
-		_q.mapValues(invocations, invokeSingle, this)
-			.done(_.bind(function (results) {
-
-				// assign results to the archetypo object
-				this.assign(results);
-
-				deferred.resolve();
-			}, this));
-
-		return deferred.promise;
-	}
-
-
-	/**
-	 *
-	 * Evaluates the invocations parsed from the el into modules.
-	 * Returns a promise for all properties evaluated.
-	 *
-	 * @method archInvoke
-	 * @private
-	 */
-	module.exports = function archInvoke(invocations) {
-
-		var deferred = q.defer();
-
-		// [1] get priority numbers and sort them
-		//     undefined priorities get sorted to the end of the array
-		//     as a default behaviour of Array.sort.
-		var priorities = _.unique(_.pluck(invocations, &#x27;priority&#x27;)).sort(function (a, b) {
-			return a - b;
-		});
-
-		// [2] group invocations into priority groups
-		var priorityGroups = _.map(priorities, function (priority) {
-
-			return _.pick(invocations, function (d, k) {
-				return d.priority === priority;
-			});
-		});
-
-		// [3] run invocations by group
-		_q.each(priorityGroups, invokeGroup, this)
+		}, this)
 			.done(function () {
+
+				// resolve with 0 arguments.
 				deferred.resolve();
 			});
 
+		// [4] return the promise
 		return deferred.promise;
 	};
 });

@@ -4,29 +4,22 @@
         "version": "0.0.0"
     },
     "files": {
-        "src/__archetypo/build/evaluate/index.js": {
-            "name": "src/__archetypo/build/evaluate/index.js",
+        "src/__archetypo/build/sub.js": {
+            "name": "src/__archetypo/build/sub.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "src/__archetypo/build/evaluate/invoke.js": {
-            "name": "src/__archetypo/build/evaluate/invoke.js",
+        "src/__archetypo/methods/arch-evaluate/index.js": {
+            "name": "src/__archetypo/methods/arch-evaluate/index.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "src/__archetypo/build/sub/index.js": {
-            "name": "src/__archetypo/build/sub/index.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/methods/create.js": {
-            "name": "src/__archetypo/methods/create.js",
+        "src/__archetypo/methods/arch-evaluate/invoke.js": {
+            "name": "src/__archetypo/methods/arch-evaluate/invoke.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -39,15 +32,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "src/__archetypo/methods/eval.js": {
-            "name": "src/__archetypo/methods/eval.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/methods/require.js": {
-            "name": "src/__archetypo/methods/require.js",
+        "src/__archetypo/methods/index.js": {
+            "name": "src/__archetypo/methods/index.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -86,8 +72,24 @@
     "classes": {},
     "classitems": [
         {
-            "file": "src/__archetypo/build/evaluate/index.js",
-            "line": 11,
+            "file": "src/__archetypo/build/sub.js",
+            "line": 8,
+            "description": "Checks whether there are sub archetypos to build.",
+            "return": {
+                "description": "[description]",
+                "type": "Q promise"
+            },
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/methods/arch-evaluate/index.js",
+            "line": 12,
+            "description": "EVALUATION ORDER\n[1] NON-EVALUATED VALUES\n    Values not prefixed by \"method:\" are first evaluated,\n    thus they cannot reference values on the same scope,\n    only those on parent scopes (inherited)\n\n[2] PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    prefixed by ! (or 0!, 1!, *!)\n\n[3] NON-PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    not prefixed by !",
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/methods/arch-evaluate/index.js",
+            "line": 28,
             "description": "Evaluates the data parsed from the el into modules.\n Returns a promise for all properties evaluated.",
             "itemtype": "method",
             "name": "archEvaluate",
@@ -96,7 +98,7 @@
             "class": ""
         },
         {
-            "file": "src/__archetypo/build/evaluate/invoke.js",
+            "file": "src/__archetypo/methods/arch-evaluate/invoke.js",
             "line": 10,
             "description": "Invokes a single method",
             "itemtype": "method",
@@ -118,7 +120,7 @@
             "class": ""
         },
         {
-            "file": "src/__archetypo/build/evaluate/invoke.js",
+            "file": "src/__archetypo/methods/arch-evaluate/invoke.js",
             "line": 44,
             "description": "Runs the invocations for a group of invocations.",
             "itemtype": "method",
@@ -137,42 +139,13 @@
             "class": ""
         },
         {
-            "file": "src/__archetypo/build/evaluate/invoke.js",
+            "file": "src/__archetypo/methods/arch-evaluate/invoke.js",
             "line": 68,
             "description": "Evaluates the invocations parsed from the el into modules.\n Returns a promise for all properties evaluated.",
             "itemtype": "method",
             "name": "archInvoke",
             "access": "private",
             "tagname": "",
-            "class": ""
-        },
-        {
-            "file": "src/__archetypo/build/sub/index.js",
-            "line": 8,
-            "description": "Checks whether there are sub archetypos to build.",
-            "return": {
-                "description": "[description]",
-                "type": "Q promise"
-            },
-            "class": ""
-        },
-        {
-            "file": "src/__archetypo/methods/create.js",
-            "line": 6,
-            "description": "Override the original scope's create method.\nReplace it with an sub archetypo creating method.",
-            "itemtype": "method",
-            "name": "create",
-            "params": [
-                {
-                    "name": "data",
-                    "description": "[description]",
-                    "type": "[type]"
-                }
-            ],
-            "return": {
-                "description": "[description]",
-                "type": "[type]"
-            },
             "class": ""
         },
         {
@@ -204,11 +177,21 @@
             "class": ""
         },
         {
-            "file": "src/__archetypo/methods/eval.js",
-            "line": 9,
-            "description": "Alias for 'evaluate', the method available for scope evaluation.\nUsage:\ndata-arch-whatever=\"eval({ key1: $v1, k2: $v2 })\"",
-            "itemtype": "method",
-            "name": "eval",
+            "file": "src/__archetypo/methods/index.js",
+            "line": 11,
+            "description": "A more intelligent 'require'.\nRequires the module and returns the property required.",
+            "params": [
+                {
+                    "name": "modname",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "property",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
             "return": {
                 "description": "[description]",
                 "type": "[type]"
@@ -216,21 +199,9 @@
             "class": ""
         },
         {
-            "file": "src/__archetypo/methods/eval.js",
-            "line": 23,
-            "description": "Evaluates a JSON formatted string\nUsage:\ndata-arch-whatever=\"eval(json, { key1: v1, k2: v2 })\"",
-            "itemtype": "method",
-            "name": "eval",
-            "return": {
-                "description": "[description]",
-                "type": "[type]"
-            },
-            "class": ""
-        },
-        {
-            "file": "src/__archetypo/methods/require.js",
-            "line": 16,
-            "description": "Requires a module and invokes it.",
+            "file": "src/__archetypo/methods/index.js",
+            "line": 39,
+            "description": "Tries to find the method on the scope.\nIf the method is available on the scope,\ninvokes the method using this scope.\n\nIf the method is not available,\ntry to load it remotely and invoke after\nthe module has been loaded.",
             "itemtype": "method",
             "name": "summon",
             "params": [
@@ -252,8 +223,27 @@
             "class": ""
         },
         {
+            "file": "src/__archetypo/methods/index.js",
+            "line": 80,
+            "description": "Override the original scope's create method.\nReplace it with an sub archetypo creating method.",
+            "itemtype": "method",
+            "name": "create",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": ""
+        },
+        {
             "file": "src/__archetypo/parse/value.js",
-            "line": 35,
+            "line": 37,
             "description": "Prepare the string to be evaluated by scope.evaluate(argString);\nFor now, basically add brackets.\nFuture modifications should be added here.",
             "itemtype": "method",
             "name": "buildArgsString",
@@ -274,7 +264,7 @@
         },
         {
             "file": "src/__archetypo/parse/value.js",
-            "line": 51,
+            "line": 53,
             "description": "Parses the match returned object (an array)\nand returns better structured data.",
             "itemtype": "method",
             "name": "parseArgsStringMatch",
@@ -293,7 +283,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 31,
+            "line": 28,
             "itemtype": "method",
             "name": "initialize",
             "params": [
@@ -308,7 +298,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 45,
+            "line": 42,
             "itemtype": "method",
             "name": "archInit description]",
             "return": {
@@ -320,7 +310,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 71,
+            "line": 72,
             "description": "The jquery-selector string that\nselects elements that are within the archetypo scope chain.",
             "itemtype": "property",
             "name": "archSelector description]",
@@ -332,7 +322,15 @@
     "warnings": [
         {
             "message": "Missing item type\nChecks whether there are sub archetypos to build.",
-            "line": " src/__archetypo/build/sub/index.js:8"
+            "line": " src/__archetypo/build/sub.js:8"
+        },
+        {
+            "message": "Missing item type\nEVALUATION ORDER\n[1] NON-EVALUATED VALUES\n    Values not prefixed by \"method:\" are first evaluated,\n    thus they cannot reference values on the same scope,\n    only those on parent scopes (inherited)\n\n[2] PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    prefixed by ! (or 0!, 1!, *!)\n\n[3] NON-PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    not prefixed by !",
+            "line": " src/__archetypo/methods/arch-evaluate/index.js:12"
+        },
+        {
+            "message": "Missing item type\nA more intelligent 'require'.\nRequires the module and returns the property required.",
+            "line": " src/__archetypo/methods/index.js:11"
         }
     ]
 }

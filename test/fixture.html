@@ -1,10 +1,35 @@
 <div
 	id="root"
 	data-archetypo
-
-	data-arch-view="summon(/test/scope/first.js)"
 >
 
+
+
+	<!-- branch for methods tests -->
+	<div
+		id="methods"
+		data-archetypo
+	>
+		<!-- Test for archetypo.load(modname [, property | deep.property ]) method -->
+		<div
+			id="methods-load"
+			data-archetypo
+			data-arch-load-test="load: /test/methods/load-test.js"
+
+			data-arch-load-property-test="load: /test/methods/load-test.js, property"
+
+			data-arch-load-deep-property-test="l: /test/methods/load-test.js, deep.property"
+		></div>
+
+		<!-- Test for archeypo.summon(path [, arg1, arg2, arg3, ...]) -->
+		<div
+			id="methods-summon"
+			data-archetypo
+			data-arch-summon-test-data="test-data"
+			data-arch-summon-test="summon: /test/methods/summon-test.js, $summonTestData, { data: $summonTestData }"
+		></div>
+	</div>
+	<!-- branch for methods tests -->
 
 
 	<!-- branch for promise-chain tests -->
@@ -28,12 +53,12 @@
 		id="priority"
 		data-archetypo
 		data-arch-parsed="summon(/test/priority-execution/parse-json.js, $remoteData)"
-		data-arch-remote-data="!require(text!/test/priority-execution/data.json)"
+		data-arch-remote-data="!load(text!/test/priority-execution/data.json)"
 	>
 		<div
 			id="priority-branch-1"
 			data-archetypo
-			data-arch-remote-data="!require(text!/test/priority-execution/data1.json)"
+			data-arch-remote-data="!load(text!/test/priority-execution/data1.json)"
 			data-arch-parsed="summon(/test/priority-execution/parse-json1.js, $remoteData)"
 		></div>
 	</div>
@@ -47,14 +72,14 @@
 
 
 
-<!-- branch for data-parsing tests -->
+<!-- branch for data-evaluation tests -->
 <div
-	id="data-parsing"
+	id="data-evaluation"
 	data-archetypo
-	data-arch-another-thing="!load: path/to/module, path.to.property"
-	data-arch-something="1!require: path/to/module.js"
-	data-arch-invocation="summon: path/to/summoned, $something, { $something, $anotherThing }"
-	data-arch-literal="    trimmed-and-continuous-literal-value  *this will be forgotten    "
+	data-arch-another-thing="!fake-method: path/to/module, path.to.property"
+	data-arch-something="1!load: path/to/module"
+	data-arch-value-literal="   no starting or trailing whitespaces    "
+	data-arch-value-evaluated="   { a: $scopeValue, b: bLiteralValue }"
 >
 </div>
-<!-- branch for data-parsing tests -->
+<!-- branch for data-evaluation tests -->
