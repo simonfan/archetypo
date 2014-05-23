@@ -19,7 +19,7 @@
 })('test', function(Archetypo, should) {
 	'use strict';
 
-	describe('Archetypo promise-chain', function () {
+	describe.skip('Archetypo promise-chain', function () {
 		beforeEach(function (done) {
 			done();
 		});

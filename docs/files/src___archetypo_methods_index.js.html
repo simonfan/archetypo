@@ -147,7 +147,7 @@ define(function (require, exports, module) {
 
 		// [1] check if the
 
-		return this.load(modname).then(_.bind(function (fn) {
+		return this.load(modname).done(_.bind(function (fn) {
 
 			fn.apply(this, args);
 

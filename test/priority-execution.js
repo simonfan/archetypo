@@ -19,7 +19,7 @@
 })('test', function(archetypo, should, $) {
 	'use strict';
 
-	describe('archetypo priority-execution', function () {
+	describe.skip('archetypo priority-execution', function () {
 		beforeEach(function (done) {
 			done();
 		});

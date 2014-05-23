@@ -220,5 +220,5 @@ module.exports = function (grunt) {
 	// mocha tests
 	grunt.registerTask('mocha', 'simplemocha');
 
-	grunt.registerTask('default', ['bower', 'yuidoc', 'jshint:gruntfile', 'jshint:src', 'requirejs', 'concurrent']);
+	grunt.registerTask('default', ['bower', 'yuidoc', 'jshint:gruntfile', 'jshint:src', 'requirejs:file', 'requirejs:dev', 'concurrent']);
 };

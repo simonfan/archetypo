@@ -6,7 +6,7 @@
 		// browser
 		'archetypo',
 		// dependencies for the test
-		deps = [mod, 'should', 'jquery', 'lodash'];
+		deps = [mod, 'should', 'jquery', 'lodash', 'q'];
 
 	if (typeof define !== 'function') {
 		// node
@@ -16,7 +16,7 @@
 		define(deps, factory);
 	}
 
-})('test', function(archetypo, should, $, _) {
+})('test', function(archetypo, should, $, _, q) {
 	'use strict';
 
 	describe('archetypo data-evaluation', function () {
@@ -69,6 +69,14 @@
 			// STUBS
 			this.fakeArchetypo.load = function (pathToModule) {
 				pathToModule.should.eql('path/to/module');
+
+
+				return q.delay({
+					prop: 'immediate-value',
+					deep: {
+						prop: 'deep-value'
+					}
+				}, 1000);
 			};
 
 			this.fakeArchetypo.fakeMethod = function (arg1, arg2) {
@@ -96,6 +104,9 @@
 					a: 'some scope value',
 					b: 'bLiteralValue',
 				});
+
+				scope.someProp.should.eql('immediate-value');
+				scope.someDeepProp.should.eql('deep-value');
 
 				done()
 			});
