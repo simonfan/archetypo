@@ -189,7 +189,7 @@
         },
         {
             "file": "src/__archetypo/methods/index.js",
-            "line": 39,
+            "line": 64,
             "description": "Tries to find the method on the scope.\nIf the method is available on the scope,\ninvokes the method using this scope.\n\nIf the method is not available,\ntry to load it remotely and invoke after\nthe module has been loaded.",
             "itemtype": "method",
             "name": "summon",
@@ -213,7 +213,7 @@
         },
         {
             "file": "src/__archetypo/methods/index.js",
-            "line": 80,
+            "line": 105,
             "description": "Override the original scope's create method.\nReplace it with an sub archetypo creating method.",
             "itemtype": "method",
             "name": "create",

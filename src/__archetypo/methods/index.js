@@ -21,15 +21,40 @@ define(function (require, exports, module) {
 
 		var deferred = q.defer();
 
-		if (!property) {
-			// simple require
-			require([modname], deferred.resolve);
-		} else {
-			// require property
-			require([modname], function (mod) {
-				// use deep getter.
-				// and solve using the response.
-				deferred.resolve(deep.get(mod, property));
+		if (_.isString(modname)) {
+			// single module
+
+
+			if (!property) {
+				// simple require
+				require([modname], deferred.resolve);
+			} else {
+				// require property
+				require([modname], function (mod) {
+					// use deep getter.
+					// and solve using the response.
+					deferred.resolve(deep.get(mod, property));
+				});
+			}
+
+		} else if (_.isArray(modname)) {
+			// multiple modules
+
+			require(modname, function () {
+
+				// the modules
+				var mods = _.toArray(arguments);
+
+				if (!property) {
+					// simply return array of modules.
+					deferred.resolve(mods);
+
+				} else {
+					// "deep-pluck" modules.
+					deferred.resolve(_.map(mods, function (mod) {
+						return deep.get(mod, property);
+					}));
+				}
 			});
 		}
 

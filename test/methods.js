@@ -29,6 +29,8 @@
 			// run tests after done
 			arch.done(function () {
 
+
+
 				// basic load, just the same as archetypo.require()
 				arch.loadTest.id.should.eql('load-test');
 				arch.loadTest.value.should.eql('load-test-value');
@@ -38,6 +40,16 @@
 
 				// retrieve a deep property
 				arch.loadDeepPropertyTest.should.eql('load-test-deep-property');
+
+
+				// multiple remote modules
+				arch.loadMultiModule.should.eql([
+					{ id: 'load-test-1' },
+					{ id: 'load-test-2' }
+				]);
+
+				// multiple remote modules pluck
+				arch.loadMultiModuleId.should.eql(['load-test-1', 'load-test-2']);
 
 				done();
 			});
