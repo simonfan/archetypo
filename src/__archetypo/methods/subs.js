@@ -25,6 +25,10 @@ define(function (require, exports, module) {
 				// the ancestor archetypo
 				ancestor  = $ancestor.data('archetypo');
 
+			if (!ancestor) {
+				throw new Error('No ancestor for sub-archetypo.');
+			}
+
 			// [1.2] create an archetypo object using
 			//       the ancestor's archetypo .create() method
 			//       and passing this 'el' as parameter.
@@ -55,8 +59,13 @@ define(function (require, exports, module) {
 		// to return the archetypo object on promise solution.
 		var arch = this;
 
-		return q.all(buildElsRes).then(function () {
+		var subsPromise = q.all(buildElsRes).then(function () {
 			return arch;
 		});
+
+		// [4] handle errors
+		subsPromise.fail(this.error);
+
+		return subsPromise;
 	};
 });

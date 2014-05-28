@@ -229,7 +229,7 @@
         },
         {
             "file": "src/__archetypo/methods/subs.js",
-            "line": 39,
+            "line": 43,
             "description": "Checks whether there are sub archetypos to build.",
             "return": {
                 "description": "[description]",
@@ -344,7 +344,7 @@
         },
         {
             "message": "Missing item type\nChecks whether there are sub archetypos to build.",
-            "line": " src/__archetypo/methods/subs.js:39"
+            "line": " src/__archetypo/methods/subs.js:43"
         },
         {
             "message": "Missing item type\nThe error handler to be called for any error that happens.\nduring archetypo building.",

@@ -113,6 +113,10 @@ define(function (require, exports, module) {
 				// the ancestor archetypo
 				ancestor  = $ancestor.data(&#x27;archetypo&#x27;);
 
+			if (!ancestor) {
+				throw new Error(&#x27;No ancestor for sub-archetypo.&#x27;);
+			}
+
 			// [1.2] create an archetypo object using
 			//       the ancestor&#x27;s archetypo .create() method
 			//       and passing this &#x27;el&#x27; as parameter.
@@ -143,9 +147,14 @@ define(function (require, exports, module) {
 		// to return the archetypo object on promise solution.
 		var arch = this;
 
-		return q.all(buildElsRes).then(function () {
+		var subsPromise = q.all(buildElsRes).then(function () {
 			return arch;
 		});
+
+		// [4] handle errors
+		subsPromise.fail(this.error);
+
+		return subsPromise;
 	};
 });
 
