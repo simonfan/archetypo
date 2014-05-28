@@ -16,9 +16,6 @@ define(function (require, exports, module) {
 		scope = require('scope'),
 		q     = require('q');
 
-		// builds sub
-	var archSub      = require('./__archetypo/build/sub');
-
 
 
 	var nonEnum = { enumerable: false };
@@ -45,28 +42,34 @@ define(function (require, exports, module) {
 		 */
 		archInit: function archInit() {
 
+			// [1] get reference to the el.
+			var el = this.el;
+			if (!el || el.length === 0 || !(el instanceof $)) {
+				throw new Error('No el on for archetypo constructor.');
+			}
+
+
 			// replace the original archetypo value with
 			// the archetypo object.
 			this.el.data('archetypo', this);
 
-			// [1] get reference to the el.
-			var el = this.el;
-			if (!el || el.length === 0) { throw new Error('No el on for archetypo constructor.'); }
-
-			// [2] create a deferred object to
-			//     be resolved only when this archetypo is completely built.
-			var deferred = q.defer();
-			this.promise = deferred.promise;
-			this.done    = _.bind(deferred.promise.done, deferred.promise);
-
-			// [3] read and evaluate the data using the scope methods
-			// [3.1] archData
+			// [2] read and evaluate the data using the scope methods
+			// [2.1] archData
 			var archData = this.archData();
 
-			// [3.2] archEvaluate
-			this.archEvaluate(archData)
-				.then(_.bind(archSub, this))
-				.done(_.partial(deferred.resolve, this));
+			// [2.2] initialize
+			var promise = this.archEvaluate(archData)
+							.then(_.bind(this.archSubs, this))
+
+							// handle failures
+							.fail(this.error);
+
+			// [3] method to set a callback for when the promise is done.
+			//     be resolved only when this archetypo is completely built.
+
+			//     use another name, for q not to get confused about the
+			//     archetypo object being a promise.
+			this.ready = _.bind(promise.done, promise);
 		},
 
 		/**
@@ -76,7 +79,21 @@ define(function (require, exports, module) {
 		 * @property archSelector description]
 		 * @type {String}
 		 */
-		archSelector: '[data-archetypo]'
+		archSelector: '[data-archetypo]',
+
+
+		/**
+		 * The error handler to be called for any error that happens.
+		 * during archetypo building.
+		 *
+		 * @param  {[type]} e [description]
+		 * @return {[type]}   [description]
+		 */
+		error: function error(e) {
+			console.log('archerrro')
+			console.log(e.message);
+			throw (e);
+		},
 
 	}, nonEnum);
 
@@ -90,4 +107,23 @@ define(function (require, exports, module) {
 	// methods related to archetypo-creation
 	archetypo.assignProto(require('./__archetypo/methods/index'), nonEnum);
 
+	// methods to build sub archetypos
+	archetypo.assignProto(require('./__archetypo/methods/subs'), nonEnum);
+
+	// create
+	archetypo.assignProto(require('./__archetypo/methods/create'), nonEnum);
+
+
+	// define a jquery plugin fn
+	$.prototype.archetypo = function jqArchetypo() {
+
+		// check if archetypo is defined on this element
+		var arch = this.data('archetypo');
+
+		if (arch) {
+			return arch;
+		} else {
+			return archetypo({ el: this });
+		}
+	};
 });

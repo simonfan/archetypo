@@ -14,8 +14,6 @@ define(function (require, exports, module) {
 	 */
 	function evaluateGroup(raw) {
 
-		var deferred = q.defer();
-
 		// [2] set value raw properties
 		var values = _.reduce(raw, function (res, d, key) {
 
@@ -35,16 +33,19 @@ define(function (require, exports, module) {
 			return d.type === 'invocation';
 		});
 
-		_q.mapValues(invocations, invoke, this)
-			.done(_.bind(function (results) {
+		return _q.mapValues(invocations, invoke, this)
+			// after invocations are done,
+			// assign their results to the scope.
+			.then(_.bind(function (results) {
 
 				// assign results to the archetypo object
 				this.assign(results);
 
-				deferred.resolve();
-			}, this));
-
-		return deferred.promise;
+				// return scope as response.
+				return this;
+			}, this))
+			// set failure handler
+			.fail(this.error);
 	}
 
 
@@ -75,8 +76,6 @@ define(function (require, exports, module) {
 	 */
 	exports.archEvaluate = function archEvaluate(raw) {
 
-		var deferred = q.defer();
-
 		// [1] get priority numbers and sort them
 		//     undefined priorities get sorted to the end of the array
 		//     as a default behaviour of Array.sort.
@@ -84,18 +83,32 @@ define(function (require, exports, module) {
 			return a - b;
 		});
 
-		// [2] group evaluations into priority groups
-		var priorityGroups = _.map(priorities, function (priority) {
+		// [2] create evaluation methods to be run according to priority
+		var evaluations = _.map(priorities, function (priority) {
 
-			return _.pick(raw, function (d, k) {
+			var group = _.pick(raw, function (d, k) {
 				return d.priority === priority;
 			});
-		});
 
-		// [3] run evaluations by group
-		_q.each(priorityGroups, evaluateGroup, this)
-			.done(_.partial(deferred.resolve, this));
+			// return a bound AND partialized function
+			return _.partial(_.bind(evaluateGroup, this), group);
+		}, this);
 
-		return deferred.promise;
+		// [3] run evaluations by group in sequence
+		var promise = _.reduce(evaluations, function (sofar, next, index) {
+			return sofar.then(next);
+		}, q());
+
+		// reference to scope
+		var scope = this;
+
+
+			// after the queue has completed..
+		promise
+			.then(function () { return scope; })
+			// handle failure
+			.fail(this.error);
+
+		return promise;
 	};
 });

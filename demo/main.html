@@ -30,14 +30,18 @@
 
 	<div
 		id="app"
-		data-archetypo
+		data-arch
 
 		data-arch-whatever="whatever-value"
-		data-arch-module-nav="!require-and-partialize(/demo/views/nav.js, [{ $el }])"
+		data-arch-module-nav="!load: /demo/views/nav.js, [{ $el }])"
 	>
 		<ul
 			id="main-nav"
-			data-archetypo
+
+			data-arch-invoke="/path/to/module.js"
+			data-bind="attributo-url"
+
+			data-arch
 			data-arch-whatever="whatever-main-nav-value"
 			data-arch-nav="module-nav()"
 		>
@@ -65,7 +69,7 @@
 		</div>
 
 		<div
-			data-archetypo
+			data-arch
 			data-arch-nav="module-nav()"
 		>
 

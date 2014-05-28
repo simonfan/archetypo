@@ -16,24 +16,18 @@ define(function (require, exports, module) {
 	 */
 	module.exports = function invoke(invocation, prop) {
 
-		// [1] create a deferred object to be returned.
-		var deferred = q.defer();
-
 		// with evaluation
 		// [2.1] execute evaluation
 		var method = helpers.camelCase(invocation.method);
 		var res = this.invoke(method, invocation.value);
 
-		// [2.2] check evaluation returns
-		if (q.isPromise(res)) {
-			// [2.2.1] it is a promise, thus, ASYNCHRONOUS
-			res.done(deferred.resolve);
-		} else {
-			// [2.2.2] it is not a prmoise, thus, SYNCHRONOUS
-			deferred.resolve(res);
-		}
 
-		// return promise no matter what
-		return deferred.promise;
+		// [2.2] make sure the response is ALWAYS A PROMISE
+		res = q.isPromise(res) ? res : q(res);
+
+		// [3] handle errors on the promise
+		res.fail(this.error);
+
+		return res;
 	}
 });

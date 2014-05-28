@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/methods/arch-evaluate/index.js - archetypo</title>
+    <title>src/__archetypo/methods/create.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,122 +82,31 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/methods/arch-evaluate/index.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/methods/create.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var _  = require(&#x27;lodash&#x27;),
-		q  = require(&#x27;q&#x27;),
-		_q = require(&#x27;_q&#x27;);
-
-	var invoke = require(&#x27;./invoke&#x27;);
-
-	/**
-	 * @method evaluateGroup
-	 * @param  {[type]} raw [description]
-	 * @return {[type]}             [description]
-	 */
-	function evaluateGroup(raw) {
-
-		// [2] set value raw properties
-		var values = _.reduce(raw, function (res, d, key) {
-
-			if (d.type === &#x27;value&#x27;) {
-				// if the type of the value is &#x27;value&#x27;,
-				// evaluate the value.
-				res[key] = this.evaluate(d.value);
-			}
-
-			return res;
-
-		}, {}, this);
-		this.assign(values);
-
-		// [3] invoke methods
-		var invocations = _.pick(raw, function (d) {
-			return d.type === &#x27;invocation&#x27;;
-		});
-
-		return _q.mapValues(invocations, invoke, this)
-			// after invocations are done,
-			// assign their results to the scope.
-			.then(_.bind(function (results) {
-
-				// assign results to the archetypo object
-				this.assign(results);
-
-				// return scope as response.
-				return this;
-			}, this))
-			// set failure handler
-			.fail(this.error);
-	}
-
+	////////////////////////
+	// archetypo creation //
+	////////////////////////
+	var scope = require(&#x27;scope&#x27;);
 
 	/**
-	 * EVALUATION ORDER
+	 * Override the original scope&#x27;s create method.
+	 * Replace it with an sub archetypo creating method.
 	 *
-	 * [1] PRIORITAIRE EVALUATED VALUES
-	 *     Values that are evaluated (prefixed by &quot;method:&quot;) and
-	 *     prefixed by ! (or 0!, 1!, *!)
-	 *
-	 * [2] NON-EVALUATED VALUES
-	 *     Values not prefixed by &quot;method:&quot; are first evaluated,
-	 *     thus they cannot reference values on the same scope,
-	 *     only those on parent scopes (inherited)
-	 *
-	 * [3] NON-PRIORITAIRE EVALUATED VALUES
-	 *     Values that are evaluated (prefixed by &quot;method:&quot;) and
-	 *     not prefixed by !
+	 * @method create
+	 * @param  {[type]} data [description]
+	 * @return {[type]}      [description]
 	 */
+	exports.create = function createSubArchetypo(data) {
 
-	/**
-	 *
-	 * Evaluates the data parsed from the el into modules.
-	 * Returns a promise for all properties evaluated.
-	 *
-	 * @method archEvaluate
-	 * @private
-	 */
-	exports.archEvaluate = function archEvaluate(raw) {
-
-		// [1] get priority numbers and sort them
-		//     undefined priorities get sorted to the end of the array
-		//     as a default behaviour of Array.sort.
-		var priorities = _.unique(_.pluck(raw, &#x27;priority&#x27;)).sort(function (a, b) {
-			return a - b;
-		});
-
-		// [2] create evaluation methods to be run according to priority
-		var evaluations = _.map(priorities, function (priority) {
-
-			var group = _.pick(raw, function (d, k) {
-				return d.priority === priority;
-			});
-
-			// return a bound AND partialized function
-			return _.partial(_.bind(evaluateGroup, this), group);
-		}, this);
-
-		// [3] run evaluations by group in sequence
-		var promise = _.reduce(evaluations, function (sofar, next, index) {
-			return sofar.then(next);
-		}, q());
-
-		// reference to scope
-		var scope = this;
-
-
-			// after the queue has completed..
-		promise
-			.then(function () { return scope; })
-			// handle failure
-			.fail(this.error);
-
-		return promise;
+		var arch = scope.prototype.create.call(this, data);
+		arch.archInit();
+		return arch;
 	};
 });
 

@@ -21,13 +21,13 @@
 
 	describe('archetypo methods', function () {
 
-		it('load', function (done) {
+		it('load', function (testdone) {
 			var arch = archetypo({
 				el: $('#methods-load')
 			});
 
 			// run tests after done
-			arch.done(function () {
+			arch.ready(function () {
 
 
 
@@ -51,7 +51,7 @@
 				// multiple remote modules pluck
 				arch.loadMultiModuleId.should.eql(['load-test-1', 'load-test-2']);
 
-				done();
+				testdone();
 			});
 		});
 

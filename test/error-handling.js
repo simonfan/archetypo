@@ -6,7 +6,7 @@
 		// browser
 		'archetypo',
 		// dependencies for the test
-		deps = [mod, 'should', 'jquery'];
+		deps = [mod, 'should'];
 
 	if (typeof define !== 'function') {
 		// node
@@ -16,25 +16,17 @@
 		define(deps, factory);
 	}
 
-})('test', function(archetypo, should, $) {
+})('test', function(Archetypo, should) {
 	'use strict';
 
-	describe.skip('archetypo priority-execution', function () {
+	describe('Archetypo error-handling', function () {
 		beforeEach(function (done) {
 			done();
 		});
 
-		it('runs methods prefixed with "!" before other methods.', function (done) {
-
-			var arch = archetypo({
-				el: $('#priority')
-			});
-
-
-			arch.ready(function () {
-				done()
-			});
-
+		it('is fine (:', function () {
+			var fruit = { name: 'banana' }
+			fruit.should.have.property('name', 'banana');
 		});
 	});
 });
