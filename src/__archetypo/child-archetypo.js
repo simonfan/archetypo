@@ -1,3 +1,13 @@
+/**
+ * Magic happens here.
+ *
+ * The scope chain is continued via the subArchetypo/create method.
+ * It lets scopes be inherited.
+ *
+ *
+ *
+ */
+
 define(function (require, exports, module) {
 	'use strict';
 
@@ -5,6 +15,12 @@ define(function (require, exports, module) {
 	// archetypo creation //
 	////////////////////////
 	var scope = require('scope');
+
+
+	/**
+	 * THESE TWO METHODS WILL BE BOUND TO THE
+	 * ARCHETYPO OBJECT ON INITIALIZATION.
+	 */
 
 	/**
 	 * Override the original scope's create method.
@@ -14,10 +30,15 @@ define(function (require, exports, module) {
 	 * @param  {[type]} data [description]
 	 * @return {[type]}      [description]
 	 */
-	exports.create = function createSubArchetypo(data) {
+	module.exports = function createChildArchetypo(data) {
 
-		var arch = scope.prototype.create.call(this, data);
+		console.log('createChildArchetypo');
+		console.log(this)
+		console.log('createChildArchetypo')
+
+		var arch = this.create(data);
 		arch.archInit();
+
 		return arch;
 	};
 });

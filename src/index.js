@@ -17,6 +17,10 @@ define(function (require, exports, module) {
 		q     = require('q');
 
 
+	// the subArchetypo build routine
+	var _buildSubs      = require('./__archetypo/build/subs'),
+		_childArchetypo = require('./__archetypo/child-archetypo');
+
 
 	var nonEnum = { enumerable: false };
 
@@ -33,14 +37,25 @@ define(function (require, exports, module) {
 			// of the first argument to the 'this' object.
 			scope.prototype.initialize.apply(this, arguments);
 
-			this.archInit();
+			this.archInit()
+				.then(_.bind(function () {
+
+					var promise = _buildSubs.call(this);
+
+					this.ready = _.bind(promise.done, promise);
+
+				}, this));
 		},
 
 		/**
 		 * @method archInit description]
 		 * @return {[type]} [description]
 		 */
-		archInit: function archInit() {
+		archInit: function archInit(noSubs) {
+
+			// childArchetypo is always bound to this
+			// archetypo object
+			this.childArchetypo = _.bind(_childArchetypo, this);
 
 			// [1] get reference to the el.
 			var el = this.el;
@@ -53,23 +68,35 @@ define(function (require, exports, module) {
 			// the archetypo object.
 			this.el.data('archetypo', this);
 
+			console.log('arch init');
+			console.log(this.el.data('archetypo'));
+
 			// [2] read and evaluate the data using the scope methods
 			// [2.1] archData
 			var archData = this.archData();
 
-			// [2.2] initialize
-			var promise = this.archEvaluate(archData)
-							.then(_.bind(this.archSubs, this))
+			// [2.2] evaluate
+			var promise = this.archEvaluate(archData);
 
-							// handle failures
-							.fail(this.error);
+			// [2.3] build subs unless defined not to do so.
+			if (!noSubs) {
+				promise = promise.then(_.bind(_buildSubs, this));
+			}
+
+			// handle failures
+			promise.fail(this.error);
+
+
 
 			// [3] method to set a callback for when the promise is done.
 			//     be resolved only when this archetypo is completely built.
 
 			//     use another name, for q not to get confused about the
 			//     archetypo object being a promise.
-			this.ready = _.bind(promise.done, promise);
+			this.promise = promise;
+			this.ready   = _.bind(promise.done, promise);
+
+			return promise;
 		},
 
 		/**
@@ -90,9 +117,9 @@ define(function (require, exports, module) {
 		 * @return {[type]}   [description]
 		 */
 		error: function error(e) {
-			console.log('archerrro')
+			console.log('Archetypo error handler. Override for better behaviour.')
 			console.log(e.message);
-			throw (e);
+			throw e;
 		},
 
 	}, nonEnum);
@@ -106,12 +133,6 @@ define(function (require, exports, module) {
 
 	// methods related to archetypo-creation
 	archetypo.assignProto(require('./__archetypo/methods/index'), nonEnum);
-
-	// methods to build sub archetypos
-	archetypo.assignProto(require('./__archetypo/methods/subs'), nonEnum);
-
-	// create
-	archetypo.assignProto(require('./__archetypo/methods/create'), nonEnum);
 
 
 	// define a jquery plugin fn
