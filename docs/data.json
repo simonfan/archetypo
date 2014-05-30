@@ -4,6 +4,13 @@
         "version": "0.0.0"
     },
     "files": {
+        "src/__archetypo/build/subs.js": {
+            "name": "src/__archetypo/build/subs.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "src/__archetypo/methods/arch-evaluate/index.js": {
             "name": "src/__archetypo/methods/arch-evaluate/index.js",
             "modules": {},
@@ -13,13 +20,6 @@
         },
         "src/__archetypo/methods/arch-evaluate/invoke.js": {
             "name": "src/__archetypo/methods/arch-evaluate/invoke.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__archetypo/methods/create.js": {
-            "name": "src/__archetypo/methods/create.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -39,15 +39,15 @@
             "fors": {},
             "namespaces": {}
         },
-        "src/__archetypo/methods/subs.js": {
-            "name": "src/__archetypo/methods/subs.js",
+        "src/__archetypo/parse/value.js": {
+            "name": "src/__archetypo/parse/value.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "src/__archetypo/parse/value.js": {
-            "name": "src/__archetypo/parse/value.js",
+        "src/__archetypo/child-archetypo.js": {
+            "name": "src/__archetypo/child-archetypo.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -78,6 +78,16 @@
     },
     "classes": {},
     "classitems": [
+        {
+            "file": "src/__archetypo/build/subs.js",
+            "line": 53,
+            "description": "Checks whether there are sub archetypos to build.",
+            "return": {
+                "description": "[description]",
+                "type": "Q promise"
+            },
+            "class": ""
+        },
         {
             "file": "src/__archetypo/methods/arch-evaluate/index.js",
             "line": 10,
@@ -132,25 +142,6 @@
                     "type": "String"
                 }
             ],
-            "class": ""
-        },
-        {
-            "file": "src/__archetypo/methods/create.js",
-            "line": 9,
-            "description": "Override the original scope's create method.\nReplace it with an sub archetypo creating method.",
-            "itemtype": "method",
-            "name": "create",
-            "params": [
-                {
-                    "name": "data",
-                    "description": "[description]",
-                    "type": "[type]"
-                }
-            ],
-            "return": {
-                "description": "[description]",
-                "type": "[type]"
-            },
             "class": ""
         },
         {
@@ -228,16 +219,6 @@
             "class": ""
         },
         {
-            "file": "src/__archetypo/methods/subs.js",
-            "line": 43,
-            "description": "Checks whether there are sub archetypos to build.",
-            "return": {
-                "description": "[description]",
-                "type": "Q promise"
-            },
-            "class": ""
-        },
-        {
             "file": "src/__archetypo/parse/value.js",
             "line": 37,
             "description": "Prepare the string to be evaluated by scope.evaluate(argString);\nFor now, basically add brackets.\nFuture modifications should be added here.",
@@ -278,8 +259,45 @@
             "class": ""
         },
         {
-            "file": "src/index.js",
+            "file": "src/__archetypo/child-archetypo.js",
+            "line": 1,
+            "description": "Magic happens here.\n\nThe scope chain is continued via the subArchetypo/create method.\nIt lets scopes be inherited.",
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/child-archetypo.js",
+            "line": 20,
+            "description": "THESE TWO METHODS WILL BE BOUND TO THE\nARCHETYPO OBJECT ON INITIALIZATION.",
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/child-archetypo.js",
             "line": 25,
+            "description": "Override the original scope's create method.\nReplace it with an sub archetypo creating method.",
+            "itemtype": "method",
+            "name": "create",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": ""
+        },
+        {
+            "file": "src/__archetypo/child-archetypo.js",
+            "line": 35,
+            "description": "console.log('createChildArchetypo');\nconsole.log(this)\nconsole.log('createChildArchetypo')",
+            "class": ""
+        },
+        {
+            "file": "src/index.js",
+            "line": 29,
             "itemtype": "method",
             "name": "initialize",
             "params": [
@@ -294,7 +312,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 39,
+            "line": 50,
             "itemtype": "method",
             "name": "archInit description]",
             "return": {
@@ -306,7 +324,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 75,
+            "line": 99,
             "description": "The jquery-selector string that\nselects elements that are within the archetypo scope chain.",
             "itemtype": "property",
             "name": "archSelector description]",
@@ -316,7 +334,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 85,
+            "line": 109,
             "description": "The error handler to be called for any error that happens.\nduring archetypo building.",
             "params": [
                 {
@@ -335,6 +353,10 @@
     ],
     "warnings": [
         {
+            "message": "Missing item type\nChecks whether there are sub archetypos to build.",
+            "line": " src/__archetypo/build/subs.js:53"
+        },
+        {
             "message": "Missing item type\nEVALUATION ORDER\n\n[1] PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    prefixed by ! (or 0!, 1!, *!)\n\n[2] NON-EVALUATED VALUES\n    Values not prefixed by \"method:\" are first evaluated,\n    thus they cannot reference values on the same scope,\n    only those on parent scopes (inherited)\n\n[3] NON-PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    not prefixed by !",
             "line": " src/__archetypo/methods/arch-evaluate/index.js:52"
         },
@@ -343,12 +365,20 @@
             "line": " src/__archetypo/methods/index.js:11"
         },
         {
-            "message": "Missing item type\nChecks whether there are sub archetypos to build.",
-            "line": " src/__archetypo/methods/subs.js:43"
+            "message": "Missing item type\nMagic happens here.\n\nThe scope chain is continued via the subArchetypo/create method.\nIt lets scopes be inherited.",
+            "line": " src/__archetypo/child-archetypo.js:1"
+        },
+        {
+            "message": "Missing item type\nTHESE TWO METHODS WILL BE BOUND TO THE\nARCHETYPO OBJECT ON INITIALIZATION.",
+            "line": " src/__archetypo/child-archetypo.js:20"
+        },
+        {
+            "message": "Missing item type\nconsole.log('createChildArchetypo');\nconsole.log(this)\nconsole.log('createChildArchetypo')",
+            "line": " src/__archetypo/child-archetypo.js:35"
         },
         {
             "message": "Missing item type\nThe error handler to be called for any error that happens.\nduring archetypo building.",
-            "line": " src/index.js:85"
+            "line": " src/index.js:109"
         }
     ]
 }

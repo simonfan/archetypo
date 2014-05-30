@@ -36,14 +36,14 @@ define(function (require, exports, module) {
 			//       and passing this 'el' as parameter.
 			arch = ancestorArch.childArchetypo({ el: $el });
 
-
+/*
 			console.log('--')
 			console.log($ancestor);
 			console.log($el);
 			console.log(ancestorArch)
 			console.log(arch);
-
 			console.log('---')
+*/
 		}
 
 		// always return promise
@@ -59,8 +59,6 @@ define(function (require, exports, module) {
 		// find all elements within this element
 		// that are selected by the archSelector defined on the scope
 		var subEls = this.el.find(this.archSelector);
-
-		console.log(subEls)
 
 		// [2]
 		// Instantiate the sub-views

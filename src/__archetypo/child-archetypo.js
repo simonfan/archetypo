@@ -32,10 +32,12 @@ define(function (require, exports, module) {
 	 */
 	module.exports = function createChildArchetypo(data) {
 
+/**
 		console.log('createChildArchetypo');
 		console.log(this)
 		console.log('createChildArchetypo')
 
+*/
 		var arch = this.create(data);
 		arch.archInit();
 

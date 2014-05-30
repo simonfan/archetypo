@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/methods/subs.js - archetypo</title>
+    <title>src/__archetypo/child-archetypo.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,79 +82,54 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/methods/subs.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/child-archetypo.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
+/**
+ * Magic happens here.
+ *
+ * The scope chain is continued via the subArchetypo/create method.
+ * It lets scopes be inherited.
+ *
+ *
+ *
+ */
+
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var q  = require(&#x27;q&#x27;),
-		_q = require(&#x27;_q&#x27;),
-		$  = require(&#x27;jquery&#x27;);
+	////////////////////////
+	// archetypo creation //
+	////////////////////////
+	var scope = require(&#x27;scope&#x27;);
 
-
-	function buildSubEl(el) {
-
-		var $el = $(el);
-
-		// [0] check if the element already has an archetypo
-		//     and only build if it has NOT
-		var arch = $el.data(&#x27;archetypo&#x27;);
-
-
-		if (!arch) {
-
-			// [1] if NO archetypo is found,
-			// create a new archetypo
-
-			// [1.1] find the closest ancestor that has an archetypo object
-			var $ancestor = $el.parent().closest(this.archSelector),
-				// the ancestor archetypo
-				ancestor  = $ancestor.data(&#x27;archetypo&#x27;);
-
-			if (!ancestor) {
-				throw new Error(&#x27;No ancestor for sub-archetypo.&#x27;);
-			}
-
-			// [1.2] create an archetypo object using
-			//       the ancestor&#x27;s archetypo .create() method
-			//       and passing this &#x27;el&#x27; as parameter.
-			arch = ancestor.create({ el: $el });
-		}
-
-
-		// always return promise
-		return arch.promise;
-	}
 
 	/**
-	 * Checks whether there are sub archetypos to build.
-	 * @return {q promise} [description]
+	 * THESE TWO METHODS WILL BE BOUND TO THE
+	 * ARCHETYPO OBJECT ON INITIALIZATION.
 	 */
-	exports.archSubs = function archSubs() {
-		// [1]
-		// find all elements within this element
-		// that are selected by the archSelector defined on the scope
-		var $subEls = this.el.find(this.archSelector);
 
-		// [2]
-		// Instantiate the sub-views
-		var buildElsRes = _.map($subEls, buildSubEl, this);
+	/**
+	 * Override the original scope&#x27;s create method.
+	 * Replace it with an sub archetypo creating method.
+	 *
+	 * @method create
+	 * @param  {[type]} data [description]
+	 * @return {[type]}      [description]
+	 */
+	module.exports = function createChildArchetypo(data) {
 
-		// [3]
-		// Reference to arch object,
-		// to return the archetypo object on promise solution.
-		var arch = this;
+/**
+		console.log(&#x27;createChildArchetypo&#x27;);
+		console.log(this)
+		console.log(&#x27;createChildArchetypo&#x27;)
 
-		var subsPromise = q.all(buildElsRes).then(function () {
-			return arch;
-		});
+*/
+		var arch = this.create(data);
+		arch.archInit();
 
-		// [4] handle errors
-		subsPromise.fail(this.error);
-
-		return subsPromise;
+		return arch;
 	};
 });
 

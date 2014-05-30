@@ -68,9 +68,6 @@ define(function (require, exports, module) {
 			// the archetypo object.
 			this.el.data('archetypo', this);
 
-			console.log('arch init');
-			console.log(this.el.data('archetypo'));
-
 			// [2] read and evaluate the data using the scope methods
 			// [2.1] archData
 			var archData = this.archData();
@@ -117,7 +114,7 @@ define(function (require, exports, module) {
 		 * @return {[type]}   [description]
 		 */
 		error: function error(e) {
-			console.log('Archetypo error handler. Override for better behaviour.')
+			console.log('Archetypo error handler. Override for better error handling.')
 			console.log(e.message);
 			throw e;
 		},
