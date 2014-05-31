@@ -48,8 +48,6 @@ define(function (require, exports, module) {
 		return '[' + str + ']';
 	}
 
-
-
 	/**
 	 * Parses the match returned object (an array)
 	 * and returns better structured data.
@@ -97,10 +95,23 @@ define(function (require, exports, module) {
 
 
 	// sample value string: "[$priorityNo!] method(literal, $evaluated, {$arg3, key: $arg4})"
-	module.exports = function parseArchValue(str) {
+	module.exports = function parseArchValue(archValue) {
 
-		var invocationMatch = str.match(invocationRegExp);
+		if (_.isString(archValue)) {
+			// parse it.
+			var invocationMatch = archValue.match(invocationRegExp);
 
-		return parseArgsStringMatch(invocationMatch);
+			return parseArgsStringMatch(invocationMatch);
+		} else {
+
+
+			console.log(archValue)
+
+			// literal (probably boolean)
+			return {
+				type : 'value',
+				value: archValue,
+			};
+		}
 	};
 });

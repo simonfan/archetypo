@@ -1,4 +1,85 @@
 <div
+	id="app"
+	data-archetypo
+
+	data-arch-opt1="app-v1"
+	data-arch-opt2="app-v2"
+	data-arch-opt3="app-v3"
+
+
+	data-arch-assert="load: assert/index"
+
+	data-arch-router="load: data/router"
+>
+	<div
+		id="nav"
+
+		data-archetypo
+		data-arch-opt2         ="nav-v2"
+		data-arch-remote-options="!load: config/nav"
+		data-arch-view          =" summon: views/nav"
+	>
+	</div>
+
+
+	<div
+		id="contents"
+		data-archetypo
+		data-arch-opt3="contents-v3"
+		data-arch-view ="summon: views/contents, $el, { option: $opt3 }"
+	>
+		<!-- block that id not a archetypo scope -->
+		<div
+			id="block-1"
+		>
+			<div
+				id="item-display"
+				data-archetypo
+				data-arch-model="!load: data/item"
+				data-arch-view =" summon: views/item/full"
+			></div>
+
+			<div
+				id="list-display"
+				data-archetypo
+
+				data-arch-item-view    ="0!l: views/collection/item"
+				data-arch-item-template="0!l: text!templates/item.html"
+				data-arch-collection   ="0!l: data/items"
+				data-arch-view         ="1!s: views/collection/index"
+
+				data-arch-opt1        ="list-display-1"
+
+				data-arch-test         ="{ opt1: list-display-1, opt2: app-v2, opt3: contents-v3 }"
+
+				data-arch-test1 = "assert.eql: value, value"
+			></div>
+		</div>
+
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
 	id="root"
 	data-archetypo
 >
@@ -83,6 +164,7 @@
 	data-arch-something       ="1!load: path/to/module"
 	data-arch-some-prop       ="$something.prop"
 	data-arch-some-deep-prop  ="$something.deep.prop"
+	data-arch-boolean-option  ="true"
 	data-arch-value-literal   ="   no starting or trailing whitespaces    "
 	data-arch-value-evaluated ="   { a: $scopeValue, b: bLiteralValue }"
 >
@@ -131,3 +213,22 @@
 	></div>
 </div>
 <!-- branch for scope tests -->
+
+
+<!-- error -->
+<div id="error">
+	<div id="not-found"
+
+		data-archetypo
+		data-arch-does-not-exist="load: /path/to/non/existent-module"
+	></div>
+
+	<div id="summoning-error"
+		data-archetypo
+		data-arch-summon-error="summon: /test/error-handling/error.js"
+	></div>
+
+</div>
+
+
+

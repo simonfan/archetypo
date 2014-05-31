@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__archetypo/parse/value.js - archetypo</title>
+    <title>src/__archetypo/build/data.js - archetypo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,126 +82,48 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__archetypo/parse/value.js</h1>
+                        <h1 class="file-heading">File: src/__archetypo/build/data.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	// sample value string: &quot;1! method(literal/path/to/somewhere, $argumentToBeScopeEvaluated)&quot;
-	var whitespace = &#x27;\\s*&#x27;,
-		priority   = &#x27;(?:(\\d*)!)?&#x27;,
-		word       = &#x27;([\\w$\\-]*)&#x27;,
-		argString  = &#x27;:&#x27; + whitespace + &#x27;(.*)&#x27; + whitespace,
-		whatever   = &#x27;(.*)&#x27;;
+	var _          = require(&#x27;lodash&#x27;),
+		jqMetaData = require(&#x27;jquery-meta-data&#x27;);
 
-
-
-	// sample invocation: &quot;method: literalArg, $evaluatedArg, { $another, $evaluated }&quot;
-
-	var invocationRegExpString = [
-			// any starting whitespaces (not captured)
-			&#x27;^&#x27;, whitespace,
-			// either
-			&#x27;(?:&#x27;,
-				// the optional priority tag
-				priority, whitespace,
-				// method(argString)
-				word, whitespace,
-				argString,
-				&#x27;|&#x27;,
-				// anything but invocation
-				&#x27;(.*?)&#x27;,
-			&#x27;)&#x27;,
-			// any trailing whitespaces (not captured)
-			whitespace, &#x27;$&#x27;
-		].join(&#x27;&#x27;),
-		// /\s*(?:(?:(\d*)!)?\s*([\w$\-]*)\s*\(\s*(.*)\s*\)|([\w$\-]*))\s*/
-		invocationRegExp       = new RegExp(invocationRegExpString);
+	var parseArchValue = require(&#x27;../parse/value&#x27;);
 
 
 
 	/**
-	 * Prepare the string to be evaluated by scope.evaluate(argString);
-	 * For now, basically add brackets.
-	 * Future modifications should be added here.
+	 * The default options to be passed to jquery meta data.
+	 * Override this if you wish to modify the data reading/parsing.
 	 *
-	 * @method  buildArgsString
-	 * @private
-	 * @param  {String} str [description]
-	 * @return {String}     [description]
+	 * @property archDataOptions
+	 * @type {Object}
 	 */
-	function buildArgsString(str) {
-		return &#x27;[&#x27; + str + &#x27;]&#x27;;
-	}
-
-	/**
-	 * Parses the match returned object (an array)
-	 * and returns better structured data.
-	 *
-	 * @method  parseArgsStringMatch
-	 * @param  {[type]} match [description]
-	 * @return {[type]}       [description]
-	 */
-	function parseArgsStringMatch(match) {
-		// the response object
-		var res = {};
-
-		if (match) {
-		// [0] = full matched string
-		// [1] = PRIORITY TAG
-		// [2] = METHOD NAME
-		// [3] = ARGUMENTS STRING
-		// [4] = LITERAL VALUE
-
-
-			if (match[2]) {
-
-				// it is a value that must be invocation
-				// before assignment
-				res.type = &#x27;invocation&#x27;;
-				res.priority = (match[1] === &#x27;&#x27;) ? &#x27;0&#x27; : match[1];
-				res.method = match[2];
-				res.value  = buildArgsString(match[3]);
-
-			} else if (match[4]) {
-
-				// it is a value that will be immediately available
-				res.type = &#x27;value&#x27;;
-				res.value = match[4];
-
-			}
-
-		} else {
-			// empty value
-			res.type = &#x27;empty&#x27;;
-		}
-
-		return res;
-	}
-
-
-	// sample value string: &quot;[$priorityNo!] method(literal, $evaluated, {$arg3, key: $arg4})&quot;
-	module.exports = function parseArchValue(archValue) {
-
-		if (_.isString(archValue)) {
-			// parse it.
-			var invocationMatch = archValue.match(invocationRegExp);
-
-			return parseArgsStringMatch(invocationMatch);
-		} else {
-
-
-			console.log(archValue)
-
-			// literal (probably boolean)
-			return {
-				type : &#x27;value&#x27;,
-				value: archValue,
-			};
-		}
+	var archDataOptions = {
+		prefix : &#x27;arch&#x27;,
+		parse  : parseArchValue,
+		replace: false,
 	};
+
+	/**
+	 * Reads arch data from the element.
+	 * Uses jquery-meta-data plugin.
+	 *
+	 * @method archData
+	 * @param  {[type]} options [description]
+	 * @return {[type]}         [description]
+	 */
+	module.exports = function archData($el, options) {
+		_.defaults(options, archDataOptions);
+
+		// read meta data.
+		return $el.metaData(options);
+	};
+
 });
 
     </pre>

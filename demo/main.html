@@ -30,53 +30,22 @@
 
 	<div
 		id="app"
-		data-arch
+		data-archetypo
 
-		data-arch-whatever="whatever-value"
-		data-arch-module-nav="!load: /demo/views/nav.js, [{ $el }])"
+		data-arch-boolean-option="true"
+		data-arch-string-option="some option value"
+		data-arch-remote-dependency="!load: /demo/modules/data.js"
+		data-arch-view="summon: /demo/views/app.js"
 	>
-		<ul
-			id="main-nav"
-
-			data-arch-invoke="/path/to/module.js"
-			data-bind="attributo-url"
-
-			data-arch
-			data-arch-whatever="whatever-main-nav-value"
-			data-arch-nav="module-nav()"
-		>
-			<li data-to="/home">Home</li>
-			<li >
-				Topics
-				<ul>
-					<li
-
-						data-arch-test-lemon-color="green"
-						data-to="/topic-1"
-					>
-						Topic 1
-					</li>
-				</ul>
-			</li>
-			<li data-to="/something">Something</li>
-		</ul>
 
 		<div
-			data-arch-fn="/demo/views/todo/full.js"
-			data-arch-template="require:text!/demo/templates/todo/full.html"
-		>
-			<div>Item display</div>
-		</div>
+			id="block-1"
+			data-archetypo
 
-		<div
-			data-arch
-			data-arch-nav="module-nav()"
-		>
+			data-arch-boolean-option="false"
 
-			<div data-to="/home">Click to home</div>
-			List display
-		</div>
-
+			data-arch-view="summon: /demo/logger.js"
+		></div>
 
 	</div>
 

@@ -31,12 +31,14 @@ require.config({
 		'model-dock': '../bower_components/model-dock/built/model-dock',
 		'archetypo-router': '../bower_components/archetypo-router/built/archetypo-router',
 		_q: '../bower_components/_q/built/_q',
-		parseArchData: '__archetypo/data/parse',
-		processArchData: '__archetypo/data/process/index',
-		property: '__archetypo/data/process/property',
 		'jquery-meta-data': '../bower_components/jquery-meta-data/built/jquery-meta-data',
 		'jquery-scope': '../bower_components/jquery-scope/built/jquery-scope',
-		scope: '../bower_components/scope/built/scope'
+		scope: '../bower_components/scope/built/scope',
+		views: '../test/views',
+		data: '../test/data',
+		templates: '../test/templates',
+		config: '../test/config',
+		assert: '../test/assert'
 	},
 	shim: {
 		backbone: {

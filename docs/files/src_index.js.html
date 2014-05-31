@@ -86,152 +86,94 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-//     archetypo
-//     (c) simonfan
-//     archetypo is licensed under the MIT terms.
-
-/**
- * AMD module.
- *
- * @module archetypo
- */
-
 define(function (require, exports, module) {
-	&#x27;use strict&#x27;;
 
-	var _     = require(&#x27;lodash&#x27;),
-		$     = require(&#x27;jquery&#x27;),
-		scope = require(&#x27;scope&#x27;),
-		q     = require(&#x27;q&#x27;);
+	var $ = require(&#x27;jquery&#x27;),
+		_ = require(&#x27;lodash&#x27;),
+		q = require(&#x27;q&#x27;);
 
-
-	// the subArchetypo build routine
-	var _buildSubs      = require(&#x27;./__archetypo/build/subs&#x27;),
-		_childArchetypo = require(&#x27;./__archetypo/child-archetypo&#x27;);
+	var buildArchData       = require(&#x27;./__archetypo/build/data&#x27;),
+		buildArchEvaluation = require(&#x27;./__archetypo/build/evaluation/index&#x27;),
+		buildArchScope      = require(&#x27;./__archetypo/build/scope&#x27;);
 
 
-	var nonEnum = { enumerable: false };
+	function buildSubArchetypos(el, options) {
+		var $subEls = $(el).find(options.selector);
 
-	var archetypo = module.exports = scope.extend({
+		var promises = _.map($subEls, function (subEl) {
+			return archetypo($(subEl), options);
+		});
 
-		/**
-		 *
-		 * @method initialize
-		 * @param properties {Object}
-		 *
-		 */
-		initialize: function initialize() {
-			// scope initialize will assign all properties
-			// of the first argument to the &#x27;this&#x27; object.
-			scope.prototype.initialize.apply(this, arguments);
+		// returns a promise for whe nall
+		// sub archetypos are done
+		return q.all(promises);
+	}
 
-			this.archInit()
-				.then(_.bind(function () {
-
-					var promise = _buildSubs.call(this);
-
-					this.ready = _.bind(promise.done, promise);
-
-				}, this));
-		},
-
-		/**
-		 * @method archInit description]
-		 * @return {[type]} [description]
-		 */
-		archInit: function archInit(noSubs) {
-
-			// childArchetypo is always bound to this
-			// archetypo object
-			this.childArchetypo = _.bind(_childArchetypo, this);
-
-			// [1] get reference to the el.
-			var el = this.el;
-			if (!el || el.length === 0 || !(el instanceof $)) {
-				throw new Error(&#x27;No el on for archetypo constructor.&#x27;);
-			}
-
-
-			// replace the original archetypo value with
-			// the archetypo object.
-			this.el.data(&#x27;archetypo&#x27;, this);
-
-			// [2] read and evaluate the data using the scope methods
-			// [2.1] archData
-			var archData = this.archData();
-
-			// [2.2] evaluate
-			var promise = this.archEvaluate(archData);
-
-			// [2.3] build subs unless defined not to do so.
-			if (!noSubs) {
-				promise = promise.then(_.bind(_buildSubs, this));
-			}
-
-			// handle failures
-			promise.fail(this.error);
-
-
-
-			// [3] method to set a callback for when the promise is done.
-			//     be resolved only when this archetypo is completely built.
-
-			//     use another name, for q not to get confused about the
-			//     archetypo object being a promise.
-			this.promise = promise;
-			this.ready   = _.bind(promise.done, promise);
-
-			return promise;
-		},
-
-		/**
-		 * The jquery-selector string that
-		 * selects elements that are within the archetypo scope chain.
-		 *
-		 * @property archSelector description]
-		 * @type {String}
-		 */
-		archSelector: &#x27;[data-archetypo]&#x27;,
-
-
-		/**
-		 * The error handler to be called for any error that happens.
-		 * during archetypo building.
-		 *
-		 * @param  {[type]} e [description]
-		 * @return {[type]}   [description]
-		 */
-		error: function error(e) {
-			console.log(&#x27;Archetypo error handler. Override for better error handling.&#x27;)
-			console.log(e.message);
-			throw e;
-		},
-
-	}, nonEnum);
-
-	// methods related to data reading
-	archetypo.assignProto(require(&#x27;./__archetypo/methods/data&#x27;), nonEnum);
-
-	// methods related to data evaluation
-	// this is a special evaluation, as it parses the data and runs defined invocations.
-	archetypo.assignProto(require(&#x27;./__archetypo/methods/arch-evaluate/index&#x27;), nonEnum);
-
-	// methods related to archetypo-creation
-	archetypo.assignProto(require(&#x27;./__archetypo/methods/index&#x27;), nonEnum);
-
-
-	// define a jquery plugin fn
-	$.prototype.archetypo = function jqArchetypo() {
-
-		// check if archetypo is defined on this element
-		var arch = this.data(&#x27;archetypo&#x27;);
-
-		if (arch) {
-			return arch;
-		} else {
-			return archetypo({ el: this });
-		}
+	/**
+	 * Default options for archetypo invocation.
+	 * @type {Object}
+	 */
+	var archetypoDefaults = {
+		selector : &#x27;[data-archetypo]&#x27;,
+		rootScope: {}
 	};
+
+	/**
+	 * [exports description]
+	 * @param  {[type]} $el     [description]
+	 * @param  {[type]} options [description]
+	 * @return {[type]}         [description]
+	 */
+	function archetypo($el, options) {
+
+		var archPromise = $el.data(&#x27;archetypo-promise&#x27;);
+
+		if (!archPromise) {
+			// if no evaluation promise was set,
+			// create archetypo .
+
+			// default options
+			options = options || {};
+			_.defaults(options, archetypoDefaults);
+
+			// read arch data available on this element.
+			// and start build promise chain
+			var archPromise = q(buildArchData($el, options))
+				.then(function (archData) {
+					// build the scope
+					var scope = buildArchScope($el, options);
+
+					// set arch scope to the jquery:data:archetypo
+					$el.data(&#x27;archetypo&#x27;, scope);
+
+					// evaluate
+					return buildArchEvaluation(scope, archData, options);
+				})
+				.then(function (evaluatedArchData) {
+
+					// set evaluated data to the scope
+					$el.data(&#x27;archetypo&#x27;).assign(evaluatedArchData);
+
+				})
+				.then(function (archScope) {
+					// build sub archetypos
+					return buildSubArchetypos($el, options);
+				})
+				.then(function () {
+					// resolve the archPromise with the scope of the $el
+					return $el.data(&#x27;archetypo&#x27;);
+				});
+
+			// save the evaluation promise to the $el
+			$el.data(&#x27;archetypo-promise&#x27;, archPromise);
+		}
+
+		// return the promise.
+		return archPromise;
+	};
+
+	module.exports = archetypo;
+
 });
 
     </pre>
