@@ -92,7 +92,7 @@ define(function (require, exports, module) {
 	// sample value string: &quot;1! method(literal/path/to/somewhere, $argumentToBeScopeEvaluated)&quot;
 	var whitespace = &#x27;\\s*&#x27;,
 		priority   = &#x27;(?:(\\d*)!)?&#x27;,
-		word       = &#x27;([\\w$\\-]*)&#x27;,
+		word       = &#x27;([\\w$.\\-]*)&#x27;,
 		argString  = &#x27;:&#x27; + whitespace + &#x27;(.*)&#x27; + whitespace,
 		whatever   = &#x27;(.*)&#x27;;
 

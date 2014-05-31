@@ -25,9 +25,11 @@ define(function (require, exports, module) {
 		//       That is done in order to be capable of getting deep methods. (scope.property.method)
 			methodFn   = scope.evaluate('$' + methodName);
 
-//		console.log(methodName);
+		console.log(methodName);
 //		console.log(invocation);
 //		console.log(methodFn);
+
+		console.log(invocation.value);
 
 		var res = scope.invoke(methodFn, invocation.value);
 

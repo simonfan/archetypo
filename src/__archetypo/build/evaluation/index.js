@@ -14,6 +14,8 @@ define(function (require, exports, module) {
 	 */
 	function evaluateGroup(scope, raw) {
 
+		console.log(raw);
+
 		// [2] set value raw properties
 		var values = _.reduce(raw, function (res, d, key) {
 
@@ -96,6 +98,9 @@ define(function (require, exports, module) {
 			// return a bound AND partialized function
 			return _.partial(evaluateGroup, scope, group);
 		});
+
+		console.log(priorities);
+		console.log(evaluations);
 
 		// [3] run evaluations by group in sequence
 		var promise = _.reduce(evaluations, function (sofar, next, index) {

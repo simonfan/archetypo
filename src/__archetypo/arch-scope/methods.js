@@ -1,9 +1,10 @@
+/**
+ * Defines logic for loading and summoning.
+ */
+
 define(function (require, exports, module) {
 	'use strict';
 
-	///////////////////////////
-	// loading and summoning //
-	///////////////////////////
 	var _    = require('lodash'),
 		q    = require('q'),
 		deep = require('deep');

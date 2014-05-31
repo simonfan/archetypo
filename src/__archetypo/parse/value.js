@@ -4,7 +4,7 @@ define(function (require, exports, module) {
 	// sample value string: "1! method(literal/path/to/somewhere, $argumentToBeScopeEvaluated)"
 	var whitespace = '\\s*',
 		priority   = '(?:(\\d*)!)?',
-		word       = '([\\w$\\-]*)',
+		word       = '([\\w$.\\-]*)',
 		argString  = ':' + whitespace + '(.*)' + whitespace,
 		whatever   = '(.*)';
 
