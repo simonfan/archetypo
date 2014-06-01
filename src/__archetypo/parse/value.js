@@ -15,10 +15,10 @@ define(function (require, exports, module) {
 	var invocationRegExpString = [
 			// any starting whitespaces (not captured)
 			'^', whitespace,
+			// the optional priority tag
+			priority, whitespace,
 			// either
 			'(?:',
-				// the optional priority tag
-				priority, whitespace,
 				// method(argString)
 				word, whitespace,
 				argString,
@@ -29,10 +29,10 @@ define(function (require, exports, module) {
 			// any trailing whitespaces (not captured)
 			whitespace, '$'
 		].join(''),
-		// /\s*(?:(?:(\d*)!)?\s*([\w$\-]*)\s*\(\s*(.*)\s*\)|([\w$\-]*))\s*/
-		invocationRegExp       = new RegExp(invocationRegExpString);
+		// /^\s*(?:(?:(\d*)!)?\s*([\w$.\-]*)\s*:\s*(.*)\s*|(?:(\d*)!)?(.*?))\s*$/
+		invocationRegExp = new RegExp(invocationRegExpString);
 
-
+//	console.log(invocationRegExp)
 
 	/**
 	 * Prepare the string to be evaluated by scope.evaluate(argString);
@@ -72,16 +72,17 @@ define(function (require, exports, module) {
 
 				// it is a value that must be invocation
 				// before assignment
-				res.type = 'invocation';
+				res.type     = 'invocation';
 				res.priority = (match[1] === '') ? '0' : match[1];
-				res.method = match[2];
-				res.value  = buildArgsString(match[3]);
+				res.method   = match[2];
+				res.value    = buildArgsString(match[3]);
 
 			} else if (match[4]) {
 
 				// it is a value that will be immediately available
-				res.type = 'value';
-				res.value = match[4];
+				res.type     = 'value';
+				res.priority = match[1]
+				res.value    = match[4];
 
 			}
 

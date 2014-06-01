@@ -19,6 +19,21 @@
 })('test', function(archetypo, should, $) {
 	'use strict';
 
+
+	var assert = {};
+
+	assert.eql = function shouldEql(v1, v2, message) {
+		should(v1).eql(v2, message);
+	};
+
+
+	assert.is = function isObject(v, type, message) {
+
+		return should(v).be.type(type, message);
+	};
+
+
+
 	describe('archetypo basics', function () {
 		beforeEach(function (done) {
 			done();
@@ -26,7 +41,9 @@
 
 		it('is fine (:', function (testdone) {
 
-			archetypo($('#app'))
+			archetypo($('#app'), {
+					rootScope: assert
+				})
 				.done(function (scope) {
 
 

@@ -86,7 +86,7 @@ define(function (require, exports, module) {
 
 		return this.load(modname).then(_.bind(function (fn) {
 
-			fn.apply(this, args);
+			return fn.apply(this, args);
 
 		}, this));
 

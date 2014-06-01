@@ -6,18 +6,23 @@
 	data-arch-opt2="app-v2"
 	data-arch-opt3="app-v3"
 
-
-	data-arch-assert="load: assert/index"
-
 	data-arch-router="load: data/router"
 >
 	<div
 		id="nav"
 
 		data-archetypo
-		data-arch-opt2         ="nav-v2"
-		data-arch-remote-options="!load: config/nav"
-		data-arch-view          =" summon: views/nav"
+		data-arch-remote-options=" !load: config/nav"
+		data-arch-test          ="1!eql: $remoteOptions.option1, remote-value"
+
+		data-arch-test          ="1!is: $view, undefined"
+		data-arch-view          ="1!summon: views/nav"
+		data-arch-test1         ="2!is: $view, object"
+
+		data-arch-opt2          ="nav-v2"
+		data-arch-test2         ="eql: $opt1, app-v1, opt1-inherited"
+		data-arch-test3         ="eql: $opt2, nav-v2, opt2-overridden"
+		data-arch-test4         ="eql: $opt3, app-v3, opt3-inherited"
 	>
 	</div>
 
@@ -48,13 +53,15 @@
 				data-arch-collection   ="0!l: data/items"
 				data-arch-view         ="1!s: views/collection/index"
 
-				data-arch-opt1         ="list-display-1"
 
-				data-arch-test         ="{ opt1: list-display-1, opt2: app-v2, opt3: contents-v3 }"
+				data-arch-test1        ="2!eql: $opt1, app-v1"
+				data-arch-test2        ="2!eql: $opt2, app-v2"
+				data-arch-test3        ="2!eql: $opt3, contents-v3"
 
-				data-arch-test1        = "assert.eql: $test, value"
+				data-arch-opt1         ="3!list-display-v1"
+
+				data-arch-test4        ="4!eql: $opt1, list-display-v1"
 			>
-				SOLVING PROBLEM OF ARCH-ASSERT NOT BEING INVOKED...
 				<div data-archetypo></div>
 
 			</div>
