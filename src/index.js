@@ -19,7 +19,8 @@ define(function (require, exports, module) {
 		var $subEls = $(el).find(options.selector);
 
 		var promises = _.map($subEls, function (subEl) {
-			return archetypo($(subEl), options);
+			// archetypo: $el, scopeData, options
+			return archetypo($(subEl), null, options);
 		});
 
 		// returns a promise for whe nall
@@ -67,13 +68,9 @@ define(function (require, exports, module) {
 					// evaluate
 					return buildArchEvaluation(scope, archData, options);
 				})
-				.then(function (evaluatedArchData) {
-
-					// set evaluated data to the scope
-					$el.data('archetypo').assign(evaluatedArchData);
-
-				})
 				.then(function (archScope) {
+					console.log(archScope)
+
 					// build sub archetypos
 					return buildSubArchetypos($el, options);
 				})

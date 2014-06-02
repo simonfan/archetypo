@@ -313,7 +313,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 30,
+            "line": 31,
             "description": "Default options for archetypo invocation.",
             "type": "{Object}",
             "class": "",
@@ -321,7 +321,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 38,
+            "line": 39,
             "description": "[archetypo description]",
             "params": [
                 {
@@ -349,7 +349,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 95,
+            "line": 92,
             "description": "Set the default archetypo options.",
             "params": [
                 {
@@ -390,15 +390,15 @@
         },
         {
             "message": "Missing item type\nDefault options for archetypo invocation.",
-            "line": " src/index.js:30"
+            "line": " src/index.js:31"
         },
         {
             "message": "Missing item type\n[archetypo description]",
-            "line": " src/index.js:38"
+            "line": " src/index.js:39"
         },
         {
             "message": "Missing item type\nSet the default archetypo options.",
-            "line": " src/index.js:95"
+            "line": " src/index.js:92"
         }
     ]
 }
