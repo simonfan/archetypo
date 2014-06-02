@@ -106,7 +106,7 @@ define(function (require, exports, module) {
 		} else {
 
 
-			console.log(archValue)
+		//	console.log(archValue)
 
 			// literal (probably boolean)
 			return {

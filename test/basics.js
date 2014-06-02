@@ -66,7 +66,9 @@
 				.done(function (scope) {
 
 
-					// [1] verify invocation count
+					console.log('archetypo done')
+
+					// [1] verify invocation collectionViewunt
 					scope.invocations.navView.should.eql(1, 'navView should have been invoked once');
 					scope.invocations.collectionView.should.eql(1, 'collectionView should have been invoked once');
 					scope.invocations.collectionItemView.should.eql(3, 'collectionItemView should have been invoked thrice');
