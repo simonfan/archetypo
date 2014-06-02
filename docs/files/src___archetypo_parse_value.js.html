@@ -103,10 +103,10 @@ define(function (require, exports, module) {
 	var invocationRegExpString = [
 			// any starting whitespaces (not captured)
 			&#x27;^&#x27;, whitespace,
+			// the optional priority tag
+			priority, whitespace,
 			// either
 			&#x27;(?:&#x27;,
-				// the optional priority tag
-				priority, whitespace,
 				// method(argString)
 				word, whitespace,
 				argString,
@@ -117,10 +117,10 @@ define(function (require, exports, module) {
 			// any trailing whitespaces (not captured)
 			whitespace, &#x27;$&#x27;
 		].join(&#x27;&#x27;),
-		// /\s*(?:(?:(\d*)!)?\s*([\w$\-]*)\s*\(\s*(.*)\s*\)|([\w$\-]*))\s*/
-		invocationRegExp       = new RegExp(invocationRegExpString);
+		// /^\s*(?:(?:(\d*)!)?\s*([\w$.\-]*)\s*:\s*(.*)\s*|(?:(\d*)!)?(.*?))\s*$/
+		invocationRegExp = new RegExp(invocationRegExpString);
 
-
+//	console.log(invocationRegExp)
 
 	/**
 	 * Prepare the string to be evaluated by scope.evaluate(argString);
@@ -160,16 +160,17 @@ define(function (require, exports, module) {
 
 				// it is a value that must be invocation
 				// before assignment
-				res.type = &#x27;invocation&#x27;;
+				res.type     = &#x27;invocation&#x27;;
 				res.priority = (match[1] === &#x27;&#x27;) ? &#x27;0&#x27; : match[1];
-				res.method = match[2];
-				res.value  = buildArgsString(match[3]);
+				res.method   = match[2];
+				res.value    = buildArgsString(match[3]);
 
 			} else if (match[4]) {
 
 				// it is a value that will be immediately available
-				res.type = &#x27;value&#x27;;
-				res.value = match[4];
+				res.type     = &#x27;value&#x27;;
+				res.priority = match[1]
+				res.value    = match[4];
 
 			}
 

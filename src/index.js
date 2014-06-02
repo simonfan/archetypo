@@ -8,7 +8,13 @@ define(function (require, exports, module) {
 		buildArchEvaluation = require('./__archetypo/build/evaluation/index'),
 		buildArchScope      = require('./__archetypo/build/scope');
 
-
+	/**
+	 * Create subarchetypos.
+	 *
+	 * @param  {[type]} el      [description]
+	 * @param  {[type]} options [description]
+	 * @return {[type]}         [description]
+	 */
 	function buildSubArchetypos(el, options) {
 		var $subEls = $(el).find(options.selector);
 
@@ -27,16 +33,16 @@ define(function (require, exports, module) {
 	 */
 	var archetypoDefaults = {
 		selector : '[data-archetypo]',
-		rootScope: {}
 	};
 
 	/**
-	 * [exports description]
-	 * @param  {[type]} $el     [description]
-	 * @param  {[type]} options [description]
-	 * @return {[type]}         [description]
+	 * [archetypo description]
+	 * @param  {[type]} $el       [description]
+	 * @param  {[type]} options   [description]
+	 * @param  {[type]} scopeData [description]
+	 * @return {[type]}           [description]
 	 */
-	function archetypo($el, options) {
+	function archetypo($el, scopeData, options) {
 
 		var archPromise = $el.data('archetypo-promise');
 
@@ -53,7 +59,7 @@ define(function (require, exports, module) {
 			var archPromise = q(buildArchData($el, options))
 				.then(function (archData) {
 					// build the scope
-					var scope = buildArchScope($el, options);
+					var scope = buildArchScope($el, options, scopeData);
 
 					// set arch scope to the jquery:data:archetypo
 					$el.data('archetypo', scope);
@@ -84,6 +90,25 @@ define(function (require, exports, module) {
 		return archPromise;
 	};
 
+	// methods
+
+	/**
+	 * Set the default archetypo options.
+	 * @param {[type]} key   [description]
+	 * @param {[type]} value [description]
+	 */
+	archetypo.setDefaults = function setDefaults(key, value) {
+
+		if (_.isObject(key)) {
+			_.each(key, function (value, key) {
+				archetypoDefaults[key] = value;
+			});
+		} else {
+			archetypoDefaults[key] = value;
+		}
+	};
+
+	// export archetupo object
 	module.exports = archetypo;
 
 });

@@ -1,4 +1,14 @@
 <div
-	data-archetypo
-	data-arch-view="summon: views/item/thumbnail"
-></div>
+	data-prefix
+	data-prefix-view ="summon: views/item/thumbnail"
+	data-prefix-test ="eql: $opt1, list-display-v1, takes list-wise opt1"
+	data-prefix-test1="eql: $listWiseOpt, some-list-wise-value"
+
+	data-prefix-item-wise-opt="item-wise-value"
+>
+	<div
+		data-prefix
+		data-prefix-test0="eql: $itemWiseOpt, item-wise-value"
+	></div>
+
+</div>

@@ -96,7 +96,13 @@ define(function (require, exports, module) {
 		buildArchEvaluation = require(&#x27;./__archetypo/build/evaluation/index&#x27;),
 		buildArchScope      = require(&#x27;./__archetypo/build/scope&#x27;);
 
-
+	/**
+	 * Create subarchetypos.
+	 *
+	 * @param  {[type]} el      [description]
+	 * @param  {[type]} options [description]
+	 * @return {[type]}         [description]
+	 */
 	function buildSubArchetypos(el, options) {
 		var $subEls = $(el).find(options.selector);
 
@@ -115,16 +121,16 @@ define(function (require, exports, module) {
 	 */
 	var archetypoDefaults = {
 		selector : &#x27;[data-archetypo]&#x27;,
-		rootScope: {}
 	};
 
 	/**
-	 * [exports description]
-	 * @param  {[type]} $el     [description]
-	 * @param  {[type]} options [description]
-	 * @return {[type]}         [description]
+	 * [archetypo description]
+	 * @param  {[type]} $el       [description]
+	 * @param  {[type]} options   [description]
+	 * @param  {[type]} scopeData [description]
+	 * @return {[type]}           [description]
 	 */
-	function archetypo($el, options) {
+	function archetypo($el, scopeData, options) {
 
 		var archPromise = $el.data(&#x27;archetypo-promise&#x27;);
 
@@ -141,7 +147,7 @@ define(function (require, exports, module) {
 			var archPromise = q(buildArchData($el, options))
 				.then(function (archData) {
 					// build the scope
-					var scope = buildArchScope($el, options);
+					var scope = buildArchScope($el, options, scopeData);
 
 					// set arch scope to the jquery:data:archetypo
 					$el.data(&#x27;archetypo&#x27;, scope);
@@ -172,6 +178,25 @@ define(function (require, exports, module) {
 		return archPromise;
 	};
 
+	// methods
+
+	/**
+	 * Set the default archetypo options.
+	 * @param {[type]} key   [description]
+	 * @param {[type]} value [description]
+	 */
+	archetypo.setDefaults = function setDefaults(key, value) {
+
+		if (_.isObject(key)) {
+			_.each(key, function (value, key) {
+				archetypoDefaults[key] = value;
+			});
+		} else {
+			archetypoDefaults[key] = value;
+		}
+	};
+
+	// export archetupo object
 	module.exports = archetypo;
 
 });

@@ -1,68 +1,68 @@
 <div
 	id="app"
-	data-archetypo
+	data-prefix
 
-	data-arch-opt1="app-v1"
-	data-arch-opt2="app-v2"
-	data-arch-opt3="app-v3"
+	data-prefix-opt1="app-v1"
+	data-prefix-opt2="app-v2"
+	data-prefix-opt3="app-v3"
 
-	data-arch-router="load: data/router"
+	data-prefix-router="load: data/router"
 >
 	<div
 		id="nav"
 
-		data-archetypo
-		data-arch-remote-options=" !load: config/nav"
-		data-arch-test          ="1!eql: $remoteOptions.option1, remote-value"
+		data-prefix
+		data-prefix-remote-options=" !load: config/nav"
+		data-prefix-test          ="1!eql: $remoteOptions.option1, remote-value"
 
-		data-arch-test          ="1!is: $view, undefined"
-		data-arch-view          ="1!summon: views/nav"
-		data-arch-test1         ="2!is: $view, object"
+		data-prefix-test          ="1!is: $view, undefined, view values is undefined because it will be defined only at the end of the no1 priority evaluation group"
+		data-prefix-view          ="1!summon: views/nav"
+		data-prefix-test1         ="2!is: $view, object, navView constructor should return an object"
 
-		data-arch-opt2          ="nav-v2"
-		data-arch-test2         ="eql: $opt1, app-v1, opt1-inherited"
-		data-arch-test3         ="eql: $opt2, nav-v2, opt2-overridden"
-		data-arch-test4         ="eql: $opt3, app-v3, opt3-inherited"
+		data-prefix-opt2          ="nav-v2"
+		data-prefix-test2         ="eql: $opt1, app-v1, opt1-inherited"
+		data-prefix-test3         ="eql: $opt2, nav-v2, opt2-overridden"
+		data-prefix-test4         ="eql: $opt3, app-v3, opt3-inherited"
 	>
 	</div>
 
 
 	<div
 		id="contents"
-		data-archetypo
-		data-arch-opt3="contents-v3"
-		data-arch-view ="summon: views/contents, $el, { option: $opt3 }"
+		data-prefix
+		data-prefix-opt3="contents-v3"
+		data-prefix-view ="summon: views/contents, $el, { option: $opt3 }"
 	>
-		<!-- block that id not a archetypo scope -->
+		<!-- block that id not a arch scope -->
 		<div
 			id="block-1"
 		>
 			<div
 				id="item-display"
-				data-archetypo
-				data-arch-model="!load: data/item"
-				data-arch-view =" summon: views/item/full"
+				data-prefix
+				data-prefix-model="!load: data/item"
+				data-prefix-view =" summon: views/item/full"
 			></div>
 
 			<div
 				id="list-display"
-				data-archetypo
+				data-prefix
 
-				data-arch-item-view    ="0!l: views/collection/item"
-				data-arch-item-template="0!l: text!templates/item.html"
-				data-arch-collection   ="0!l: data/items"
-				data-arch-view         ="1!s: views/collection/index"
+				data-prefix-test1        ="0!eql: $opt1, app-v1"
+				data-prefix-test2        ="0!eql: $opt2, app-v2"
+				data-prefix-test3        ="0!eql: $opt3, contents-v3"
+
+				data-prefix-opt1         ="1!list-display-v1, opt1 overridden"
+				data-prefix-list-wise-opt="1!some-list-wise-value"
+
+				data-prefix-item-view    ="1!l: views/collection/item"
+				data-prefix-item-template="1!l: text!templates/item.html"
+				data-prefix-collection   ="1!l: data/items"
+				data-prefix-view         ="2!s: views/collection/index"
 
 
-				data-arch-test1        ="2!eql: $opt1, app-v1"
-				data-arch-test2        ="2!eql: $opt2, app-v2"
-				data-arch-test3        ="2!eql: $opt3, contents-v3"
-
-				data-arch-opt1         ="3!list-display-v1"
-
-				data-arch-test4        ="4!eql: $opt1, list-display-v1"
+				data-prefix-test4        ="4!eql: $opt1, list-display-v1"
 			>
-				<div data-archetypo></div>
 
 			</div>
 		</div>
@@ -70,176 +70,3 @@
 	</div>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div
-	id="root"
-	data-archetypo
->
-
-
-
-	<!-- branch for methods tests -->
-	<div
-		id="methods"
-		data-archetypo
-	>
-		<!-- Test for archetypo.load(modname [, property | deep.property ]) method -->
-		<div
-			id="methods-load"
-			data-archetypo
-			data-arch-load-test="load: /test/methods/load-test.js"
-
-			data-arch-load-property-test="load: /test/methods/load-test.js, property"
-
-			data-arch-load-deep-property-test="l: /test/methods/load-test.js, deep.property"
-
-			data-arch-load-multi-module="l: [/test/methods/load-test-1.js, /test/methods/load-test-2.js]"
-			data-arch-load-multi-module-id="l: [/test/methods/load-test-1.js, /test/methods/load-test-2.js], id"
-		></div>
-
-		<!-- Test for archeypo.summon(path [, arg1, arg2, arg3, ...]) -->
-		<div
-			id="methods-summon"
-			data-archetypo
-			data-arch-summon-test-data="test-data"
-			data-arch-summon-test="summon: /test/methods/summon-test.js, $summonTestData, { data: $summonTestData }"
-		></div>
-	</div>
-	<!-- branch for methods tests -->
-
-
-	<!-- branch for promise-chain tests -->
-	<div
-
-		id="promise"
-		data-archetypo
-	>
-
-		<div
-			id="promise-1"
-			data-archetypo
-			data-arch-view="summon(/test/)"
-		></div>
-
-	</div>
-	<!-- branch for promise-chain tests -->
-
-	<!-- branch for priority-execution tests -->
-	<div
-		id="priority"
-		data-archetypo
-		data-arch-parsed="summon(/test/priority-execution/parse-json.js, $remoteData)"
-		data-arch-remote-data="!load(text!/test/priority-execution/data.json)"
-	>
-		<div
-			id="priority-branch-1"
-			data-archetypo
-			data-arch-remote-data="!load(text!/test/priority-execution/data1.json)"
-			data-arch-parsed="summon(/test/priority-execution/parse-json1.js, $remoteData)"
-		></div>
-	</div>
-	<!-- branch for priority tests -->
-
-
-	<div
-
-	></div>
-</div>
-
-
-
-<!-- branch for data-evaluation tests -->
-<div
-	id="data-evaluation"
-	data-archetypo
-	data-arch-another-thing   ="!fake-method: path/to/module, path.to.property"
-	data-arch-something       ="1!load: path/to/module"
-	data-arch-some-prop       ="$something.prop"
-	data-arch-some-deep-prop  ="$something.deep.prop"
-	data-arch-boolean-option  ="true"
-	data-arch-value-literal   ="   no starting or trailing whitespaces    "
-	data-arch-value-evaluated ="   { a: $scopeValue, b: bLiteralValue }"
->
-</div>
-<!-- branch for data-evaluation tests -->
-
-
-
-
-
-<!-- branch for scope-execution tests -->
-<div
-	id="scope"
-	data-archetypo
-	data-arch-v1="root-v1"
-	data-arch-v2="root-v2"
-	data-arch-v3="root-v3"
-	data-arch-v4="root-v4"
->
-	<div
-		id="scope-1"
-		data-archetypo
-		data-arch-v2="branch-1-v2"
-		data-arch-v3="branch-1-v3"
-
-
-		data-arch-v5="branch-1-v5"
-	>
-		<div>
-			<div
-				id="scope-1-1"
-				data-archetypo
-				data-arch-v4="branch-1-1-v4"
-			></div>
-
-		</div>
-
-	</div>
-
-	<div
-		id="scope-2"
-		data-archetypo
-		data-arch-v1="branch-2-v1"
-		data-arch-v3="branch-2-v3"
-
-	></div>
-</div>
-<!-- branch for scope tests -->
-
-
-<!-- error -->
-<div id="error">
-	<div id="not-found"
-
-		data-archetypo
-		data-arch-does-not-exist="load: /path/to/non/existent-module"
-	></div>
-
-	<div id="summoning-error"
-		data-archetypo
-		data-arch-summon-error="summon: /test/error-handling/error.js"
-	></div>
-
-</div>
-
-
-

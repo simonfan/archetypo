@@ -290,19 +290,11 @@
         },
         {
             "file": "src/index.js",
-            "line": 24,
-            "description": "Default options for archetypo invocation.",
-            "type": "{Object}",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/index.js",
-            "line": 33,
-            "description": "[exports description]",
+            "line": 11,
+            "description": "Create subarchetypos.",
             "params": [
                 {
-                    "name": "$el",
+                    "name": "el",
                     "description": "[description]",
                     "type": "[type]"
                 },
@@ -316,6 +308,61 @@
                 "description": "[description]",
                 "type": "[type]"
             },
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 30,
+            "description": "Default options for archetypo invocation.",
+            "type": "{Object}",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 38,
+            "description": "[archetypo description]",
+            "params": [
+                {
+                    "name": "$el",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "options",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "scopeData",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 95,
+            "description": "Set the default archetypo options.",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "value",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
             "class": "",
             "module": "archetypo"
         }
@@ -338,12 +385,20 @@
             "line": " src/__archetypo/auxiliary.js:13"
         },
         {
-            "message": "Missing item type\nDefault options for archetypo invocation.",
-            "line": " src/index.js:24"
+            "message": "Missing item type\nCreate subarchetypos.",
+            "line": " src/index.js:11"
         },
         {
-            "message": "Missing item type\n[exports description]",
-            "line": " src/index.js:33"
+            "message": "Missing item type\nDefault options for archetypo invocation.",
+            "line": " src/index.js:30"
+        },
+        {
+            "message": "Missing item type\n[archetypo description]",
+            "line": " src/index.js:38"
+        },
+        {
+            "message": "Missing item type\nSet the default archetypo options.",
+            "line": " src/index.js:95"
         }
     ]
 }
