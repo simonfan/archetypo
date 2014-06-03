@@ -129,14 +129,32 @@
         },
         {
             "file": "src/__archetypo/build/evaluation/index.js",
-            "line": 56,
+            "line": 54,
             "description": "EVALUATION ORDER\n\n[1] PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    prefixed by ! (or 0!, 1!, *!)\n\n[2] NON-EVALUATED VALUES\n    Values not prefixed by \"method:\" are first evaluated,\n    thus they cannot reference values on the same scope,\n    only those on parent scopes (inherited)\n\n[3] NON-PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    not prefixed by !",
             "class": "",
             "module": "archetypo"
         },
         {
             "file": "src/__archetypo/build/evaluation/index.js",
-            "line": 73,
+            "line": 95,
+            "description": "[evaluateGroups description]",
+            "params": [
+                {
+                    "name": "groups",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/build/evaluation/index.js",
+            "line": 107,
             "description": "Evaluates the data parsed from the el into modules.\n Returns a promise for all properties evaluated.",
             "itemtype": "method",
             "name": "archEvaluate",
@@ -290,7 +308,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 11,
+            "line": 13,
             "description": "Create subarchetypos.",
             "params": [
                 {
@@ -313,7 +331,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 31,
+            "line": 36,
             "description": "Default options for archetypo invocation.",
             "type": "{Object}",
             "class": "",
@@ -321,7 +339,14 @@
         },
         {
             "file": "src/index.js",
-            "line": 39,
+            "line": 46,
+            "description": "Archetypo is a two step build process:\n[1] the own evaluation\nThis promise should be done whenever the evaluation of own arch data is ready\n\n\n[2] the own ready and dependencies ready\n\nThis promise should be done only whenever all sub archetyypos are done.",
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/index.js",
+            "line": 57,
             "description": "[archetypo description]",
             "params": [
                 {
@@ -349,7 +374,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 91,
+            "line": 106,
             "description": "Set the default archetypo options.",
             "params": [
                 {
@@ -378,7 +403,11 @@
         },
         {
             "message": "Missing item type\nEVALUATION ORDER\n\n[1] PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    prefixed by ! (or 0!, 1!, *!)\n\n[2] NON-EVALUATED VALUES\n    Values not prefixed by \"method:\" are first evaluated,\n    thus they cannot reference values on the same scope,\n    only those on parent scopes (inherited)\n\n[3] NON-PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    not prefixed by !",
-            "line": " src/__archetypo/build/evaluation/index.js:56"
+            "line": " src/__archetypo/build/evaluation/index.js:54"
+        },
+        {
+            "message": "Missing item type\n[evaluateGroups description]",
+            "line": " src/__archetypo/build/evaluation/index.js:95"
         },
         {
             "message": "Missing item type\nFinds the closest ancestor that has the selector.",
@@ -386,19 +415,23 @@
         },
         {
             "message": "Missing item type\nCreate subarchetypos.",
-            "line": " src/index.js:11"
+            "line": " src/index.js:13"
         },
         {
             "message": "Missing item type\nDefault options for archetypo invocation.",
-            "line": " src/index.js:31"
+            "line": " src/index.js:36"
+        },
+        {
+            "message": "Missing item type\nArchetypo is a two step build process:\n[1] the own evaluation\nThis promise should be done whenever the evaluation of own arch data is ready\n\n\n[2] the own ready and dependencies ready\n\nThis promise should be done only whenever all sub archetyypos are done.",
+            "line": " src/index.js:46"
         },
         {
             "message": "Missing item type\n[archetypo description]",
-            "line": " src/index.js:39"
+            "line": " src/index.js:57"
         },
         {
             "message": "Missing item type\nSet the default archetypo options.",
-            "line": " src/index.js:91"
+            "line": " src/index.js:106"
         }
     ]
 }

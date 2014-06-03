@@ -113,7 +113,7 @@ define(function (require, exports, module) {
 	 */
 	function retrieveMethodFn(scope, methodName) {
 
-		var methodFn = scope.evaluate(&#x27;$&#x27; + methodName);
+		var methodFn = scope.evaluate(&#x27;$&#x27; + aux.camelCase(methodName));
 
 		if (_.isFunction(methodFn)) {
 			// return a immetiately resolved
@@ -139,25 +139,17 @@ define(function (require, exports, module) {
 
 		// with evaluation
 		// [2.1] execute evaluation
-		var methodName = aux.camelCase(invocation.method);
 
 		// [2.2] retrieve the function to be invoked by evaluation
 		//       (instead of by object property lookup as scope.invoke does by default)
 		//       That is done in order to be capable of getting deep methods. (scope.property.method)
 
-		return retrieveMethodFn(scope, methodName).then(function (methodFn) {
+		return retrieveMethodFn(scope, invocation.method).then(function (methodFn) {
 
 
 			var args = scope.evaluate(invocation.value),
-				res;
-
-			if (!args || args.length === 0) {
-
-				res = methodFn.call(scope, scope);
-			} else {
-
-				res = methodFn.apply(scope, args);
-			}
+				// invoke
+				res  = methodFn.apply(scope, args);
 
 			return q.isPromise(res) ? res : q(res);
 		});

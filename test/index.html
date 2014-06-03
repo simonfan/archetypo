@@ -33,6 +33,7 @@
 			    	});
 
 			        mocha.checkLeaks();
+			        mocha.globals(['$', 'jQuery', 'Backbone'])
 			        mocha.run();
 			    })
             })

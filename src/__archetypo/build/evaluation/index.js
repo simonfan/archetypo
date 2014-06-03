@@ -14,8 +14,6 @@ define(function (require, exports, module) {
 	 */
 	function evaluateGroup(scope, raw) {
 
-//		console.log(raw);
-
 		// [2] set value raw properties
 		var values = _.reduce(raw, function (res, d, key) {
 			if (d.type === 'value') {
@@ -70,18 +68,9 @@ define(function (require, exports, module) {
 	 *     not prefixed by !
 	 */
 
-	/**
-	 *
-	 * Evaluates the data parsed from the el into modules.
-	 * Returns a promise for all properties evaluated.
-	 *
-	 * @method archEvaluate
-	 * @private
-	 */
-	module.exports = function archEvaluate(scope, raw) {
 
-//		console.log(raw)
 
+	function parseEvaluationGroups(scope, raw) {
 		// [1] get priority numbers and sort them
 		//     undefined priorities get sorted to the end of the array
 		//     as a default behaviour of Array.sort.
@@ -90,7 +79,7 @@ define(function (require, exports, module) {
 		});
 
 		// [2] create evaluation methods to be run according to priority
-		var evaluations = _.map(priorities, function (priority) {
+		var evaluationGroups = _.map(priorities, function (priority) {
 
 			var group = _.pick(raw, function (d, k) {
 				return d.priority === priority;
@@ -100,15 +89,43 @@ define(function (require, exports, module) {
 			return _.partial(evaluateGroup, scope, group);
 		});
 
-	//	console.log(priorities);
-	//	console.log(evaluations);
+		return evaluationGroups;
+	}
 
-		// [3] run evaluations by group in sequence
-		var promise = _.reduce(evaluations, function (sofar, next, index) {
+	/**
+	 * [evaluateGroups description]
+	 * @param  {[type]} groups [description]
+	 * @return {[type]}        [description]
+	 */
+	function evaluateGroups(groups) {
+		// return promise for own evaluation to be done.
+		return _.reduce(groups, function (sofar, next, index) {
 			return sofar.then(next);
 		}, q());
+	}
+
+	/**
+	 *
+	 * Evaluates the data parsed from the el into modules.
+	 * Returns a promise for all properties evaluated.
+	 *
+	 * @method archEvaluate
+	 * @private
+	 */
+	module.exports = function archEvaluate($parent, scope, raw) {
+
+		// parse out the evaluation order and groupings
+		var evaluationGroups = parseEvaluationGroups(scope, raw);
 
 
-		return promise.then(function () { return scope; });
+		// create a var to hold the promise for the parente evaluation ready
+		var parentEvaluation = $parent ?
+			// get the parent evaluation promise
+			$parent.data('archetypo-evaluation-promise') :
+			// immediately resolved promise
+			q(true);
+
+		// [3] run evaluations by group in sequence
+		return parentEvaluation.then(_.partial(evaluateGroups, evaluationGroups));
 	};
 });

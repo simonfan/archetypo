@@ -8,6 +8,8 @@ define(function (require, exports, module) {
 		buildArchEvaluation = require('./__archetypo/build/evaluation/index'),
 		buildArchScope      = require('./__archetypo/build/scope');
 
+	var aux                 = require('./__archetypo/auxiliary');
+
 	/**
 	 * Create subarchetypos.
 	 *
@@ -15,15 +17,18 @@ define(function (require, exports, module) {
 	 * @param  {[type]} options [description]
 	 * @return {[type]}         [description]
 	 */
-	function buildSubArchetypos(el, options) {
-		var $subEls = $(el).find(options.selector);
+	function buildSubArchetypos($el, options) {
+
+		var $subEls = $el.find(options.selector);
 
 		var promises = _.map($subEls, function (subEl) {
 			// archetypo: $el, scopeData, options
-			return archetypo($(subEl), null, options);
+			archetypo($(subEl), null, options);
+
+			return $(subEl).data('archetypo-evaluation-promise');
 		});
 
-		// returns a promise for whe nall
+		// returns a promise for when all
 		// sub archetypos are done
 		return q.all(promises);
 	}
@@ -36,6 +41,19 @@ define(function (require, exports, module) {
 		selector : '[data-archetypo]',
 	};
 
+
+
+	/**
+	 * Archetypo is a two step build process:
+	 * [1] the own evaluation
+	 * This promise should be done whenever the evaluation of own arch data is ready
+	 *
+	 *
+	 * [2] the own ready and dependencies ready
+	 *
+	 * This promise should be done only whenever all sub archetyypos are done.
+	 */
+
 	/**
 	 * [archetypo description]
 	 * @param  {[type]} $el       [description]
@@ -44,6 +62,7 @@ define(function (require, exports, module) {
 	 * @return {[type]}           [description]
 	 */
 	function archetypo($el, scopeData, options) {
+
 
 		var archPromise = $el.data('archetypo-promise');
 
@@ -55,30 +74,26 @@ define(function (require, exports, module) {
 			options = options || {};
 			_.defaults(options, archetypoDefaults);
 
-			// read arch data available on this element.
-			// and start build promise chain
-			var archPromise = q(buildArchData($el, options))
-				.then(function (archData) {
-					// build the scope
-					var scope = buildArchScope($el, options, scopeData);
 
-					// set arch scope to the jquery:data:archetypo
-					$el.data('archetypo', scope);
+			// [1] get the parent
+			// check if there is a parent archetypo el
+			var $parent = aux.closestAncestor($el, options.selector);
+			$parent = $parent.length === 1 ? $parent : false;
 
-					// evaluate
-					return buildArchEvaluation(scope, archData, options);
-				})
-				.then(function (archScope) {
+			// [1] get own arch data
+			var archData = buildArchData($el, options);
 
-					// build sub archetypos
-					return buildSubArchetypos($el, options);
-				})
-				.then(function () {
-					// resolve the archPromise with the scope of the $el
-					return $el.data('archetypo');
-				});
+			// [2] build scope
+			var archScope = buildArchScope($parent, $el, options, scopeData);
+			$el.data('archetypo', archScope);
 
-			// save the evaluation promise to the $el
+			// [3] build evaluation promise
+			var evaluation = buildArchEvaluation($parent, archScope, archData);
+			$el.data('archetypo-evaluation-promise', evaluation);
+
+			// [4] build sub archetypos only if requested to do so
+			var archPromise = buildSubArchetypos($el, options).then(function () { return archScope });
+			// save the arch promise to the $el
 			$el.data('archetypo-promise', archPromise);
 		}
 

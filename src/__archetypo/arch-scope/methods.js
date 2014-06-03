@@ -33,8 +33,8 @@ define(function (require, exports, module) {
 				require([modname], function (mod) {
 					// use deep getter.
 					// and solve using the response.
-					deferred.resolve(deep.get(mod, property), deferred.reject);
-				});
+					deferred.resolve(deep.get(mod, property));
+				}, deferred.reject);
 			}
 
 		} else if (_.isArray(modname)) {
@@ -56,8 +56,6 @@ define(function (require, exports, module) {
 				}
 			}, deferred.reject);
 		}
-
-		deferred.promise
 
 		return deferred.promise;
 	};
