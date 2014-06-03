@@ -87,7 +87,7 @@
         },
         {
             "file": "src/__archetypo/arch-scope/methods.js",
-            "line": 12,
+            "line": 13,
             "description": "A more intelligent 'require'.\nRequires the module and returns the property required.",
             "params": [
                 {
@@ -97,31 +97,6 @@
                 },
                 {
                     "name": "property",
-                    "description": "[description]",
-                    "type": "[type]"
-                }
-            ],
-            "return": {
-                "description": "[description]",
-                "type": "[type]"
-            },
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/arch-scope/methods.js",
-            "line": 64,
-            "description": "Tries to find the method on the scope.\nIf the method is available on the scope,\ninvokes the method using this scope.\n\nIf the method is not available,\ntry to load it remotely and invoke after\nthe module has been loaded.",
-            "itemtype": "method",
-            "name": "summon",
-            "params": [
-                {
-                    "name": "modname",
-                    "description": "[description]",
-                    "type": "[type]"
-                },
-                {
-                    "name": "args",
                     "description": "[description]",
                     "type": "[type]"
                 }
@@ -154,14 +129,14 @@
         },
         {
             "file": "src/__archetypo/build/evaluation/index.js",
-            "line": 57,
+            "line": 56,
             "description": "EVALUATION ORDER\n\n[1] PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    prefixed by ! (or 0!, 1!, *!)\n\n[2] NON-EVALUATED VALUES\n    Values not prefixed by \"method:\" are first evaluated,\n    thus they cannot reference values on the same scope,\n    only those on parent scopes (inherited)\n\n[3] NON-PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    not prefixed by !",
             "class": "",
             "module": "archetypo"
         },
         {
             "file": "src/__archetypo/build/evaluation/index.js",
-            "line": 74,
+            "line": 73,
             "description": "Evaluates the data parsed from the el into modules.\n Returns a promise for all properties evaluated.",
             "itemtype": "method",
             "name": "archEvaluate",
@@ -172,7 +147,32 @@
         },
         {
             "file": "src/__archetypo/build/evaluation/invoke.js",
-            "line": 9,
+            "line": 12,
+            "description": "Tries to find the method on the scope.\nIf the method is available on the scope,\ninvokes the method using this scope.\n\nIf the method is not available,\ntry to load it remotely and invoke after\nthe module has been loaded.",
+            "itemtype": "method",
+            "name": "summon",
+            "params": [
+                {
+                    "name": "modname",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "args",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "",
+            "module": "archetypo"
+        },
+        {
+            "file": "src/__archetypo/build/evaluation/invoke.js",
+            "line": 41,
             "description": "Invokes a single method",
             "itemtype": "method",
             "name": "invoke",
@@ -374,11 +374,11 @@
         },
         {
             "message": "Missing item type\nA more intelligent 'require'.\nRequires the module and returns the property required.",
-            "line": " src/__archetypo/arch-scope/methods.js:12"
+            "line": " src/__archetypo/arch-scope/methods.js:13"
         },
         {
             "message": "Missing item type\nEVALUATION ORDER\n\n[1] PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    prefixed by ! (or 0!, 1!, *!)\n\n[2] NON-EVALUATED VALUES\n    Values not prefixed by \"method:\" are first evaluated,\n    thus they cannot reference values on the same scope,\n    only those on parent scopes (inherited)\n\n[3] NON-PRIORITAIRE EVALUATED VALUES\n    Values that are evaluated (prefixed by \"method:\") and\n    not prefixed by !",
-            "line": " src/__archetypo/build/evaluation/index.js:57"
+            "line": " src/__archetypo/build/evaluation/index.js:56"
         },
         {
             "message": "Missing item type\nFinds the closest ancestor that has the selector.",

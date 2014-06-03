@@ -16,7 +16,9 @@
 		data-prefix-test          ="1!eql: $remoteOptions.option1, remote-value"
 
 		data-prefix-test          ="1!is: $view, undefined, view values is undefined because it will be defined only at the end of the no1 priority evaluation group"
-		data-prefix-view          ="1!summon: views/nav"
+
+		data-prefix-view          ="1!views/nav: $this"
+
 		data-prefix-test1         ="2!is: $view, object, navView constructor should return an object"
 
 		data-prefix-opt2          ="nav-v2"
@@ -31,7 +33,7 @@
 		id="contents"
 		data-prefix
 		data-prefix-opt3="contents-v3"
-		data-prefix-view ="summon: views/contents, $el, { option: $opt3 }"
+		data-prefix-view ="views/contents: $el, { option: $opt3 }"
 	>
 		<!-- block that id not a arch scope -->
 		<div
@@ -41,7 +43,7 @@
 				id="item-display"
 				data-prefix
 				data-prefix-model="!load: data/item"
-				data-prefix-view =" summon: views/item/full"
+				data-prefix-view =" views/item/full: $this"
 			></div>
 
 			<div
@@ -58,7 +60,7 @@
 				data-prefix-item-view    ="1!l: views/collection/item"
 				data-prefix-item-template="1!l: text!templates/item.html"
 				data-prefix-collection   ="1!l: data/items"
-				data-prefix-view         ="2!s: views/collection/index"
+				data-prefix-view         ="2!views/collection/index: $this"
 
 
 				data-prefix-test4        ="4!eql: $opt1, list-display-v1"

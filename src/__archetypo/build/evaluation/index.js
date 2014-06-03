@@ -18,7 +18,6 @@ define(function (require, exports, module) {
 
 		// [2] set value raw properties
 		var values = _.reduce(raw, function (res, d, key) {
-
 			if (d.type === 'value') {
 				// if the type of the value is 'value',
 				// evaluate the value.
@@ -80,6 +79,8 @@ define(function (require, exports, module) {
 	 * @private
 	 */
 	module.exports = function archEvaluate(scope, raw) {
+
+//		console.log(raw)
 
 		// [1] get priority numbers and sort them
 		//     undefined priorities get sorted to the end of the array

@@ -93,9 +93,10 @@
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var _    = require(&#x27;lodash&#x27;),
-		q    = require(&#x27;q&#x27;),
-		deep = require(&#x27;deep&#x27;);
+	var _     = require(&#x27;lodash&#x27;),
+		q     = require(&#x27;q&#x27;),
+		deep  = require(&#x27;deep&#x27;),
+		scope = require(&#x27;scope&#x27;);
 
 	/**
 	 * A more intelligent &#x27;require&#x27;.
@@ -149,43 +150,8 @@ define(function (require, exports, module) {
 		return deferred.promise;
 	};
 
-	/**
-	 * Tries to find the method on the scope.
-	 * If the method is available on the scope,
-	 * invokes the method using this scope.
-	 *
-	 * If the method is not available,
-	 * try to load it remotely and invoke after
-	 * the module has been loaded.
-	 *
-	 * @method summon
-	 * @param  {[type]} modname [description]
-	 * @param  {[type]} args    [description]
-	 * @return {[type]}         [description]
-	 */
-	exports.summon = function archSummon(modname /*, arg1, aarg2 */) {
-
-		var args = Array.prototype.slice.call(arguments, 1);
-
-		// if summoned with no arguments, pass the scope itself as the argument.
-		args = (args &amp;&amp; args.length &gt; 0) ? args : [this];
-
-		// [1] check if the
-
-		return this.load(modname).then(_.bind(function (fn) {
-
-			return fn.apply(this, args);
-
-		}, this));
-
-	};
-
 	// shorteners
 	exports.l = exports.load;
-	exports.s = exports.summon;
-
-
-
 
 });
 
