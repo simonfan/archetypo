@@ -99,6 +99,9 @@ define(function (require, exports, module) {
 	module.exports = function parseArchValue(archValue) {
 
 		if (_.isString(archValue)) {
+			// remove all newlines from value
+			archValue = archValue.replace(/\n/g, '');
+
 			// parse it.
 			var invocationMatch = archValue.match(invocationRegExp);
 
