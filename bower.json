@@ -1,14 +1,14 @@
 {
   "name": "archetypo",
   "main": "built/archetypo.js",
-  "version": "0.17.10",
+  "version": "0.17.11",
   "description": "Scoped html",
   "dependencies": {
     "q": "1.0.1",
     "jquery": "*",
     "lodash": "~2.4.1",
     "_q": "0.0.1",
-    "scope": "simonfan/scope#0.5.8",
+    "scope": "simonfan/scope#0.5.9",
     "jquery-meta-data": "*",
     "deep": "simonfan/deep#~0.1.2"
   },
@@ -23,6 +23,7 @@
   "resolutions": {
     "subject": "0.5.8",
     "jquery": "~2.1.1",
-    "q": "~1.0.1"
+    "q": "~1.0.1",
+    "scope": "0.5.9"
   }
 }
