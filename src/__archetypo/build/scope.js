@@ -15,8 +15,16 @@ define(function (require, exports, module) {
 			// this is root
 			scope = archScope(scopeData);
 		} else {
-			// this is a branch
-			scope = $parent.data('archetypo').create(scopeData);
+			// get parent scope
+			var parentScope = $parent.data('archetypo');
+
+			if (!parentScope) {
+				// this is root
+				scope = archScope(scopeData);
+			} else {
+				// this is a branch
+				scope = $parent.data('archetypo').create(scopeData);
+			}
 		}
 
 		return scope;

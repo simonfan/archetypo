@@ -38,7 +38,16 @@ define(function (require, exports, module) {
 	 * @type {Object}
 	 */
 	var archetypoDefaults = {
-		selector : '[data-archetypo]',
+
+		namespace: 'arch',
+
+		selector : function buildSelector(namespace) {
+			return '[data-' + namespace + ']';
+		},
+
+		rootSelector: function buildRootSelector(namespace) {
+			return '[data-' + namespace + '-root]';
+		}
 	};
 
 
@@ -75,10 +84,29 @@ define(function (require, exports, module) {
 			_.defaults(options, archetypoDefaults);
 
 
+			// evaluate options
+			options.selector = _.isFunction(options.selector) ?
+				// if selector is a function, execute it.
+				options.selector(options.namespace) :
+				// else assume it is a string (selector)
+				options.selector;
+
+			options.rootSelector = _.isFunction(options.rootSelector) ?
+				// if rootSelector is a fn, execute
+				options.rootSelector(options.namespace) :
+				// else assume it is a selector string
+				options.rootSelector;
+
+
 			// [1] get the parent
-			// check if there is a parent archetypo el
-			var $parent = aux.closestAncestor($el, options.selector);
-			$parent = $parent.length === 1 ? $parent : false;
+			var $parent;
+
+			// [1.1] check if it is a root $el
+			if (!$el.is(options.rootSelector)) {
+				// [1.2] check if there is a parent archetypo el
+				var $parent = aux.closestAncestor($el, options.selector);
+				$parent = $parent.length === 1 ? $parent : void(0);
+			}
 
 			// [1] get own arch data
 			var archData = buildArchData($el, options);

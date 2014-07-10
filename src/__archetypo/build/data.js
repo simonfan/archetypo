@@ -6,21 +6,6 @@ define(function (require, exports, module) {
 
 	var parseArchValue = require('../parse/value');
 
-
-
-	/**
-	 * The default options to be passed to jquery meta data.
-	 * Override this if you wish to modify the data reading/parsing.
-	 *
-	 * @property archDataOptions
-	 * @type {Object}
-	 */
-	var archDataOptions = {
-		prefix : 'arch',
-		parse  : parseArchValue,
-		replace: false,
-	};
-
 	/**
 	 * Reads arch data from the element.
 	 * Uses jquery-meta-data plugin.
@@ -30,10 +15,13 @@ define(function (require, exports, module) {
 	 * @return {[type]}         [description]
 	 */
 	module.exports = function archData($el, options) {
-		_.defaults(options, archDataOptions);
 
 		// read meta data.
-		return $el.metaData(options);
+		return $el.metaData({
+			prefix : options.namespace,
+			parse  : parseArchValue,
+			replace: false
+		});
 	};
 
 });

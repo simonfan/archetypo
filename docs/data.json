@@ -213,17 +213,7 @@
         },
         {
             "file": "src/__archetypo/build/data.js",
-            "line": 11,
-            "description": "The default options to be passed to jquery meta data.\nOverride this if you wish to modify the data reading/parsing.",
-            "itemtype": "property",
-            "name": "archDataOptions",
-            "type": "{Object}",
-            "class": "",
-            "module": "archetypo"
-        },
-        {
-            "file": "src/__archetypo/build/data.js",
-            "line": 24,
+            "line": 9,
             "description": "Reads arch data from the element.\nUses jquery-meta-data plugin.",
             "itemtype": "method",
             "name": "archData",
@@ -339,14 +329,14 @@
         },
         {
             "file": "src/index.js",
-            "line": 46,
+            "line": 55,
             "description": "Archetypo is a two step build process:\n[1] the own evaluation\nThis promise should be done whenever the evaluation of own arch data is ready\n\n\n[2] the own ready and dependencies ready\n\nThis promise should be done only whenever all sub archetyypos are done.",
             "class": "",
             "module": "archetypo"
         },
         {
             "file": "src/index.js",
-            "line": 57,
+            "line": 66,
             "description": "[archetypo description]",
             "params": [
                 {
@@ -374,7 +364,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 106,
+            "line": 134,
             "description": "Set the default archetypo options.",
             "params": [
                 {
@@ -423,15 +413,15 @@
         },
         {
             "message": "Missing item type\nArchetypo is a two step build process:\n[1] the own evaluation\nThis promise should be done whenever the evaluation of own arch data is ready\n\n\n[2] the own ready and dependencies ready\n\nThis promise should be done only whenever all sub archetyypos are done.",
-            "line": " src/index.js:46"
+            "line": " src/index.js:55"
         },
         {
             "message": "Missing item type\n[archetypo description]",
-            "line": " src/index.js:57"
+            "line": " src/index.js:66"
         },
         {
             "message": "Missing item type\nSet the default archetypo options.",
-            "line": " src/index.js:106"
+            "line": " src/index.js:134"
         }
     ]
 }

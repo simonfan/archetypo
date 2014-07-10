@@ -1,7 +1,7 @@
 {
   "name": "archetypo",
   "main": "built/archetypo.js",
-  "version": "0.17.12",
+  "version": "0.18.12",
   "description": "Scoped html",
   "dependencies": {
     "q": "1.0.1",
